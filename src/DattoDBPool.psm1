@@ -4,7 +4,7 @@
 	A PowerShell module that connects to the Datto DBPool API.
 
 	.DESCRIPTION
-	This module contains Datto DBPool v2 API controllers that can used in PowerShell to perform the followiing operations:
+	This module contains functions that can used in PowerShell to perform the following operations for the Datto Internal DBPool v2 API:
 	
 	parent-controller : Operations on Parent Containers
 	container-controller : Operations on your database containers
@@ -17,7 +17,7 @@
     See https://github.com/cksapp/DattoDBPool_Module/blob/main/LICENSE for license information.
 	
 	.PARAMETER apiUrl
-	Provide your Datto RMM platform URL
+	Provide the Datto DBPool API URL
 	
 	.PARAMETER apiKey
 	Provide your API Key
