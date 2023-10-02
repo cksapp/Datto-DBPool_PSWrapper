@@ -1,24 +1,40 @@
 <#
 .SYNOPSIS
-    A short one-line action-based description, e.g. 'Tests if a function is valid'
+    Sets logging and creates log file
 .DESCRIPTION
-    A longer description of the function, its purpose, common use cases, etc.
+    Validates log directory exists and creates it if not. Sets log location and creates log file.
 .NOTES
-    Information or caveats about the function e.g. 'This function is not supported in Linux'
+    Should work for both Windows and Unix based systems.
 .LINK
     Specify a URI to a help page, this will show when Get-Help -Online is used.
 .EXAMPLE
-    Test-MyTestFunction -Verbose
-    Explanation of the function or its result. You can include multiple examples with additional .EXAMPLE lines
+    Set-Logging -logPath '/path/to/logging'
+    -logPath will specifiy the log path to be used, will default to the current working path for scripts.
+.PARAMETER
+    Log 
 #>
 
 function Set-Logging {
+    [CmdletBinding()]
     param (
-        [string]$logPath = $PSScriptRoot
+        #OptionalParameters
+        [Parameter(
+            Position = 0,
+            Mandatory = $false
+        )]
+        [string]
+        $logPath = $PWD,
+
+        [Parameter(Position = 1)]
+        [switch]
+        $doLogs = $true
     )
 
     # Directory for "logs"
     $logDir = Get-ChildItem $logPath | Where-Object { $_.PSIsContainer -and $_.Name -imatch "logs" }
+
+    # Log file
+    $logFile = "$logPath\logFile.log"
 
     # Check if log directory was found
     if ($logDir) {
@@ -27,9 +43,10 @@ function Set-Logging {
         Write-Information "Logging to: $logDir" -InformationAction Continue
     } else {
         # Create the directory if not found
-        Write-Verbose "Log directory not found"
+        Write-Verbose -Message "Log directory not found at $logPath"
         $logDir = Join-Path -Path $logPath -ChildPath "logs"
         New-Item -ItemType Directory -Path $logDir | Out-Null
-        Write-Information "Directory created: $logDir" -InformationAction Continue
+        Write-Verbose -Message "Directory created: $logDir" #Writes informational output that the directory was created and log location set
+        Write-Information "Logging to: $logDir" -InformationAction Continue
     }
 }
