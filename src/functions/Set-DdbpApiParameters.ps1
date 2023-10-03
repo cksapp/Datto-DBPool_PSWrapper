@@ -12,10 +12,13 @@ function Set-DdbpApiParameters {
 	#>
 	
 	Param(
-	[Parameter(Mandatory=$True)]
+	[Parameter(Position = 0, Mandatory=$True)]
+	[ValidateSet(
+		"https://dbpool.datto.net/api/v2"
+	)]
 	$Url,
     
-	[Parameter(Mandatory=$True)]
+	[Parameter(Position = 1, Mandatory=$True)]
 	$Key
 
 	)
