@@ -99,14 +99,14 @@
             # IconUri = ''
 
             # ReleaseNotes of this module
-            ReleaseNotes = 'https://github.com/cksapp/DattoDBPool_Module/blob/main/README.md'
+            ReleaseNotes = ''
 
         } # End of PSData hashtable
 
     } # End of PrivateData hashtable
 
     # HelpInfo URI of this module
-    # HelpInfoURI = ''
+    # HelpInfoURI = 'https://github.com/cksapp/DattoDBPool_Module/blob/main/README.md'
 
     # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
     # DefaultCommandPrefix = ''
