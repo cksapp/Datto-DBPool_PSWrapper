@@ -10,6 +10,9 @@
 .EXAMPLE
     Test-MyTestFunction -Verbose
     Explanation of the function or its result. You can include multiple examples with additional .EXAMPLE lines
+
+.PARAMETER logPath
+   System path for logging.
 #>
 
 function Set-Logging {
