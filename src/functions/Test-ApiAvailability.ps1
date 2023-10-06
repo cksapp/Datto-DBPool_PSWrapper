@@ -6,37 +6,36 @@
    This function sends a HEAD request to the specified API URL using Invoke-RestMethod
    and checks if the HTTP status code is 200, indicating that the API is available.
 
-.PARAMETER ApiUrl
+.PARAMETER apiUrl
    The URL of the API to be checked.
 
 .PARAMETER ApiKey
    Optional: Access token for authorization.
 
 .EXAMPLE
-   Test-ApiAvailability -ApiUrl "https://api.example.com" -ApiKey "your_access_token"
+   Test-ApiAvailability -apiUrl "https://api.example.com" -ApiKey "your_access_token"
 #>
 function Test-ApiAvailability {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true, Position=0, ValueFromPipeline=$true, ValueFromPipelineByPropertyName=$true, HelpMessage="The URL of the API to be checked.")]
-        [string]$ApiUrl,
+        [Parameter(Mandatory=$False, Position=0, ValueFromPipeline=$true, ValueFromPipelineByPropertyName=$true, HelpMessage="The URL of the API to be checked.")]
+        [string]$apiUrl,
 
-        [Parameter(Mandatory=$true, Position=1, ValueFromPipeline=$true, ValueFromPipelineByPropertyName=$true, HelpMessage="API Key for authorization.")]
-        [string]$ApiKey
+        [Parameter(Mandatory=$False, Position=1, ValueFromPipeline=$true, ValueFromPipelineByPropertyName=$true, HelpMessage="API Key for authorization.")]
+        [string]$apiKey
     )
-
 # Check API Parameters
-if (!$apiUrl -or !$apiKey) {
+if (!$($Script:apiUrl) -or !$($Script:apiKey)) {
     Write-Host "API Parameters missing, please run Set-DdbpApiParameters first!"
     return
 }
 
     try {
         $headers = @{
-            "X-App-Apikey" = $ApiKey
+            "X-App-Apikey" = $apiKey
         }
 
-        $Response = Invoke-RestMethod -Uri $ApiUrl -Method Head -Headers $headers
+        $Response = Invoke-RestMethod -Uri ($($Script:apiUrl) -replace '/v2$', '/docs/openapi.json') -Method Head -Headers $headers
         return $true
     } catch {
         if ($_.Exception.Response -ne $null -and $_.Exception.Response.StatusCode -eq 404) {
