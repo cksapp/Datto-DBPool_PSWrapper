@@ -11,7 +11,8 @@
 .EXAMPLE
     Set-SecurityProtocol -Protocol Tls12
     Sets the Security Protocol to use TLS 1.2.
-.PARAMETER
+.PARAMETER Protocol
+    The security protocol to use. Can be set to 'Ssl3', 'SystemDefault', 'Tls', 'Tls11', 'Tls12', and 'Tls13'.
 #>
 
 function Set-SecurityProtocol {
