@@ -24,8 +24,6 @@ function Test-ApiAvailability {
         [Parameter(Mandatory=$False, Position=1, ValueFromPipeline=$true, ValueFromPipelineByPropertyName=$true, HelpMessage="API Key for authorization.")]
         [string]$apiKey
     )
-    Write-Host "Testing apiUrl: $($Script:apiUrl)"
-    Write-Host "Testing apiKey: $($Script:apiKey)"
 # Check API Parameters
 if (!$($Script:apiUrl) -or !$($Script:apiKey)) {
     Write-Host "API Parameters missing, please run Set-DdbpApiParameters first!"
