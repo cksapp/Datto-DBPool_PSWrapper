@@ -3,6 +3,7 @@
     Specify security protocols
 .DESCRIPTION
     Sets the Security Protocol for a .NET application to use TLS 1.2 by default.
+    This function is useful for ensuring secure communication in .NET applications.
 .NOTES
     Make sure to run this function in the appropriate context, as it affects .NET-wide security settings.
 .LINK
@@ -10,9 +11,6 @@
 .EXAMPLE
     Set-SecurityProtocol -Protocol Tls12
     Sets the Security Protocol to use TLS 1.2.
-    
-    Set-SecurityProtocol -Protocol SystemDefault
-    Sets the Security Protocol to use the system default.
 .PARAMETER
 #>
 
@@ -22,7 +20,7 @@ function Set-SecurityProtocol {
         [Parameter(Position = 0)]
         [ValidateSet('Ssl3', 'SystemDefault', 'Tls', 'Tls11', 'Tls12', 'Tls13')]
         [string]
-        $Protocol = 'SystemDefault'
+        $Protocol = 'Tls12'
     )
     
     try {

@@ -49,5 +49,5 @@ foreach ($Import in @($Functions)){
 
 # Set API parameters
 If ($apiUrl -and $apiKey) {
-	Set-DdbpApiParameters -Url $apiUrl -apiKey $apiKey
+	Set-DdbpApiParameters -Url $Script:apiUrl -apiKey $Script:apiKey
 }
