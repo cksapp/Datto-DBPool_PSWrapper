@@ -17,44 +17,39 @@
 function Set-Logging {
     [CmdletBinding()]
     param (
-        #OptionalParameters
-        [Parameter(
-            Position = 0,
-            Mandatory = $false
-        )]
-        [string]
-        $logPath = $PWD,
+        [Parameter(Position = 0, Mandatory = $false)]
+        [string]$logPath = $PWD,
 
         [Parameter(Position = 1)]
-        [switch]
-        $doLogs
+        [boolean]$doLogs
     )
 
-    if ($doLogs) {
-        # Directory for "logs"
-        $logDir = Get-ChildItem $logPath | Where-Object { $_.PSIsContainer -and $_.Name -imatch "logs" }
+    switch ($doLogs) {
+        $true {
+            # Directory for "logs"
+            $logDir = Get-ChildItem $logPath | Where-Object { $_.PSIsContainer -and $_.Name -imatch "logs" }
+            
+            # Log file
+            $logFile = Join-Path -Path $logPath -ChildPath 'logFile.log'
 
-        # Log file
-        $logFile = Join-Path -Path $logPath -ChildPath 'logFile.log'
-
-        # Check if log directory was found
-        if ($logDir) {
-            # Join the paths and assign to $logDir
-            $logDir = Join-Path -Path $logPath -ChildPath $logDir.Name
-            Write-Information "Logging to: $logDir" -InformationAction Continue
-        } else {
-            # Create the directory if not found
-            Write-Verbose -Message "Log directory not found at $logPath"
-            $logDir = Join-Path -Path $logPath -ChildPath "logs"
-            New-Item -ItemType Directory -Path $logDir -ErrorAction SilentlyContinue
-            if (Test-Path -Path $logDir -PathType Container) {
-            Write-Verbose -Message "Directory created: $logDir" -InformationAction Continue 
-                Write-Verbose -Message "Logging to: $logDir" -InformationAction Continue 
+            # Check if log directory was found
+            if ($logDir) {
+                # Join the paths and assign to $logDir
+                $logDir = Join-Path -Path $logPath -ChildPath $logDir.Name
+                Write-Information "Logging to: $logDir" -InformationAction Continue
             } else {
-                Write-Error -Message "Failed to create log directory at $logDir" -Category ObjectNotFound -ErrorAction SilentlyContinue
+                # Create the directory if not found
+                Write-Verbose -Message "Log directory not found at $logPath"
+                $logDir = Join-Path -Path $logPath -ChildPath "logs"
+                New-Item -ItemType Directory -Path $logDir -ErrorAction SilentlyContinue
+                if (Test-Path -Path $logDir -PathType Container) {
+                    Write-Verbose -Message "Directory created: $logDir" -InformationAction Continue 
+                    Write-Verbose -Message "Logging to: $logDir" -InformationAction Continue 
+                } else {
+                    Write-Error -Message "Failed to create log directory at $logDir" -Category ObjectNotFound -ErrorAction SilentlyContinue
+                }
+            }
         }
-    }
-} else {
-        Write-Verbose -Message "Logging disabled."
+        Default {Write-Verbose -Message "Logging disabled."}
     }
 }
