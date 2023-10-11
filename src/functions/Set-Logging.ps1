@@ -27,16 +27,15 @@ function Set-Logging {
 
         [Parameter(Position = 1)]
         [switch]
-        $doLogs = $true
+        $doLogs
     )
 
-								  
     if ($doLogs) {
         # Directory for "logs"
         $logDir = Get-ChildItem $logPath | Where-Object { $_.PSIsContainer -and $_.Name -imatch "logs" }
 
         # Log file
-        $logFile = "$logPath\logFile.log"
+        $logFile = Join-Path -Path $logPath -ChildPath 'logFile.log'
 
         # Check if log directory was found
         if ($logDir) {
@@ -47,9 +46,15 @@ function Set-Logging {
             # Create the directory if not found
             Write-Verbose -Message "Log directory not found at $logPath"
             $logDir = Join-Path -Path $logPath -ChildPath "logs"
-            New-Item -ItemType Directory -Path $logDir | Out-Null
-            Write-Verbose -Message "Directory created: $logDir" #Writes informational output that the directory was created and log location set
-            Write-Information "Logging to: $logDir" -InformationAction Continue
+            New-Item -ItemType Directory -Path $logDir -ErrorAction SilentlyContinue
+            if (Test-Path -Path $logDir -PathType Container) {
+            Write-Verbose -Message "Directory created: $logDir" -InformationAction Continue 
+                Write-Verbose -Message "Logging to: $logDir" -InformationAction Continue 
+            } else {
+                Write-Error -Message "Failed to create log directory at $logDir" -Category ObjectNotFound -ErrorAction SilentlyContinue
         }
+    }
+} else {
+        Write-Verbose -Message "Logging disabled."
     }
 }
