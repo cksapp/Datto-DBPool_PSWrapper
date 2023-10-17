@@ -29,15 +29,15 @@ function Set-Logging {
             # Directory for "logs"
             $logDir = Get-ChildItem $logPath | Where-Object { $_.PSIsContainer -and $_.Name -imatch "logs" }
             
-            # Log file
-            $logFile = Join-Path -Path $logPath -ChildPath 'logFile.log'
-
             # Check if log directory was found
-            if ($logDir) {
+            if ($logDir) 
+            {
                 # Join the paths and assign to $logDir
                 $logDir = Join-Path -Path $logPath -ChildPath $logDir.Name
-                Write-Information "Logging to: $logDir" -InformationAction Continue
-            } else {
+                Write-Information "Logging directory set to: $logDir" -InformationAction Continue
+            }
+            else 
+            {
                 # Create the directory if not found
                 Write-Verbose -Message "Log directory not found at $logPath"
                 $logDir = Join-Path -Path $logPath -ChildPath "logs"
@@ -49,6 +49,11 @@ function Set-Logging {
                     Write-Error -Message "Failed to create log directory at $logDir" -Category ObjectNotFound -ErrorAction SilentlyContinue
                 }
             }
+            # Log file
+            $isoDate = Get-Date -Format "yyyy-MM-dd"
+            $logFile = Join-Path -Path $logDir -ChildPath "$isoDate`_logFile.log"
+            Write-Output "Logging to $logFile."
+            return $logFile
         }
         Default {Write-Verbose -Message "Logging disabled."}
     }
