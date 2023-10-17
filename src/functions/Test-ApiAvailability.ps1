@@ -38,7 +38,7 @@ if (!$($Script:apiUrl) -or !$($Script:apiKey)) {
         $Response = Invoke-RestMethod -Uri ($($Script:apiUrl) -replace '/v2$', '/docs/openapi.json') -Method Head -Headers $headers
         return $true
     } catch {
-        if ($_.Exception.Response -ne $null -and $_.Exception.Response.StatusCode -eq 404) {
+        if ($null -ne $_.Exception.Response -and $_.Exception.Response.StatusCode -eq 404) {
             Write-Error "Error 404: The webpage was not found.`nPlease make sure you are connected to the internal VPN."
         } else {
             Write-Error $_.Exception.Message
