@@ -13,7 +13,7 @@ function Set-DdbpApiParameters {
     Param(
         [Parameter(Position = 0, Mandatory=$False)]
         [ValidateScript({
-            $_ = if ($_ -match '^https://dbpool\.datto\.net/api/v2/?$') { $_ } else { "$_/"}; $true
+            $_ = if ($_ -match '^https?://[^\s/$.?#].[^\s]*$') { $_ } else { "$_/"}; $true
         })]
         [Uri]$apiUrl = "https://dbpool.datto.net/api/v2/",
         
