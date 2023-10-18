@@ -52,6 +52,7 @@ function Set-Logging {
             # Log file
             $isoDate = Get-Date -Format "yyyy-MM-dd"
             $logFile = Join-Path -Path $logDir -ChildPath "$isoDate`_logFile.log"
+            
             Write-Output "Logging to $logFile."
             return $logFile
         }
