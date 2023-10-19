@@ -7,20 +7,24 @@ function Set-DdbpApiParameters {
     Provide Datto DBPool API Url. See Datto DBPool API help files for more information.
 
     .PARAMETER Key
-    Provide Datto DBPool API Key. You can find your user API key at [/web/self](https://dbpool.datto.net/web/self).
+    Provide Dattto DBPool API Key. You can find your user API key at [/web/self](https://dbpool.datto.net/web/self).
     #>
     
     Param(
         [Parameter(Position = 0, Mandatory=$False)]
-        [ValidateScript({
-            $_ = if ($_ -match '^https?://[^\s/$.?#].[^\s]*$') { $_ } else { "$_/"}; $true
-        })]
-        [Uri]$apiUrl = "https://dbpool.datto.net/api/v2/",
-        
+        [Uri]$apiUrl = "https://dbpool.datto.net/api/v2",
+
         [Parameter(Position = 1, Mandatory=$True)]
         [string]$apiKey
     )
 
-    New-Variable -Name apiUrl -Value $apiUrl -Force
-    New-Variable -Name apiKey -Value $apiKey -Force
+    # Cast URI variable to string, check for trailing slash and remove if present
+    $apiUrl = [string]$apiUrl
+    if ($apiUrl -match '/$') {
+        $apiUrl = $apiUrl -replace '/$'
+    }
+
+    # Return the parameters (optional)
+    New-Variable -Name apiUrl -Value $apiUrl -Scope Script -Force
+    New-Variable -Name apiKey -Value $apiKey -Scope Script -Force
 }
