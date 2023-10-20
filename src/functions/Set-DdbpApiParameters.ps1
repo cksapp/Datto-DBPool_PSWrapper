@@ -12,7 +12,7 @@ function Set-DdbpApiParameters {
     
     Param(
         [Parameter(Position = 0, Mandatory=$False)]
-        [Uri]$apiUrl = "https://dbpool.datto.net/api/v2",
+        [Uri]$apiUrl = "https://dbpool.datto.net",
 
         [Parameter(Position = 1, Mandatory=$True)]
         [string]$apiKey
