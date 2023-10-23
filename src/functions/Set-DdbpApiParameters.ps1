@@ -29,7 +29,7 @@ function Set-DdbpApiParameters {
             ValueFromPipelineByPropertyName=$True, 
             HelpMessage="API Key for authorization."
         )]
-        [string]$apiKey,
+        [string]$apiKey<#,
 
         [Parameter(
             Position = 2, 
@@ -39,7 +39,7 @@ function Set-DdbpApiParameters {
             HelpMessage="Check if variables exist before replacing them. Default will skip this overwrite."
         )]
         [boolean]
-        $replaceVars
+        $replaceVars#>
     )
     
     begin {
