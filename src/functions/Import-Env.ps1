@@ -2,7 +2,7 @@
 .SYNOPSIS
     Checks if the override.env file exists and imports the variables to current session
 .DESCRIPTION
-    A longer description of the function, its purpose, common use cases, etc.
+    This allows for a user specified file location for 
 .NOTES
     Information or caveats about the function e.g. 'This function is not supported in Linux'
 .LINK
@@ -15,33 +15,71 @@
 function Import-Env {
     [CmdletBinding()]
     param (
+        [Parameter( 
+            Mandatory = $false, 
+            Position = 0, 
+            ValueFromPipeline = $true, 
+            ValueFromPipelineByPropertyName = $true, 
+            HelpMessage = "The path for environment override file."
+        )]
+        [String]
+        $envFilePath,
+
+        [Parameter( 
+            Mandatory = $false, 
+            Position = 1, 
+            ValueFromPipeline = $true, 
+            ValueFromPipelineByPropertyName = $true, 
+            HelpMessage = "The environment override file name."
+        )]
+        [String]
+        $envFileName,
+
+        [Parameter( 
+            Mandatory = $false, 
+            Position = 2, 
+            ValueFromPipeline = $true, 
+            ValueFromPipelineByPropertyName = $true, 
+            HelpMessage = "The environment override file filter. Defaults to remove lines begining with `#` comments"
+        )]
+        [regex]
+        $envFilter
         
     )
     
     begin {
+        # Set the variables used
+        $currentLocation = Get-Location
+        $envFileName = "override.env"
+        $envFilePath = Convert-Path (Join-Path -Path $currentLocation -ChildPath $envFileName)
+        $envFilter = '^\s*#'
+
         if (Test-Path -Path $envFilePath -PathType Leaf) {
-            $envLines = Get-Content -Path $envFilePath
+            $envContent = Get-Content -Path $envFilePath | Where-Object { $_ -notmatch $envFilter }
         
-            foreach ($line in $envLines) {
-                # Skip commented lines that start with `#`
-                if ($line -match '^\s*#') {
-                    continue
-                }
-        
-                $line = $line.Trim()
-                if (-not [string]::IsNullOrWhiteSpace($line) -and $line -match '^(.*?)=(.*)$') {
-                    $envName = $matches[1]
-                    $envValue = $matches[2]
-                    Write-Host "Setting environment variable: $envName=$envValue"
-                    [Environment]::SetEnvironmentVariable($envName, $envValue, "Process")
-                }
-            }
         } else {
-            Write-Host "Override file does not exist at $envFilePath"
+            Write-Verbose -Message "Override file does not exist at $envFilePath"
         }
-        
+        Continue
+    }
+<#    
+    process {
+        foreach ($line in $envContent) {
+            # Skip commented lines that start with `#`
+            if ($line -match '^\s*#') {
+                continue
+            }
+    
+            $line = $line.Trim()
+            if (-not [string]::IsNullOrWhiteSpace($line) -and $line -match '^(.*?)=(.*)$') {
+                $envName = $matches[1]
+                $envValue = $matches[2]
+                Write-Host "Setting environment variable: $envName=$envValue"
+                [Environment]::SetEnvironmentVariable($envName, $envValue, "Process")
+            }
+        }
         # Check if the variable $p_apiKey exists from override.env file, otherwise ask the user for their API key
-        if (-not (Test-Path variable:p_apiKey)) {
+        if (-not (Test-Path variable:apiKey)) {
             # If it doesn't exist, ask the user for input
             $apiKeySecure = Read-Host "Please enter your DBPool Personal API Key" -AsSecureString
             # Convert the secure string to a plain text string
@@ -56,12 +94,8 @@ function Import-Env {
             $apiKeySecure.Dispose()
         }
     }
-    
-    process {
-        
-    }
-    
+    #>
     end {
-        
+        return $envContent
     }
 }
