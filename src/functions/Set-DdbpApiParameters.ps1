@@ -19,8 +19,7 @@ function Set-DdbpApiParameters {
             ValueFromPipelineByPropertyName=$True, 
             HelpMessage="API URL to be used."
         )]
-        [Uri]
-        $apiUrl = "https://dbpool.datto.net",
+        [Uri]$apiUrl = "https://dbpool.datto.net",
 
         [Parameter(
             Position = 1, 
@@ -28,7 +27,7 @@ function Set-DdbpApiParameters {
             ValueFromPipeline=$True, 
             ValueFromPipelineByPropertyName=$True, 
             HelpMessage="API Key for authorization."
-        )]
+            )]
         [string]$apiKey<#,
 
         [Parameter(
@@ -38,10 +37,9 @@ function Set-DdbpApiParameters {
             ValueFromPipelineByPropertyName=$True, 
             HelpMessage="Check if variables exist before replacing them. Default will skip this overwrite."
         )]
-        [boolean]
-        $replaceVars#>
+        [boolean]$replaceVars#>
     )
-    
+<#    
     begin {
         # Check to replace existing variables
         if ($ApiUrl -and $ApiKey) {
@@ -52,7 +50,7 @@ function Set-DdbpApiParameters {
             }
         }
     }
-    
+#>    
     process {
         # Cast URI variable to string, check for trailing slash and remove if present
         $apiUrl = [string]$apiUrl
