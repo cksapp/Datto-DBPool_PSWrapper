@@ -17,10 +17,15 @@
 function Set-Logging {
     [CmdletBinding()]
     param (
-        [Parameter(Position = 0, Mandatory = $false)]
-        [string]$logPath = $PWD,
+        [Parameter(
+            Position = 0, 
+            Mandatory = $false
+        )]
+        [string]$logPath = Get-Location,
 
-        [Parameter(Position = 1)]
+        [Parameter(
+            Position = 1
+        )]
         [boolean]$doLogs
     )
 
@@ -30,14 +35,12 @@ function Set-Logging {
             $logDir = Get-ChildItem $logPath | Where-Object { $_.PSIsContainer -and $_.Name -imatch "logs" }
             
             # Check if log directory was found
-            if ($logDir) 
-            {
+            if ($logDir) {
                 # Join the paths and assign to $logDir
                 $logDir = Join-Path -Path $logPath -ChildPath $logDir.Name
                 Write-Information "Logging directory set to: $logDir" -InformationAction Continue
             }
-            else 
-            {
+            else {
                 # Create the directory if not found
                 Write-Verbose -Message "Log directory not found at $logPath"
                 $logDir = Join-Path -Path $logPath -ChildPath "logs"
@@ -51,11 +54,15 @@ function Set-Logging {
             }
             # Log file
             $isoDate = Get-Date -Format "yyyy-MM-dd"
-            $logFile = Join-Path -Path $logDir -ChildPath "$isoDate`_logFile.log"
+            $logFileName = "logFile.log"
+            $logName = "$isoDate`_$logFileName"
+            $logFile = Join-Path -Path $logDir -ChildPath $logName
             
             Write-Output "Logging to $logFile."
             return $logFile
         }
-        Default {Write-Verbose -Message "Logging disabled."}
+        Default {
+            Write-Verbose -Message "Logging disabled."
+        }
     }
 }
