@@ -21,7 +21,7 @@ function Set-Logging {
             Position = 0, 
             Mandatory = $false
         )]
-        [string]$logPath = Get-Location,
+        [string]$logPath = (Get-Location),
 
         [Parameter(
             Position = 1
@@ -58,7 +58,7 @@ function Set-Logging {
             $logName = "$isoDate`_$logFileName"
             $logFile = Join-Path -Path $logDir -ChildPath $logName
             
-            Write-Output "Logging to $logFile."
+            #Write-Output "Logging to $logFile."
             return $logFile
         }
         Default {
