@@ -28,16 +28,24 @@
 # Root Module Parameters
 [CmdletBinding()]
 Param(
-  [Parameter(Position = 0, Mandatory=$False)]
-  $apiUrl,
-    
-  [Parameter(Position = 1, Mandatory=$False)]
-  $apiKey
+	[Parameter(
+		Position = 0, 
+		Mandatory=$False
+	)]
+	$apiUrl,
+
+	[Parameter(
+		Position = 1, 
+		Mandatory=$False
+	)]
+	$apiKey
 )
 
+# Functions Directory Path
+$functionsPath = Join-Path -path $PSScriptRoot -ChildPath "functions" -AdditionalChildPath "*.ps1"
 
 # Import functions
-$Functions = @( Get-ChildItem -Path $PSScriptRoot\functions\*.ps1 -ErrorAction SilentlyContinue ) 
+$Functions = @( Get-ChildItem -Path $functionsPath -ErrorAction SilentlyContinue ) 
 foreach ($Import in @($Functions)){
   try{
     . $Import.fullname
@@ -49,5 +57,5 @@ foreach ($Import in @($Functions)){
 
 # Set API parameters
 If ($apiUrl -and $apiKey) {
-	Set-DdbpApiParameters -Url $Script:apiUrl -apiKey $Script:apiKey
+	Set-DdbpApiParameters -Url $apiUrl -apiKey $apiKey
 }
