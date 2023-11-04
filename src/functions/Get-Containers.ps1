@@ -15,23 +15,56 @@
 function Get-Containers {
     [CmdletBinding()]
     param (
-        
+        [Parameter( 
+            Position = 0, 
+            Mandatory = $False, 
+            ValueFromPipeline = $True, 
+            ValueFromPipelineByPropertyName = $True, 
+            HelpMessage = "The URL of the API to be checked."
+        )]
+        [string]$apiUrl,
+
+        [Parameter( 
+            Position = 1, 
+            Mandatory = $False,
+            ValueFromPipeline = $True, 
+            ValueFromPipelineByPropertyName = $True, 
+            HelpMessage = "API Key for authorization."
+        )]
+        [string]$apiKey,
+
+        [Parameter(
+            Mandatory = $False,
+            ValueFromPipeline = $True,
+            ValueFromPipelineByPropertyName = $True
+        )]
+        $varScope = "Global"
     )
     
-    begin {
+    Begin {
+        # Check API Parameters
+        Write-Verbose -Message "Api URL is $apiUrl"
+        if (!($apiUrl) -or !($apiKey))
+        {
+            Write-Output "API Parameters missing, please run Set-DdbpApiParameters first!"
+            break
+        }
+    }
+    
+    Process {
+        $DBPool = New-ApiRequest -apiUrl $apiUrl -apiKey $apiKey -apiMethod Get -apiRequest "containers" | ConvertFrom-Json
+        # Display the response content
+        Write-Verbose -Message " Getting containers for $DBPool.containers"
+        
+        <#foreach ($container in $DBPool.containers){
+            Write-Output "Container Name: $($container.name)"
+            Write-Output "Container ID: $($container.id)"`n
+        }#>
 
     }
     
-    process {
-        $getContainers = Invoke-WebRequest -Uri $apiUrl -Headers $headers -Method Get
-        # Display the response content
-        #Write-Host $getContainers.Content
-        
-        # Convert JSON response to PowerShell object
-        $json = ConvertFrom-Json $getContainers
-    }
-    
-    end {
-        
+    End {
+        Set-Variable -Name "Containers" -Value $($DBPool.containers) -Force -Scope $varScope
+        Return Write-Output $Containers
     }
 }
