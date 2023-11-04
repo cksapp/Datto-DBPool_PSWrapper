@@ -18,10 +18,21 @@
 function Set-SecurityProtocol {
     [CmdletBinding()]
     param (
-        [Parameter(Position = 0)]
-        [ValidateSet('Ssl3', 'SystemDefault', 'Tls', 'Tls11', 'Tls12', 'Tls13')]
-        [string]
-        $Protocol = 'Tls12'
+        [Parameter(
+            Position = 0, 
+            Mandatory = $False, 
+            ValueFromPipeline = $True, 
+            ValueFromPipelineByPropertyName = $True
+        )]
+        [ValidateSet(
+            'Ssl3', 
+            'SystemDefault', 
+            'Tls', 
+            'Tls11', 
+            'Tls12', 
+            'Tls13'
+        )]
+        [string]$Protocol = 'Tls12'
     )
     
     try {
