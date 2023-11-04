@@ -18,21 +18,42 @@ function Set-Logging {
     [CmdletBinding()]
     param (
         [Parameter(
-            Position = 0, 
-            Mandatory = $false
+            Position = 0,
+            Mandatory = $False, 
+            ValueFromPipeline = $True, 
+            ValueFromPipelineByPropertyName = $True
+        )]
+        [boolean]$doLogs,
+
+        [Parameter(
+            Position = 1, 
+            Mandatory = $False, 
+            ValueFromPipeline = $True, 
+            ValueFromPipelineByPropertyName = $True
         )]
         [string]$logPath = (Get-Location),
 
         [Parameter(
-            Position = 1
+            Position = 2, 
+            Mandatory = $False, 
+            ValueFromPipeline = $True, 
+            ValueFromPipelineByPropertyName = $True
         )]
-        [boolean]$doLogs
+        $logFileName = "logFile.log",
+
+        [Parameter(
+            Position = 3, 
+            Mandatory = $False, 
+            ValueFromPipeline = $True, 
+            ValueFromPipelineByPropertyName = $True
+        )]
+        $logDateFormat = "yyyy-MM-dd"
     )
 
     switch ($doLogs) {
         $true {
             # Directory for "logs"
-            $logDir = Get-ChildItem $logPath | Where-Object { $_.PSIsContainer -and $_.Name -imatch "logs" }
+            $logDir = Get-ChildItem $logPath | Where-Object { $_.PSIsContainer -and $_.Name -imatch "logs" } 
             
             # Check if log directory was found
             if ($logDir) {
@@ -52,10 +73,9 @@ function Set-Logging {
                     Write-Error -Message "Failed to create log directory at $logDir" -Category ObjectNotFound -ErrorAction SilentlyContinue
                 }
             }
-            # Log file
-            $isoDate = Get-Date -Format "yyyy-MM-dd"
-            $logFileName = "logFile.log"
-            $logName = "$isoDate`_$logFileName"
+            # Log file params
+            $logDate = Get-Date -Format "$logDateFormat"
+            $logName = "$logDate`_$logFileName"
             $logFile = Join-Path -Path $logDir -ChildPath $logName
             
             #Write-Output "Logging to $logFile."
