@@ -61,7 +61,7 @@ function New-ApiRequest {
         $apiKey
     )
 
-    begin {
+    Begin {
         # Check API Parameters
         Write-Verbose -Message "Checking variables for $apiUrl & $apiKey"
         if (!$apiUrl -or !$apiKey) {
@@ -70,7 +70,7 @@ function New-ApiRequest {
         }
     }
 
-    process {
+    Process {
         Write-Verbose -Message "Using Uri $apiUrl"
         # Define parameters for Invoke-WebRequest cmdlet
         $params = [ordered] @{
