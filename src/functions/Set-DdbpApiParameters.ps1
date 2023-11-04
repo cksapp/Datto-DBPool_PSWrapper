@@ -39,21 +39,22 @@ function Set-DdbpApiParameters {
         )]
         [boolean]$replaceVars#>
     )
-<#    
+ 
     begin {
         # Check to replace existing variables
-        if ($ApiUrl -and $ApiKey) {
+        <#if ($ApiUrl -and $ApiKey) {
             $replaceVars = Read-Host "Variables 'apiUrl' and 'apiKey' already exist. Do you want to replace them? (Y/N)"
             if ($replaceVars -eq 'N') {
                 Write-Output "Existing variables were not replaced."
                 return
             }
-        }
+        }#>
     }
-#>    
+
     process {
-        # Cast URI variable to string, check for trailing slash and remove if present
-        $apiUrl = [string]$apiUrl
+        # Cast URI Variable to string type
+        [String]$apiUrl = $apiUrl.AbsoluteUri
+        # Check for trailing slash and remove if present
         if ($apiUrl -match '/$') {
             $apiUrl = $apiUrl -replace '/$'
         }
@@ -61,7 +62,7 @@ function Set-DdbpApiParameters {
     
     end {
         # Set or replace the parameters
-        Set-Variable -Name 'apiUrl' -Value $apiUrl -Scope Script -Force
-        Set-Variable -Name 'apiKey' -Value $apiKey -Scope Script -Force
+        Set-Variable -Name 'apiUrl' -Value $apiUrl -Force -Scope Global
+        Set-Variable -Name 'apiKey' -Value $apiKey -Force -Scope Global
     }
 }

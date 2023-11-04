@@ -46,16 +46,18 @@ function Test-ApiAvailability {
         }
 
         # Sets the variable for the document URI to check, filtered to replace ending with /v2 with openapi docs
-        $apiDocsUrl = $apiUrl -replace '/v2$', '/docs/openapi.json'
+        $apiUrl = $apiUrl -replace '/v2$', '/docs/openapi.json'
     }
 
     process {
         try
         {
-            $Response = Invoke-RestMethod -Uri $apiDocsUrl -Method Head -Headers $headers
+            <#$Response = Invoke-RestMethod -Uri $apiUrl -Method Head
+            Write-Output "$Response"#>
+
+            $Response = Invoke-WebRequest -Uri $apiUrl -Method Head
             Write-Output "$Response"
-            <#$Response = Invoke-WebRequest -Uri $apiDocsUrl -Method Head -Headers $headers
-        Write-Output "$Response"#>
+
             return $true
         }
         catch
@@ -78,7 +80,9 @@ function Test-ApiAvailability {
     }
 
     end {
-        
+        # Return the apiUrl variable without the openAPI docs URI
+        $apiUrl = $apiUrl -replace 'api/docs/openapi.json', ''
+        Set-Variable -name apiUrl -value $apiUrl -Force -Scope global
     }
 
 

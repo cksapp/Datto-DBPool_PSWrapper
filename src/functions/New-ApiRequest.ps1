@@ -24,10 +24,13 @@ function New-ApiRequest {
             ValueFromPipeline = $True
         )]
         [ValidateSet(
+            'DEFAULT', 
+            'DELETE', 
             'GET', 
-            'PUT', 
+            'HEAD', 
+            'PATCH', 
             'POST', 
-            'DELETE'
+            'PUT'
         )]
         [string]$apiMethod,
 
