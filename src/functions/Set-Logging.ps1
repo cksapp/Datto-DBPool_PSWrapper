@@ -17,27 +17,51 @@
 function Set-Logging {
     [CmdletBinding()]
     param (
-        [Parameter(Position = 0, Mandatory = $false)]
-        [string]$logPath = $PWD,
+        [Parameter(
+            Position = 0,
+            Mandatory = $False, 
+            ValueFromPipeline = $True, 
+            ValueFromPipelineByPropertyName = $True
+        )]
+        [boolean]$doLogs,
 
-        [Parameter(Position = 1)]
-        [boolean]$doLogs
+        [Parameter(
+            Position = 1, 
+            Mandatory = $False, 
+            ValueFromPipeline = $True, 
+            ValueFromPipelineByPropertyName = $True
+        )]
+        [string]$logPath = (Get-Location),
+
+        [Parameter(
+            Position = 2, 
+            Mandatory = $False, 
+            ValueFromPipeline = $True, 
+            ValueFromPipelineByPropertyName = $True
+        )]
+        $logFileName = "logFile.log",
+
+        [Parameter(
+            Position = 3, 
+            Mandatory = $False, 
+            ValueFromPipeline = $True, 
+            ValueFromPipelineByPropertyName = $True
+        )]
+        $logDateFormat = "yyyy-MM-dd"
     )
 
     switch ($doLogs) {
         $true {
             # Directory for "logs"
-            $logDir = Get-ChildItem $logPath | Where-Object { $_.PSIsContainer -and $_.Name -imatch "logs" }
+            $logDir = Get-ChildItem $logPath | Where-Object { $_.PSIsContainer -and $_.Name -imatch "logs" } 
             
             # Check if log directory was found
-            if ($logDir) 
-            {
+            if ($logDir) {
                 # Join the paths and assign to $logDir
                 $logDir = Join-Path -Path $logPath -ChildPath $logDir.Name
                 Write-Information "Logging directory set to: $logDir" -InformationAction Continue
             }
-            else 
-            {
+            else {
                 # Create the directory if not found
                 Write-Verbose -Message "Log directory not found at $logPath"
                 $logDir = Join-Path -Path $logPath -ChildPath "logs"
@@ -49,12 +73,16 @@ function Set-Logging {
                     Write-Error -Message "Failed to create log directory at $logDir" -Category ObjectNotFound -ErrorAction SilentlyContinue
                 }
             }
-            # Log file
-            $isoDate = Get-Date -Format "yyyy-MM-dd"
-            $logFile = Join-Path -Path $logDir -ChildPath "$isoDate`_logFile.log"
-            Write-Output "Logging to $logFile."
+            # Log file params
+            $logDate = Get-Date -Format "$logDateFormat"
+            $logName = "$logDate`_$logFileName"
+            $logFile = Join-Path -Path $logDir -ChildPath $logName
+            
+            #Write-Output "Logging to $logFile."
             return $logFile
         }
-        Default {Write-Verbose -Message "Logging disabled."}
+        Default {
+            Write-Verbose -Message "Logging disabled."
+        }
     }
 }
