@@ -41,9 +41,8 @@ Param(
 	$apiKey
 )
 
-# Functions Directory
-$functionsDir = Get-ChildItem $PSScriptRoot | Where-Object { $_.PSIsContainer -and $_.Name -imatch "functions" }
-$functionsPath = Join-Path -path $functionsDir -ChildPath "*.ps1"
+# Functions Directory Path
+$functionsPath = Join-Path -path $PSScriptRoot -ChildPath "functions" -AdditionalChildPath "*.ps1"
 
 # Import functions
 $Functions = @( Get-ChildItem -Path $functionsPath -ErrorAction SilentlyContinue ) 
