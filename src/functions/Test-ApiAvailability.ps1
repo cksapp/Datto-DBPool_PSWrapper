@@ -18,20 +18,20 @@
 function Test-ApiAvailability {
     [CmdletBinding()]
     param (
-        [Parameter(
-            Mandatory=$False, 
-            Position=0, 
-            ValueFromPipeline=$true, 
-            ValueFromPipelineByPropertyName=$true, 
+        [Parameter( 
+            Position = 0, 
+            Mandatory = $False, 
+            ValueFromPipeline = $True, 
+            ValueFromPipelineByPropertyName = $True, 
             HelpMessage="The URL of the API to be checked."
         )]
         [string]$apiUrl,
 
-        [Parameter(
-            Mandatory=$False, 
-            Position=1, 
-            ValueFromPipeline=$true, 
-            ValueFromPipelineByPropertyName=$true, 
+        [Parameter( 
+            Position = 1, 
+            Mandatory = $False,
+            ValueFromPipeline = $True, 
+            ValueFromPipelineByPropertyName = $True, 
             HelpMessage="API Key for authorization."
         )]
         [string]$apiKey
