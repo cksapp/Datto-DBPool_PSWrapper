@@ -28,19 +28,26 @@ function Set-DdbpApiParameters {
             ValueFromPipelineByPropertyName=$True, 
             HelpMessage="API Key for authorization."
             )]
-        [string]$apiKey<#,
+        [string]$apiKey,
 
-        [Parameter(
+        <#[Parameter(
             Position = 2, 
             Mandatory=$False, 
             ValueFromPipeline=$True, 
             ValueFromPipelineByPropertyName=$True, 
             HelpMessage="Check if variables exist before replacing them. Default will skip this overwrite."
         )]
-        [boolean]$replaceVars#>
+        [boolean]$replaceVars,#>
+
+        [Parameter(
+            Mandatory = $False,
+            ValueFromPipeline = $True,
+            ValueFromPipelineByPropertyName = $True
+        )]
+        $varScope = "Global"
     )
  
-    begin {
+    Begin {
         # Check to replace existing variables
         <#if ($ApiUrl -and $ApiKey) {
             $replaceVars = Read-Host "Variables 'apiUrl' and 'apiKey' already exist. Do you want to replace them? (Y/N)"
@@ -51,7 +58,7 @@ function Set-DdbpApiParameters {
         }#>
     }
 
-    process {
+    Process {
         # Cast URI Variable to string type
         [String]$apiUrl = $apiUrl.AbsoluteUri
         # Check for trailing slash and remove if present
@@ -60,9 +67,9 @@ function Set-DdbpApiParameters {
         }
     }
     
-    end {
+    End {
         # Set or replace the parameters
-        Set-Variable -Name 'apiUrl' -Value $apiUrl -Force -Scope Global
-        Set-Variable -Name 'apiKey' -Value $apiKey -Force -Scope Global
+        Set-Variable -Name "apiUrl" -Value "$apiUrl" -Force -Scope $varScope
+        Set-Variable -Name "apiKey" -Value "$apiKey" -Force -Scope $varScope
     }
 }
