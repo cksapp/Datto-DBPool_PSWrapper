@@ -18,31 +18,72 @@
 function Test-ApiAvailability {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$False, Position=0, ValueFromPipeline=$true, ValueFromPipelineByPropertyName=$true, HelpMessage="The URL of the API to be checked.")]
+        [Parameter( 
+            Position = 0, 
+            Mandatory = $False, 
+            ValueFromPipeline = $True, 
+            ValueFromPipelineByPropertyName = $True, 
+            HelpMessage="The URL of the API to be checked."
+        )]
         [string]$apiUrl,
 
-        [Parameter(Mandatory=$False, Position=1, ValueFromPipeline=$true, ValueFromPipelineByPropertyName=$true, HelpMessage="API Key for authorization.")]
+        [Parameter( 
+            Position = 1, 
+            Mandatory = $False,
+            ValueFromPipeline = $True, 
+            ValueFromPipelineByPropertyName = $True, 
+            HelpMessage="API Key for authorization."
+        )]
         [string]$apiKey
     )
-# Check API Parameters
-if (!$($Script:apiUrl) -or !$($Script:apiKey)) {
-    Write-Host "API Parameters missing, please run Set-DdbpApiParameters first!"
-    return
-}
 
-    try {
-        $headers = @{
-            "X-App-Apikey" = $apiKey
+    begin {
+        # Check API Parameters
+        Write-Verbose -Message "Api URL is $apiUrl"
+        if (!($apiUrl) -or !($apiKey)) {
+            Write-Output "API Parameters missing, please run Set-DdbpApiParameters first!"
+            break
         }
 
-        $Response = Invoke-RestMethod -Uri ($($Script:apiUrl) -replace '/v2$', '/docs/openapi.json') -Method Head -Headers $headers
-        return $true
-    } catch {
-        if ($_.Exception.Response -ne $null -and $_.Exception.Response.StatusCode -eq 404) {
-            Write-Error "Error 404: The webpage was not found.`nPlease make sure you are connected to the internal VPN."
-        } else {
-            Write-Error $_.Exception.Message
-        }
-        return $false
+        # Sets the variable for the document URI to check, filtered to replace ending with /v2 with openapi docs
+        $apiUrl = $apiUrl -replace '/v2$', '/docs/openapi.json'
     }
+
+    process {
+        try
+        {
+            <#$Response = Invoke-RestMethod -Uri $apiUrl -Method Head
+            Write-Output "$Response"#>
+
+            $Response = Invoke-WebRequest -Uri $apiUrl -Method Head
+            Write-Output "$Response"
+
+            return $true
+        }
+        catch
+        {
+            if ($null -ne $_.Exception.Response -and $_.Exception.Response.StatusCode -eq 404)
+            {
+                Write-Error -Message "Error 404: Page not found.`nPlease check your parameters and try again."
+            }
+            <#elseif ($null -ne $_.Exception.Response -and $_.Exception.Contains("No such host is known"))
+            {
+                Write-Error "Error: No such host is known.`nPlease check your connection, VPN, and try again."
+            }#>
+            else
+            {
+                #Write-Error $_.Exception
+                Write-Error $_.Exception.Message
+            }
+            return $false
+        }
+    }
+
+    end {
+        # Return the apiUrl variable without the openAPI docs URI
+        $apiUrl = $apiUrl -replace 'api/docs/openapi.json', ''
+        Set-Variable -name apiUrl -value $apiUrl -Force -Scope global
+    }
+
+
 }
