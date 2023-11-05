@@ -17,7 +17,7 @@ function New-ApiRequest {
         API response
     #>  
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     Param(
         [Parameter(
             Mandatory = $True,

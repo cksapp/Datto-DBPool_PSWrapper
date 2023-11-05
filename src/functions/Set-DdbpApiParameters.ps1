@@ -11,6 +11,7 @@ function Set-DdbpApiParameters {
 	
 	#>
 	
+    [CmdletBinding(SupportsShouldProcess)]
 	Param(
         [Parameter(
             Position = 0, 
