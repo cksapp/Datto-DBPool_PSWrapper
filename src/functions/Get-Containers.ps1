@@ -38,7 +38,7 @@ function Get-Containers {
             ValueFromPipeline = $True,
             ValueFromPipelineByPropertyName = $True
         )]
-        $varScope = "Global"
+        $varScope = "Script"
     )
     
     Begin {
