@@ -85,51 +85,66 @@ function New-ApiRequest {
         # Add body to parameters if present
         If ($apiRequestBody) { $params.Add('Body', $apiRequestBody) }
 
-        $maxRetries = 3  # Maximum number of retries    
-        $retryCount = 0
+        # Check if the action should proceed
+        if ($PSCmdlet.ShouldProcess("$apiMethod`: $($params['Uri'])"))
+        {
+            $maxRetries = 3  # Maximum number of retries    
+            $retryCount = 0
 
-        do {
-            try {
-                $response = Invoke-WebRequest -UseBasicParsing @params
-                $content = [System.Text.Encoding]::UTF8.GetString($response.RawContentStream.ToArray())
-                return $content  # Return successful response content and exit the function
-            }
-            catch {
-                $errorObject = $_
-                $exceptionError = $_.Exception.Message
+            do
+            {
+                try
+                {
+                    $response = Invoke-WebRequest -UseBasicParsing @params
+                    $content = [System.Text.Encoding]::UTF8.GetString($response.RawContentStream.ToArray())
+                    return $content  # Return successful response content and exit the function
+                }
+                catch
+                {
+                    $errorObject = $_
+                    $exceptionError = $_.Exception.Message
 
-                switch ($exceptionError) {
-                    'The remote server returned an error: (429).' {
-                        Write-Warning 'New-ApiRequest : API rate limit breached, sleeping for 60 seconds'
-                        Start-Sleep -Seconds 60
-                    }
-                    'The remote server returned an error: (403) Forbidden.' {
-                        Write-Warning 'New-ApiRequest : AWS DDOS protection breached, sleeping for 5 minutes'
-                        Start-Sleep -Seconds 300
-                    }
-                    'The remote server returned an error: (404) Not Found.' {
-                        Write-Error "New-ApiRequest : $apiRequest not found!"
-                        return
-                    }
-                    'The remote server returned an error: (504) Gateway Timeout.' {
-                        Write-Warning "New-ApiRequest : Gateway Timeout, sleeping for 60 seconds"
-                        Start-Sleep -Seconds 60
-                    }
-                    default {
-                        Write-Error $errorObject
-                        return
+                    switch ($exceptionError)
+                    {
+                        'The remote server returned an error: (429).'
+                        {
+                            Write-Warning 'New-ApiRequest : API rate limit breached, sleeping for 60 seconds'
+                            Start-Sleep -Seconds 60
+                        }
+                        'The remote server returned an error: (403) Forbidden.'
+                        {
+                            Write-Warning 'New-ApiRequest : AWS DDOS protection breached, sleeping for 5 minutes'
+                            Start-Sleep -Seconds 300
+                        }
+                        'The remote server returned an error: (404) Not Found.'
+                        {
+                            Write-Error "New-ApiRequest : $apiRequest not found!"
+                            return
+                        }
+                        'The remote server returned an error: (504) Gateway Timeout.'
+                        {
+                            Write-Warning "New-ApiRequest : Gateway Timeout, sleeping for 60 seconds"
+                            Start-Sleep -Seconds 60
+                        }
+                        default
+                        {
+                            Write-Error $errorObject
+                            return
+                        }
                     }
                 }
-            }
 
-            $retryCount++
-            if ($retryCount -lt $maxRetries) {
-                Write-Warning "New-ApiRequest : Retrying API request $apiRequest (Attempt $retryCount of $maxRetries)"
-            }
-            else {
-                Write-Error "New-ApiRequest : Maximum retry attempts reached."
-                break
-            }
-        } while ($retryCount -lt $maxRetries)
+                $retryCount++
+                if ($retryCount -lt $maxRetries)
+                {
+                    Write-Warning "New-ApiRequest : Retrying API request $apiRequest (Attempt $retryCount of $maxRetries)"
+                }
+                else
+                {
+                    Write-Error "New-ApiRequest : Maximum retry attempts reached."
+                    break
+                }
+            } while ($retryCount -lt $maxRetries)
+        }
     }
 }
