@@ -17,6 +17,7 @@
 #>
 function Test-ApiAvailability {
     [CmdletBinding()]
+    [OutputType([System.Boolean], ParameterSetName = "API Available")]
     param (
         [Parameter( 
             Position = 0, 

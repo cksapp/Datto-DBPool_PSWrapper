@@ -35,10 +35,15 @@ function Set-SecurityProtocol {
         [string]$Protocol = 'Tls12'
     )
     
-    try {
-        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::$Protocol
-        Write-Verbose "Security Protocol set to: $Protocol"
-    } catch {
-        Write-Error "Failed to set Security Protocol. $_"
+    Process{
+        try
+        {
+            [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::$Protocol
+            Write-Verbose "Security Protocol set to: $Protocol"
+        }
+        catch
+        {
+            Write-Error "Failed to set Security Protocol. $_"
+        }
     }
 }
