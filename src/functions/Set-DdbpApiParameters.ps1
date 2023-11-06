@@ -45,7 +45,7 @@ function Set-DdbpApiParameters {
             ValueFromPipeline = $True,
             ValueFromPipelineByPropertyName = $True
         )]
-        $varScope = "Global"
+        $varScope = "Script"
     )
  
     Begin {
