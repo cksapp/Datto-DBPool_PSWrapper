@@ -17,36 +17,72 @@
 function Set-Logging {
     [CmdletBinding()]
     param (
-        #OptionalParameters
         [Parameter(
             Position = 0,
-            Mandatory = $false
+            Mandatory = $False, 
+            ValueFromPipeline = $True, 
+            ValueFromPipelineByPropertyName = $True
         )]
-        [string]
-        $logPath = $PWD,
+        [boolean]$doLogs,
 
-        [Parameter(Position = 1)]
-        [switch]
-        $doLogs = $true
+        [Parameter(
+            Position = 1, 
+            Mandatory = $False, 
+            ValueFromPipeline = $True, 
+            ValueFromPipelineByPropertyName = $True
+        )]
+        [string]$logPath = (Get-Location),
+
+        [Parameter(
+            Position = 2, 
+            Mandatory = $False, 
+            ValueFromPipeline = $True, 
+            ValueFromPipelineByPropertyName = $True
+        )]
+        $logFileName = "logFile.log",
+
+        [Parameter(
+            Position = 3, 
+            Mandatory = $False, 
+            ValueFromPipeline = $True, 
+            ValueFromPipelineByPropertyName = $True
+        )]
+        $logDateFormat = "yyyy-MM-dd"
     )
 
-    # Directory for "logs"
-    $logDir = Get-ChildItem $logPath | Where-Object { $_.PSIsContainer -and $_.Name -imatch "logs" }
-
-    # Log file
-    $logFile = "$logPath\logFile.log"
-
-    # Check if log directory was found
-    if ($logDir) {
-        # Join the paths and assign to $logDir
-        $logDir = Join-Path -Path $logPath -ChildPath $logDir.Name
-        Write-Information "Logging to: $logDir" -InformationAction Continue
-    } else {
-        # Create the directory if not found
-        Write-Verbose -Message "Log directory not found at $logPath"
-        $logDir = Join-Path -Path $logPath -ChildPath "logs"
-        New-Item -ItemType Directory -Path $logDir | Out-Null
-        Write-Verbose -Message "Directory created: $logDir" #Writes informational output that the directory was created and log location set
-        Write-Information "Logging to: $logDir" -InformationAction Continue
+    switch ($doLogs) {
+        $true {
+            # Directory for "logs"
+            $logDir = Get-ChildItem $logPath | Where-Object { $_.PSIsContainer -and $_.Name -imatch "logs" } 
+            
+            # Check if log directory was found
+            if ($logDir) {
+                # Join the paths and assign to $logDir
+                $logDir = Join-Path -Path $logPath -ChildPath $logDir.Name
+                Write-Information "Logging directory set to: $logDir" -InformationAction Continue
+            }
+            else {
+                # Create the directory if not found
+                Write-Verbose -Message "Log directory not found at $logPath"
+                $logDir = Join-Path -Path $logPath -ChildPath "logs"
+                New-Item -ItemType Directory -Path $logDir -ErrorAction SilentlyContinue
+                if (Test-Path -Path $logDir -PathType Container) {
+                    Write-Verbose -Message "Directory created: $logDir" -InformationAction Continue 
+                    Write-Verbose -Message "Logging to: $logDir" -InformationAction Continue 
+                } else {
+                    Write-Error -Message "Failed to create log directory at $logDir" -Category ObjectNotFound -ErrorAction SilentlyContinue
+                }
+            }
+            # Log file params
+            $logDate = Get-Date -Format "$logDateFormat"
+            $logName = "$logDate`_$logFileName"
+            $logFile = Join-Path -Path $logDir -ChildPath $logName
+            
+            #Write-Output "Logging to $logFile."
+            return $logFile
+        }
+        Default {
+            Write-Verbose -Message "Logging disabled."
+        }
     }
 }
