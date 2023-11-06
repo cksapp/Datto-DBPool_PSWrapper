@@ -1,5 +1,5 @@
 <#
- 
+
 	.SYNOPSIS
 	A PowerShell module that connects to the Datto DBPool API.
 
@@ -21,8 +21,7 @@
 	
 	.PARAMETER apiKey
 	Provide your API Key
-	
-	
+
 #>
 
 # Root Module Parameters

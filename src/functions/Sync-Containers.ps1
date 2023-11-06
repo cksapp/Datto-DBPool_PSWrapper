@@ -41,18 +41,16 @@ function Sync-Containers
         [int]$id
     )
     
-    Begin
-    {
+    Begin {
         # Check API Parameters
         Write-Verbose -Message "Api URL is $apiUrl"
-        if (!($apiUrl) -or !($apiKey))
-        {
+        if (!($apiUrl) -or !($apiKey)){
             Write-Output "API Parameters missing, please run Set-DdbpApiParameters first!"
             break
         }
     }
     
-    Process{
+    Process {
         Write-Output "Refreshing container ID: $id"
         try{
             $apiRefresh = New-ApiRequest -apiUrl $apiUrl -apiKey $apiKey -apiMethod post -apiRequest "containers/$id/actions/refresh" -ErrorAction Stop | ConvertFrom-Json
@@ -66,8 +64,7 @@ function Sync-Containers
         }
     }
     
-    End
-    {
+    End {
         Return Write-Output $apiRefresh
     }
 }
