@@ -55,7 +55,7 @@ function Sync-Containers
         try{
             $apiRefresh = New-ApiRequest -apiUrl $apiUrl -apiKey $apiKey -apiMethod post -apiRequest "containers/$id/actions/refresh" -ErrorAction Stop | ConvertFrom-Json
             Write-Output "Successfully refreshed container ID: $id"
-            Write-Output "Response: $apiRefresh"
+            Write-Verbose -Message "Response: $apiRefresh"
         }
         catch{
             $errorMessage = $_.Exception.Response
