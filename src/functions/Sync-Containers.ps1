@@ -51,7 +51,7 @@ function Sync-Containers
     }
     
     Process {
-        Write-Output "Refreshing container ID: $id"
+        Write-Verbose -Message "Refreshing container ID: $id"
         try{
             $apiRefresh = New-ApiRequest -apiUrl $apiUrl -apiKey $apiKey -apiMethod post -apiRequest "containers/$id/actions/refresh" -ErrorAction Stop | ConvertFrom-Json
             Write-Output "Successfully refreshed container ID: $id"
