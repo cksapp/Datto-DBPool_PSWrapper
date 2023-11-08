@@ -45,7 +45,7 @@ function Set-DdbpApiParameters {
             ValueFromPipeline = $True,
             ValueFromPipelineByPropertyName = $True
         )]
-        $varScope = "Script"
+        $VariableScope = "Script"
     )
  
     Begin {
@@ -70,7 +70,7 @@ function Set-DdbpApiParameters {
     
     End {
         # Set or replace the parameters
-        Set-Variable -Name "apiUrl" -Value "$apiUrl" -Force -Scope $varScope
-        Set-Variable -Name "apiKey" -Value "$apiKey" -Force -Scope $varScope
+        Set-Variable -Name "apiUrl" -Value "$apiUrl" -Force -Scope $VariableScope
+        Set-Variable -Name "apiKey" -Value "$apiKey" -Force -Scope $VariableScope
     }
 }

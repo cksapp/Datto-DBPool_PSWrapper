@@ -38,7 +38,7 @@ function Get-Containers {
             ValueFromPipeline = $True,
             ValueFromPipelineByPropertyName = $True
         )]
-        $varScope = "Script"
+        $VariableScope = "Script"
     )
     
     Begin {
@@ -64,7 +64,7 @@ function Get-Containers {
     }
     
     End {
-        Set-Variable -Name "Containers" -Value $($DBPool.containers) -Force -Scope $varScope
+        Set-Variable -Name "Containers" -Value $($DBPool.containers) -Force -Scope $VariableScope
         Return Write-Output $Containers
     }
 }

@@ -60,21 +60,24 @@ function Import-Env {
             ValueFromPipeline = $True,
             ValueFromPipelineByPropertyName = $True
         )]
-        $varScope = "Script"
+        $VariableScope = "Script"
     )
     
     begin
     {
         $envFile = "$($envFileName).$($envFileExt)"
         $currentLocation = Get-Location
+        #$currentLocation = $PSScriptRoot
         $envFilePath = Join-Path -Path $currentLocation -ChildPath $envFile
 
         if (Test-Path -Path $envFilePath -PathType Leaf) {
             # Convert path only if the file exists
             $envFilePath = Convert-Path $envFilePath
 
+            Write-Verbose -Message "Override file found, Importing variables from $envFilePath."
             # Dot source env override if file exists
-            . $envFilePath
+            . $envFilePath -Verbose
+            . Import-EnvironmentOverride -VariableScope $VariableScope -Verbose
         }
         else {
             Write-Verbose -Message "Override file does not exist at $envFilePath"
@@ -98,7 +101,7 @@ function Import-Env {
                 $varName = $matches[1]
                 $varValue = $matches[2]
                 Write-Host "Setting override variable: $varName=$varValue"
-                Set-Variable -Name "$varName" -Value "$varValue" #-Force -Scope $varScope
+                Set-Variable -Name "$varName" -Value "$varValue" #-Force -Scope $VariableScope
             }
         }
         #>
