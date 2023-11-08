@@ -41,7 +41,8 @@ Param(
 )
 
 # Functions Directory Path
-$functionsPath = Join-Path -path $PSScriptRoot -ChildPath "functions" -AdditionalChildPath "*.ps1"
+$functionsDir = Join-Path -path $PSScriptRoot -ChildPath "functions"
+$functionsPath = Join-Path -path $functionsDir -ChildPath "*.ps1"
 
 # Import functions
 $Functions = @( Get-ChildItem -Path $functionsPath -ErrorAction SilentlyContinue ) 
