@@ -4,7 +4,7 @@
     RootModule        = 'DattoDBPool.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '2023.11.0'
+    ModuleVersion     = '2023.11.1'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
