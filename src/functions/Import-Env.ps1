@@ -60,7 +60,16 @@ function Import-Env {
             ValueFromPipeline = $True,
             ValueFromPipelineByPropertyName = $True
         )]
-        $VariableScope = "Script"
+        [ValidateSet(
+            "Global",
+            "Script",
+            "Local",
+            "Private",
+            "AllUsers",
+            "CurrentUser"
+        )]
+        [String]
+        $VariableScope = "Global"
     )
     
     begin
