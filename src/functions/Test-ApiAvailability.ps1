@@ -39,8 +39,8 @@ function Test-ApiAvailability {
     )
 
     begin {
-        # Check API Parameters
-        Write-Verbose -Message "Api URL is $apiUrl"
+        # Check if API Parameters are set
+        #Write-Verbose -Message "Api URL is $apiUrl"
         if (!($apiUrl) -or !($apiKey)) {
             Write-Output "API Parameters missing, please run Set-DdbpApiParameters first!"
             break
@@ -51,6 +51,7 @@ function Test-ApiAvailability {
     }
 
     process {
+        Write-Verbose -Message "Checking API availability for URL $apiUrl"
         try
         {
             <#$Response = Invoke-RestMethod -Uri $apiUrl -Method Head

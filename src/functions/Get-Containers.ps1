@@ -40,7 +40,7 @@ function Get-Containers {
             ValueFromPipelineByPropertyName = $True
         )]
         [string]
-        $apiRequest = "conatiners",
+        $apiRequest = "containers",
 
         [Parameter(
             Mandatory = $False,
@@ -51,8 +51,8 @@ function Get-Containers {
     )
     
     Begin {
-        # Check API Parameters
-        Write-Verbose -Message "Api URL is $apiUrl"
+        # Check if API Parameters are set
+        #Write-Verbose -Message "Api URL is $apiUrl"
         if (!($apiUrl) -or !($apiKey))
         {
             Write-Output "API Parameters missing, please run Set-DdbpApiParameters first!"
