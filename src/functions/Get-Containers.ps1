@@ -34,6 +34,15 @@ function Get-Containers {
         [string]$apiKey,
 
         [Parameter(
+            Position = 2,
+            Mandatory = $False,
+            ValueFromPipeline = $True,
+            ValueFromPipelineByPropertyName = $True
+        )]
+        [string]
+        $apiRequest = "conatiners",
+
+        [Parameter(
             Mandatory = $False,
             ValueFromPipeline = $True,
             ValueFromPipelineByPropertyName = $True
@@ -52,7 +61,7 @@ function Get-Containers {
     }
     
     Process {
-        $DBPool = New-ApiRequest -apiUrl $apiUrl -apiKey $apiKey -apiMethod Get -apiRequest "containers" | ConvertFrom-Json
+        $DBPool = New-ApiRequest -apiUrl $apiUrl -apiKey $apiKey -apiMethod Get -apiRequest $apiRequest | ConvertFrom-Json
         # Display the response content
         Write-Verbose -Message " Getting containers for $DBPool.containers"
         
