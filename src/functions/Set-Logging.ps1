@@ -47,7 +47,14 @@ function Set-Logging {
             ValueFromPipeline = $True, 
             ValueFromPipelineByPropertyName = $True
         )]
-        $logDateFormat = "yyyy-MM-dd"
+        $logDateFormat = "yyyy-MM-dd",
+
+        [Parameter(
+            Mandatory = $False,
+            ValueFromPipeline = $True,
+            ValueFromPipelineByPropertyName = $True
+        )]
+        $VariableScope = "Script"
     )
 
     switch ($doLogs) {
@@ -78,7 +85,8 @@ function Set-Logging {
             $logName = "$logDate`_$logFileName"
             $logFile = Join-Path -Path $logDir -ChildPath $logName
             
-            #Write-Output "Logging to $logFile."
+            # Sets the logFile variable
+            New-Variable -Name 'logFile' -Value "$logFile" -Force -Scope $VariableScope
             return $logFile
         }
         Default {
