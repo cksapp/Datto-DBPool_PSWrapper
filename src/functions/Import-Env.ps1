@@ -69,7 +69,7 @@ function Import-Env {
             "CurrentUser"
         )]
         [String]
-        $VariableScope = "Global"
+        $VariableScope = "Script"
     )
     
     begin
