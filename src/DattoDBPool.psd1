@@ -13,13 +13,13 @@
     GUID              = '8c050520-2433-464a-9415-2445197aff4e'
 
     # Author of this module
-    Author            = 'Kent Sapp'
+    Author            = 'Kent Sapp (@CKSapp)'
 
     # Company or vendor of this module
-    CompanyName       = ''
+    # CompanyName       = ''
 
     # Copyright statement for this module
-    Copyright         = '(c) 2023 Kent sapp. All rights reserved.'
+    Copyright         = '(c) 2023 Kent Sapp. All rights reserved.'
 
     # Description of the functionality provided by this module
     Description       = 'This module is designed to make it easier to use the internal Datto DBPool API in your PowerShell scripts. As some of the hard work is done, you can develop your scripts faster and be more effecient. There is no need to go through a big learning curve spending lots of time working out how to use the Datto DBPool API. Simply load the module, enter your API key and get results within minutes!'
