@@ -14,7 +14,7 @@
 	
 	.COPYRIGHT
     Copyright (c) Kent Sapp. All rights reserved. Licensed under the MIT license.
-    See https://github.com/cksapp/DattoDBPool_Module/blob/main/LICENSE for license information.
+    See https://github.com/cksapp/Datto-DBPool_PSWrapper/blob/main/LICENSE for license information.
 	
 	.PARAMETER apiUrl
 	Provide the Datto DBPool API URL

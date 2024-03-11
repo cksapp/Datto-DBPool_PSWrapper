@@ -3,7 +3,7 @@
    Checks the availability of an API using a HEAD request.
 
 .DESCRIPTION
-   This function sends a HEAD request to the specified API URL using Invoke-RestMethod
+   This function sends an HTTP HEAD request to the specified API URL using Invoke-WebRequest
    and checks if the HTTP status code is 200, indicating that the API is available.
 
 .PARAMETER apiUrl

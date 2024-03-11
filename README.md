@@ -1,2 +1,2 @@
 # Datto_DBPool_PowerShell-Module
- PowerShell Module for Datto DBPool
+ This PowerShell Module acts as a wrapper for Datto DBPool API.
