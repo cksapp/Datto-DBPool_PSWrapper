@@ -1,5 +1,5 @@
 function ConvertTo-DBPoolQueryString {
-    <#
+<#
     .SYNOPSIS
         Converts uri filter parameters
 

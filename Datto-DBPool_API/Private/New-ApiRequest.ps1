@@ -11,8 +11,8 @@ function New-ApiRequest {
     .PARAMETER ApiRequestBody
         Only used with PUT and POST request
     .INPUTS
-        $apiUrl = The API URL
-        $apiKey = The API Key
+        $DBPool_Base_URI = The API URL
+        $DBPool_ApiKey = The API Key
     .OUTPUTS
         API response
     #>  
@@ -44,41 +44,41 @@ function New-ApiRequest {
             Mandatory = $False,
             ValueFromPipeline = $True
         )]
-        [string]$apiRequestBody,
+        [string]$apiRequestBody<#,
 
         [Parameter(
             Mandatory = $False,
             ValueFromPipeline = $True,
             ValueFromPipelineByPropertyName = $True
         )]
-        $apiUrl,
+        $DBPool_Base_URI,
 
         [Parameter(
             Mandatory = $False,
             ValueFromPipeline = $True,
             ValueFromPipelineByPropertyName = $True
         )]
-        $apiKey
+        $DBPool_ApiKey#>
     )
 
     Begin {
         # Check API Parameters
-        Write-Verbose -Message "Checking variables for $apiUrl & $apiKey"
-        if (!$apiUrl -or !$apiKey) {
+        Write-Verbose -Message "Checking variables for $DBPool_Base_URI & $DBPool_ApiKey"
+        if (!($DBPool_Base_URI -or $DBPool_ApiKey)) {
             Write-Output "API Parameters missing, please run Set-DdbpApiParameters first!"
             break
         }
     }
 
     Process {
-        Write-Verbose -Message "Using Uri $apiUrl"
+        Write-Verbose -Message "Using Uri $DBPool_Base_URI"
         # Define parameters for Invoke-WebRequest cmdlet
         $params = [ordered] @{
-            Uri         = '{0}/api/v2/{1}' -f $apiUrl, $apiRequest
+            Uri         = '{0}{1}' -f $DBPool_Base_URI, $apiRequest
             Method      = $apiMethod
             ContentType = 'application/json'
             Headers = @{
-                "X-App-Apikey" = $apiKey
+                "X-App-Apikey" = "[System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($DBPool_ApiKey))"
             }
         }
 

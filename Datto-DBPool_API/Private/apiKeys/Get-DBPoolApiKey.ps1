@@ -1,5 +1,5 @@
 function Get-DBPoolApiKey {
-    <#
+<#
     .SYNOPSIS
         Gets the DBPool API key global variable.
 
