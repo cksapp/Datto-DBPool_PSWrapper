@@ -34,14 +34,13 @@ function Get-DBPoolUser {
     
     begin {
 
-        $requestPath = if ($Username) { "/api/v2/users/$Username"
-        } else { '/api/v2/self' }
+        $requestPath = if ($Username) { "/api/v2/users/$Username" } else { '/api/v2/self' }
 
     }
     
     process {
 
-        Invoke-DBPoolRequest -Method Get -resource_Uri $requestPath -Verbose
+        Invoke-DBPoolRequest -Method GET -resource_Uri $requestPath
 
     }
     

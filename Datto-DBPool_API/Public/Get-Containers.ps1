@@ -15,14 +15,14 @@
 function Get-Containers {
     [CmdletBinding()]
     param (
-        [Parameter( 
+        <#[Parameter( 
             Position = 0, 
             Mandatory = $False, 
             ValueFromPipeline = $True, 
             ValueFromPipelineByPropertyName = $True, 
             HelpMessage = "The URL of the API to be checked."
         )]
-        [string]$apiUrl,
+        [string]$DBPool_Base_URI,
 
         [Parameter( 
             Position = 1, 
@@ -31,7 +31,7 @@ function Get-Containers {
             ValueFromPipelineByPropertyName = $True, 
             HelpMessage = "API Key for authorization."
         )]
-        [string]$apiKey,
+        [string]$DBPool_ApiKey,#>
 
         [Parameter(
             Position = 2,
@@ -40,7 +40,7 @@ function Get-Containers {
             ValueFromPipelineByPropertyName = $True
         )]
         [string]
-        $apiRequest = "containers",
+        $apiRequest = "/api/v2/containers",
 
         [Parameter(
             Mandatory = $False,
@@ -52,8 +52,8 @@ function Get-Containers {
     
     Begin {
         # Check if API Parameters are set
-        #Write-Verbose -Message "Api URL is $apiUrl"
-        if (!($apiUrl) -or !($apiKey))
+        #Write-Verbose -Message "Api URL is $DBPool_Base_URI"
+        if (!($DBPool_Base_URI -or $DBPool_ApiKey))
         {
             Write-Output "API Parameters missing, please run Set-DdbpApiParameters first!"
             break
@@ -61,19 +61,19 @@ function Get-Containers {
     }
     
     Process {
-        $DBPool = New-ApiRequest -apiUrl $apiUrl -apiKey $apiKey -apiMethod Get -apiRequest $apiRequest | ConvertFrom-Json
+        $DBPool = Invoke-DBPoolRequest -method GET -resource_Uri $apiRequest
         # Display the response content
-        Write-Verbose -Message " Getting containers for $DBPool.containers"
         
-        <#foreach ($container in $DBPool.containers){
+        Write-Verbose -Message "Getting containers for $($DBPool.containers)"
+        foreach ($container in $DBPool.containers){
             Write-Output "Container Name: $($container.name)"
             Write-Output "Container ID: $($container.id)"`n
-        }#>
+        }
 
     }
     
     End {
         Set-Variable -Name "Containers" -Value $($DBPool.containers) -Force -Scope $VariableScope
-        Return Write-Output $Containers
+        Return $Containers
     }
 }
