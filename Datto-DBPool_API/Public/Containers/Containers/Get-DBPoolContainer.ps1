@@ -11,31 +11,47 @@ function Get-DBPoolContainer {
     .EXAMPLE
         Test-MyTestFunction -Verbose
         Explanation of the function or its result. You can include multiple examples with additional .EXAMPLE lines
-#>
+    #>
 
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'ListContainer')]
     param (
-        [Parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [Parameter(ParameterSetName = 'ListContainer')]
+        [switch]$ListContainer,
+
+        [Parameter(ParameterSetName = 'ParentContainer', ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [Parameter(ParameterSetName = 'ListContainer', ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         #[ValidateNotNullOrEmpty()]
         [ValidateRange(1, [int]::MaxValue)]
-        [int]$Id
+        [int]$Id,
+
+        [Parameter(ParameterSetName = 'ParentContainer')]
+        [switch]$ParentContainer,
+
+        [Parameter(ParameterSetName = 'ChildContainer')]
+        [switch]$ChildContainer
     )
     
     begin {
-
         $method = 'GET'
-        $requestPath = '/api/v2/containers'
+        switch ($PSCmdlet.ParameterSetName) {
+            'ListContainer' {
+                $requestPath = '/api/v2/containers' 
+            }
+            'ParentContainer' {
+                $requestPath = '/api/v2/parents' 
+            }
+            'ChildContainer' {
+                $requestPath = '/api/v2/children' 
+            }
+        }
 
         if ($PSBoundParameters.ContainsKey('Id')) {
             $requestPath += "/$Id" 
         }
-
     }
     
     process {
-
         Invoke-DBPoolRequest -method $method -resource_Uri $requestPath
-        
     }
     
     end {
