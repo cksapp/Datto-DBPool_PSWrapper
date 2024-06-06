@@ -54,6 +54,8 @@ function Get-DBPoolContainer {
             $requestPath += "/$Id" 
         }
 
+        Write-Verbose "Running the [ $($PSCmdlet.ParameterSetName) ] parameterSet"
+
         Invoke-DBPoolRequest -method $method -resource_Uri $requestPath
 
     }
