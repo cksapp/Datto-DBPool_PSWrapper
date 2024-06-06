@@ -26,11 +26,13 @@ function Invoke-DBPoolDebug {
         [string]$method = 'GET'
     )
     
-    begin {}
+    begin {
+        $requestPath = '/api/docs/error'
+    }
     
     process {
 
-        Invoke-DBPoolRequest -method $method -resource_Uri '/api/docs/error'
+        Invoke-DBPoolRequest -method $method -resource_Uri $requestPath
 
     }
     

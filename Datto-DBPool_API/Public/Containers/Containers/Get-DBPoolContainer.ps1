@@ -15,14 +15,14 @@ function Get-DBPoolContainer {
 
     [CmdletBinding(DefaultParameterSetName = 'ListContainer')]
     param (
+        [Parameter(ParameterSetName = 'ParentContainer', Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [Parameter(ParameterSetName = 'ListContainer', Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        #[ValidateNotNullOrEmpty()]
+        #[ValidateRange(0, [int]::MaxValue)]
+        [long]$Id,
+
         [Parameter(ParameterSetName = 'ListContainer')]
         [switch]$ListContainer,
-
-        [Parameter(ParameterSetName = 'ParentContainer', ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-        [Parameter(ParameterSetName = 'ListContainer', ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-        #[ValidateNotNullOrEmpty()]
-        [ValidateRange(1, [int]::MaxValue)]
-        [int]$Id,
 
         [Parameter(ParameterSetName = 'ParentContainer')]
         [switch]$ParentContainer,
@@ -32,6 +32,7 @@ function Get-DBPoolContainer {
     )
     
     begin {
+
         $method = 'GET'
         switch ($PSCmdlet.ParameterSetName) {
             'ListContainer' {
@@ -45,13 +46,16 @@ function Get-DBPoolContainer {
             }
         }
 
-        if ($PSBoundParameters.ContainsKey('Id')) {
-            $requestPath += "/$Id" 
-        }
     }
     
     process {
+
+        if ($PSBoundParameters.ContainsKey('Id')) {
+            $requestPath += "/$Id" 
+        }
+
         Invoke-DBPoolRequest -method $method -resource_Uri $requestPath
+
     }
     
     end {

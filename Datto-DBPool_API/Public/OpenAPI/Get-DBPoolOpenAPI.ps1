@@ -20,12 +20,12 @@ function Get-DBPoolOpenAPI {
 
     [CmdletBinding()]
     param (
-        [Parameter()]
-        [string]
-        $requestPath = '/api/docs/openapi.json'
+        
     )
     
-    begin {}
+    begin {
+        $requestPath = '/api/docs/openapi.json'
+    }
     
     process {
         Invoke-DBPoolRequest -Method Get -resource_Uri $requestPath
