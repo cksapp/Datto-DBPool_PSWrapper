@@ -39,12 +39,12 @@ function Invoke-DBPoolContainerAccess {
     param (
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         #[ValidateRange(1, [int]::MaxValue)]
-        [long]$Id,
+        [long[]]$Id,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'GetAccess', ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [Parameter(Mandatory = $true, ParameterSetName = 'AddAccess', ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [Parameter(Mandatory = $true, ParameterSetName = 'RemoveAccess', ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-        [string]$Username,
+        [string[]]$Username,
 
         [Parameter(Mandatory = $false, ParameterSetName = 'GetAccess')]
         [Switch]$GetAccess,
@@ -59,26 +59,29 @@ function Invoke-DBPoolContainerAccess {
     begin {}
 
     process {
+        foreach ($id in $Id) {
+            foreach ($user in $Username) {
+                $requestPath = "/api/v2/containers/$id/access/$user"
 
-        $requestPath = "/api/v2/containers/$Id/access/$Username"
-        switch ($PSCmdlet.ParameterSetName) {
-            'GetAccess' {
-                $method = 'GET'
-            }
-            'AddAccess' {
-                if ($PSCmdlet.ShouldProcess("Target", "Operation")) {
-                    $method = 'PUT'   
+                switch ($PSCmdlet.ParameterSetName) {
+                    'GetAccess' {
+                        $method = 'GET'
+                    }
+                    'AddAccess' {
+                        if ($PSCmdlet.ShouldProcess("Target", "Operation")) {
+                            $method = 'PUT'   
+                        }
+                    }
+                    'RemoveAccess' {
+                        if ($PSCmdlet.ShouldProcess("Target", "Operation")) {
+                            $method = 'DELETE'   
+                        }
+                    }
                 }
-            }
-            'RemoveAccess' {
-                if ($PSCmdlet.ShouldProcess("Target", "Operation")) {
-                    $method = 'DELETE'   
-                }
+
+                Invoke-DBPoolRequest -method $method -resource_Uri $requestPath
             }
         }
-
-        Invoke-DBPoolRequest -method $method -resource_Uri $requestPath
-
     }
     
     end {}
