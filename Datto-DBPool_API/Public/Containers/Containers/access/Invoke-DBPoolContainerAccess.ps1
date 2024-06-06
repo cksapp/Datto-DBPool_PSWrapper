@@ -61,9 +61,9 @@ function Invoke-DBPoolContainerAccess {
     begin {}
 
     process {
-        foreach ($id in $Id) {
-            foreach ($user in $Username) {
-                $requestPath = "/api/v2/containers/$id/access/$user"
+        foreach ($n in $Id) {
+            foreach ($uName in $Username) {
+                $requestPath = "/api/v2/containers/$n/access/$uName"
 
                 switch ($PSCmdlet.ParameterSetName) {
                     'GetAccess' {
