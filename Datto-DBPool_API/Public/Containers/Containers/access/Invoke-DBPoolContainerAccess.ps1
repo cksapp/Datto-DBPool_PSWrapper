@@ -1,28 +1,53 @@
 function Invoke-DBPoolContainerAccess {
-    <#
+<#
     .SYNOPSIS
-        A short one-line action-based description, e.g. 'Tests if a function is valid'
+        The Invoke-DBPoolContainerAccess function is used to interact with various container access operations in the Datto DBPool API.
+
     .DESCRIPTION
-        A longer description of the function, its purpose, common use cases, etc.
-    .NOTES
-        Information or caveats about the function e.g. 'This function is not supported in Linux'
-    .LINK
-        Specify a URI to a help page, this will show when Get-Help -Online is used.
+        The Invoke-DBPoolContainerAccess function is used to Get, Add, or Remove access to a container in the Datto DBPool API based on a given username.
+
+    .PARAMETER Id
+        The ID of the container to access.
+
+    .PARAMETER Username
+        The username to access the container.
+
     .EXAMPLE
-        Test-MyTestFunction -Verbose
-        Explanation of the function or its result. You can include multiple examples with additional .EXAMPLE lines
+        Invoke-DBPoolContainerAccess -Id '12345' -Username 'John.Doe'
+        Invoke-DBPoolContainerAccess -Id '12345' -Username 'John.Doe' -GetAccess
+
+        This will get access to the container with ID 12345 for the user John.Doe
+
+    .EXAMPLE
+        Invoke-DBPoolContainerAccess -Id '12345' -Username 'John.Doe' -AddAccess
+
+        This will add access to the container with ID 12345 for the user John.Doe
+
+    .EXAMPLE
+        Invoke-DBPoolContainerAccess -Id '12345' -Username 'John.Doe' -RemoveAccess
+
+        This will remove access to the container with ID 12345 for the user John.Doe
+
+    .NOTES
+        N/A
+
+    .LINK
+        N/A
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'GetAccess', SupportsShouldProcess = $true, ConfirmImpact = 'Medium')]
     param (
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-        [ValidateRange(1, [int]::MaxValue)]
-        [int]$Id,
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        #[ValidateRange(1, [int]::MaxValue)]
+        [long]$Id,
 
-        [Parameter(Mandatory = $true, ParameterSetName = 'GetAccess')]
-        [Parameter(Mandatory = $true, ParameterSetName = 'AddAccess')]
-        [Parameter(Mandatory = $true, ParameterSetName = 'RemoveAccess')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'GetAccess', ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [Parameter(Mandatory = $true, ParameterSetName = 'AddAccess', ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [Parameter(Mandatory = $true, ParameterSetName = 'RemoveAccess', ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [string]$Username,
+
+        [Parameter(Mandatory = $false, ParameterSetName = 'GetAccess')]
+        [Switch]$GetAccess,
 
         [Parameter(Mandatory = $false, ParameterSetName = 'AddAccess')]
         [Switch]$AddAccess,
@@ -31,10 +56,11 @@ function Invoke-DBPoolContainerAccess {
         [Switch]$RemoveAccess
     )
 
-    begin {
+    begin {}
+
+    process {
 
         $requestPath = "/api/v2/containers/$Id/access/$Username"
-
         switch ($PSCmdlet.ParameterSetName) {
             'GetAccess' {
                 $method = 'GET'
@@ -50,11 +76,9 @@ function Invoke-DBPoolContainerAccess {
                 }
             }
         }
-    }
-
-    process {
 
         Invoke-DBPoolRequest -method $method -resource_Uri $requestPath
+
     }
     
     end {}
