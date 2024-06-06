@@ -44,7 +44,12 @@ function Get-DBPoolMetaData {
         [string]$base_uri = $DBPool_Base_URI
     )
 
-    begin { $resource_uri = "/api/v2/self" }
+    begin {
+
+        $method       = 'GET'
+        $resource_uri = "/api/v2/self"
+
+    }
 
     process {
 
@@ -56,13 +61,13 @@ function Get-DBPoolMetaData {
             $DBPool_Headers.Add("Content-Type", 'application/json')
             $DBPool_Headers.Add('X-App-Apikey', $api_Key)
 
-            $rest_output = Invoke-WebRequest -method Get -uri ($base_uri + $resource_uri) -headers $DBPool_Headers -ErrorAction Stop
+            $rest_output = Invoke-WebRequest -method $method -uri ($base_uri + $resource_uri) -headers $DBPool_Headers -ErrorAction Stop
         }
         catch {
 
             [PSCustomObject]@{
-                URI               = $_.Exception.Response.RequestMessage.RequestUri
-                Method            = $_.Exception.Response.RequestMessage.Method
+                URI               = $($base_uri + $resource_uri)
+                Method            = $method
                 StatusCode        = $_.Exception.Response.StatusCode.value__
                 StatusDescription = $_.Exception.Response.ReasonPhrase
                 Message           = $_.Exception.Message

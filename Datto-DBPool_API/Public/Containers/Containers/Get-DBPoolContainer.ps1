@@ -19,7 +19,7 @@ function Get-DBPoolContainer {
         [Parameter(ParameterSetName = 'ListContainer', Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         #[ValidateNotNullOrEmpty()]
         #[ValidateRange(0, [int]::MaxValue)]
-        [long]$Id,
+        [int]$Id,
 
         [Parameter(ParameterSetName = 'ListContainer')]
         [switch]$ListContainer,

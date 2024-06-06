@@ -31,7 +31,7 @@ function Invoke-DBPoolContainerAction {
     param (
         [Parameter(Mandatory = $true)]
         [ValidateRange(1, [int]::MaxValue)]
-        [int]$Id,
+        [int[]]$Id,
 
         [Parameter(Mandatory = $true)]
         [ValidateSet('refresh', 'schema-merge', 'start', 'restart', 'stop', IgnoreCase = $false)]
@@ -39,24 +39,29 @@ function Invoke-DBPoolContainerAction {
     )
 
     begin {
-        $method = 'POST'
-        $requestPath = "/api/v2/containers/$Id/actions/$Action"
 
-        # Try to get the container name for the ID
-        try {
-            $containerName = (Get-DBPoolContainer -Id $Id).name
-        }
-        catch {
-            Write-Warning "Failed to get the container name for ID $Id. Error: $_"
-        }
+        $method = 'POST'
+
     }
 
     process {
 
-        Write-Verbose "Performing action [ $Action ] on container [ $containerName ]: $Id"
+        foreach ($n in $Id) {
+            $requestPath = "/api/v2/containers/$n/actions/$Action"
 
-        Invoke-DBPoolRequest -method $method -resource_Uri $requestPath
+            # Try to get the container name for the ID when using the Verbose preference
+            if ($VerbosePreference -eq 'Continue') {
+                try {
+                    $containerName = (Get-DBPoolContainer -Id $n).name
+                } catch {
+                    Write-Warning "Failed to get the container name for ID $n. Error: $_"
+                }
+            }
 
+            Write-Verbose "Performing action [ $Action ] on container [ $containerName ]: $n"
+
+            Invoke-DBPoolRequest -method $method -resource_Uri $requestPath
+        }
     }
     
     end {}

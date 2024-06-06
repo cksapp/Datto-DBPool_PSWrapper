@@ -41,7 +41,7 @@ function Invoke-DBPoolContainerAccess {
     param (
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         #[ValidateRange(1, [int]::MaxValue)]
-        [long[]]$Id,
+        [int[]]$Id,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'GetAccess', ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [Parameter(Mandatory = $true, ParameterSetName = 'AddAccess', ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]

@@ -40,7 +40,7 @@ function Test-DBPoolApiKey {
     Param (
         [parameter(
             Position = 0,
-            Mandatory = $true,
+            Mandatory = $false,
             ValueFromPipeline = $true,
             ValueFromPipelineByPropertyName = $true,
             HelpMessage = "Define the base URI for the DBPool connection. Default is Datto's DBPool URI or set a custom URI."
