@@ -1,16 +1,33 @@
 function Get-DBPoolContainer {
-    <#
+<#
     .SYNOPSIS
-        A short one-line action-based description, e.g. 'Tests if a function is valid'
+        The Get-DBPoolContainer function is used to get container information from the DBPool API.
+
     .DESCRIPTION
-        A longer description of the function, its purpose, common use cases, etc.
-    .NOTES
-        Information or caveats about the function e.g. 'This function is not supported in Linux'
-    .LINK
-        Specify a URI to a help page, this will show when Get-Help -Online is used.
+        The Get-DBPoolContainer function is used to get container details from the DBPool API.
+        This function is used to get the list of containers, parent containers, or child containers; and parent or child containers by ID.
+
+    .PARAMETER Id
+        The ID of the container to get. This parameter is required when using the ParentContainer or ChildContainer parameter sets.
+
+    .PARAMETER ListContainer
+        The ListContainer parameter is used to get a list of containers from the DBPool API.
+        This is the default parameter set.
+
+    .PARAMETER ParentContainer
+        The ParentContainer parameter is used to get a list of parent containers from the DBPool API.
+
+    .PARAMETER ChildContainer
+        The ChildContainer parameter is used to get a list of child containers from the DBPool API.
+
     .EXAMPLE
         Test-MyTestFunction -Verbose
         Explanation of the function or its result. You can include multiple examples with additional .EXAMPLE lines
+
+    .NOTES
+        N/A
+    .LINK
+        N/A
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'ListContainer')]
@@ -19,7 +36,7 @@ function Get-DBPoolContainer {
         [Parameter(ParameterSetName = 'ListContainer', Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         #[ValidateNotNullOrEmpty()]
         #[ValidateRange(0, [int]::MaxValue)]
-        [int]$Id,
+        [int[]]$Id,
 
         [Parameter(ParameterSetName = 'ListContainer')]
         [switch]$ListContainer,
@@ -49,17 +66,16 @@ function Get-DBPoolContainer {
     }
     
     process {
-
         if ($PSBoundParameters.ContainsKey('Id')) {
-            $requestPath += "/$Id" 
+            foreach ($n in $Id) {
+                Write-Verbose "Running the [ $($PSCmdlet.ParameterSetName) ] parameterSet for ID $n"
+                Invoke-DBPoolRequest -method $method -resource_Uri "$requestPath/$n"
+            }
+        } else {
+            Write-Verbose "Running the [ $($PSCmdlet.ParameterSetName) ] parameterSet"
+            Invoke-DBPoolRequest -method $method -resource_Uri $requestPath
         }
-
-        Write-Verbose "Running the [ $($PSCmdlet.ParameterSetName) ] parameterSet"
-
-        Invoke-DBPoolRequest -method $method -resource_Uri $requestPath
-
     }
     
-    end {
-    }
+    end {}
 }
