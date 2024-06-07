@@ -9,6 +9,7 @@ function Get-DBPoolUser {
 
     .PARAMETER username
         The username of the user to get details for.
+        This accepts an array of strings.
 
     .EXAMPLE
         Get-DBPoolUser
@@ -29,18 +30,24 @@ function Get-DBPoolUser {
 
     [CmdletBinding()]
     param (
-        [string]$Username
+        [Parameter(Mandatory = $false, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [string[]]$Username
     )
     
     begin {
-
-        $requestPath = if ($Username) { "/api/v2/users/$Username" } else { '/api/v2/self' }
-
+        $method = 'GET'
     }
     
     process {
 
-        Invoke-DBPoolRequest -Method GET -resource_Uri $requestPath
+        if ($null -eq $Username -or $Username.Count -eq 0) {
+            Invoke-DBPoolRequest -Method $method -resource_Uri '/api/v2/self'
+        } else {
+            foreach ($user in $Username) {
+                $requestPath = "/api/v2/users/$user"
+                Invoke-DBPoolRequest -Method $method -resource_Uri $requestPath
+            }
+        }
 
     }
     
