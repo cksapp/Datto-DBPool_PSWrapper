@@ -36,7 +36,7 @@ function New-DBPoolContainer {
 
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [string]$ContainerName,
 
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
