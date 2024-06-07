@@ -44,14 +44,14 @@ function Get-DBPoolApiKey {
             if ($DBPool_ApiKey) {
 
                 if ($plainText) {
-                    $Api_Key = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($DBPool_ApiKey)
+                    $ApiKey = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($DBPool_ApiKey)
 
                     [PSCustomObject]@{
-                        "X-App-Apikey" = ( [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($Api_Key) ).ToString()
+                        "ApiKey" = ( [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($ApiKey) ).ToString()
                     }
                 } else {
                     [PSCustomObject]@{
-                        "X-App-Apikey" = $DBPool_ApiKey
+                        "ApiKey" = $DBPool_ApiKey
                     }
                 }
 
@@ -62,8 +62,8 @@ function Get-DBPoolApiKey {
         } catch {
             Write-Error $_
         } finally {
-            if ($Api_Key) {
-                [System.Runtime.InteropServices.Marshal]::ZeroFreeBSTR($Api_Key)
+            if ($ApiKey) {
+                [System.Runtime.InteropServices.Marshal]::ZeroFreeBSTR($ApiKey)
             }
         }
 

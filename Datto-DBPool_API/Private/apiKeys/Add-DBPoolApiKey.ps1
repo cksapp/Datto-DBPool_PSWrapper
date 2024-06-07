@@ -10,7 +10,7 @@ function Add-DBPoolApiKey {
 
         The DBPool API key is retrieved via the DBPool UI at My Profile -> API key
 
-    .PARAMETER Api_Key
+    .PARAMETER ApiKey
         Defines your API key for the DBPool.
 
     .EXAMPLE
@@ -19,7 +19,7 @@ function Add-DBPoolApiKey {
         Prompts to enter in your personal API key.
 
     .EXAMPLE
-        Add-DBPoolApiKey -Api_Key "0207e066-a779-4849-8aab-0105abf360d8"
+        Add-DBPoolApiKey -ApiKey "0207e066-a779-4849-8aab-0105abf360d8"
 
         Sets the API key to
 
@@ -33,22 +33,18 @@ function Add-DBPoolApiKey {
     [CmdletBinding()]
     [Alias("Set-DBPoolApiKey")]
     param (
-        [Parameter(
-            Position = 0,
-            Mandatory = $true,
-            ValueFromPipeline = $true,
-            ValueFromPipelineByPropertyName = $true,
-            HelpMessage = "API Key for authorization to DBPool."
-        )]
+        [Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true, HelpMessage = "API Key for authorization to DBPool.")]
         [ValidateNotNullOrEmpty()]
-        [securestring]$Api_Key
+        [securestring]$apiKey
     )
     
     begin {}
     
     process {
+    
         Write-Verbose "Setting the DBPool API Key."
-        Set-Variable -Name "DBPool_ApiKey" -Value $Api_Key -Option ReadOnly -Scope global -Force
+        Set-Variable -Name "DBPool_ApiKey" -Value $apiKey -Option ReadOnly -Scope global -Force
+
     }
     
     end {}

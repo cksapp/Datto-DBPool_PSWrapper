@@ -124,7 +124,7 @@ function Invoke-DBPoolRequest {
         }
 
         try {
-            $api_Key = $(Get-DBPoolAPIKey -plainText)."X-App-Apikey"
+            $api_Key = $(Get-DBPoolAPIKey -plainText).'API_Key'
 
             $parameters = [ordered] @{
                 "Method"    = $method

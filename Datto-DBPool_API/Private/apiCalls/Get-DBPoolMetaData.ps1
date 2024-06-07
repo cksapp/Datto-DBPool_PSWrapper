@@ -55,7 +55,7 @@ function Get-DBPoolMetaData {
 
         try {
 
-            $api_Key = $(Get-DBPoolAPIKey -plainText)."X-App-Apikey"
+            $api_Key = $(Get-DBPoolAPIKey -plainText).'API_Key'
 
             $DBPool_Headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
             $DBPool_Headers.Add("Content-Type", 'application/json')
