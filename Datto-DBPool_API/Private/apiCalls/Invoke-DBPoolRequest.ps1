@@ -151,7 +151,7 @@ function Invoke-DBPoolRequest {
                     $parameters['Uri'] = $query_String.Uri -replace '_page=\d+',"_page=$page_Number"
 
                     Write-Verbose "Making API request to Uri: [ $($parameters['Uri']) ]"
-                    $current_Page = Invoke-RestMethod @parameters -ErrorAction Stop
+                    $current_Page = Invoke-WebRequest @parameters -ErrorAction Stop
 
                     Write-Verbose "[ $page_Number ] of [ $($current_Page.pagination.totalPages) ] pages"
 
@@ -166,7 +166,7 @@ function Invoke-DBPoolRequest {
             }
             else{
                 Write-Verbose "Making API request to Uri: [ $($parameters['Uri']) ]"
-                $api_Response = Invoke-RestMethod @parameters -ErrorAction Stop
+                $api_Response = Invoke-WebRequest @parameters -ErrorAction Stop
             }
 
         }
