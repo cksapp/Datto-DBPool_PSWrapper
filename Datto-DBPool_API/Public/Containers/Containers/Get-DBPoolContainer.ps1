@@ -37,8 +37,17 @@ function Get-DBPoolContainer {
 
         Get a list of child containers from the DBPool API
 
+    .EXAMPLE
+        Get-DBPoolContainer -Name 'MyContainer'
+        Get-DBPoolContainer -ParentContainer -Name '*ParentContainer*'
+
+        Get a list of containers from the DBPool API, or parent containers by name
+        Accepts '*' for wildcard input
+
     .NOTES
-        N/A
+        The '-Name' parameter is not a native endpoint of the DBPool API.
+        This is a custom method which uses 'Where-Object' to filter the response with the provided name, if no match is found the original response is returned.
+
     .LINK
         N/A
 #>
@@ -58,7 +67,11 @@ function Get-DBPoolContainer {
         [switch]$ParentContainer,
 
         [Parameter(ParameterSetName = 'ChildContainer')]
-        [switch]$ChildContainer
+        [switch]$ChildContainer,
+
+        [Parameter(ParameterSetName = 'ListContainer')]
+        [Parameter(ParameterSetName = 'ParentContainer')]
+        [string]$Name
     )
     
     begin {
@@ -82,12 +95,42 @@ function Get-DBPoolContainer {
         if ($PSBoundParameters.ContainsKey('Id')) {
             foreach ($n in $Id) {
                 Write-Verbose "Running the [ $($PSCmdlet.ParameterSetName) ] parameterSet for ID $n"
-                Invoke-DBPoolRequest -method $method -resource_Uri "$requestPath/$n"
+                $response = Invoke-DBPoolRequest -method $method -resource_Uri "$requestPath/$n"
             }
         } else {
             Write-Verbose "Running the [ $($PSCmdlet.ParameterSetName) ] parameterSet"
-            Invoke-DBPoolRequest -method $method -resource_Uri $requestPath
+            $response = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath
         }
+
+        if ($PSBoundParameters.ContainsKey('Name')) {
+            $originalResponse = $response
+
+            # Filter the response by name if provided
+            switch ($PSCmdlet.ParameterSetName) {
+                'ListContainer' {
+                    if ($PSBoundParameters.ContainsKey('Id')) {
+                        $response = $response | Where-Object { $_.name -like $Name }
+                    } else {
+                        $response = $($response.containers) | Where-Object { $_.name -like $Name }
+                    }
+                }
+                'ParentContainer' {
+                    if ($PSBoundParameters.ContainsKey('Id')) {
+                        $response = $response | Where-Object { $_.name -like $Name }
+                    } else {
+                        $response = $($response.parents) | Where-Object { $_.name -like $Name }
+                    }
+                }
+            }
+
+            if (!$response) {
+                Write-Error "No container found matching the name [ $Name ] returning fetched containers."
+                $response = $originalResponse
+            }
+        }
+
+        return $response
+
     }
     
     end {}
