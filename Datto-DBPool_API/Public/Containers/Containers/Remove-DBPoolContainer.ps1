@@ -1,43 +1,59 @@
 function Remove-DBPoolContainer {
     <#
     .SYNOPSIS
-        A short one-line action-based description, e.g. 'Tests if a function is valid'
+        The Remove-DBPoolContainer function is used to delete a container in the DBPool.
+
     .DESCRIPTION
-        A longer description of the function, its purpose, common use cases, etc.
-    .NOTES
-        Information or caveats about the function e.g. 'This function is not supported in Linux'
-    .LINK
-        Specify a URI to a help page, this will show when Get-Help -Online is used.
+        The Remove-DBPoolContainer function is used to delete containers in the DBPool based on the provided container ID.
+        This is a destructive operation and will destory the container.
+
+    .PARAMETER Id
+        The ID of the container to delete.
+        This accepts an array of integers.
+
     .EXAMPLE
-        Test-MyTestFunction -Verbose
-        Explanation of the function or its result. You can include multiple examples with additional .EXAMPLE lines
+        Remove-DBPoolContainer -Id '12345'
+        @( 12345, 98765 ) | Remove-DBPoolContainer -Confirm:$false
+
+        This will delete the provided containers by ID.
+
+    .NOTES
+        N/A
+
+    .LINK
+        N/A
 #>
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     param (
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateRange(1, [int]::MaxValue)]
-        [int]$Id
+        [int[]]$Id
     )
     
     begin {
-
         $method = 'DELETE'
-        $requestPath = "/api/v2/containers/$Id"
-
-        try {
-            $containerName = $(Get-DBPoolContainer -Id $Id).name
-        }
-        catch {
-            Write-Warning "Failed to get the container name for ID $Id. Error: $_"
-        }
-
     }
     
     process {
 
-        if ($PSCmdlet.ShouldProcess("[ $containerName ] with ID $Id", 'Destroy Container')) {
-            Invoke-DBPoolRequest -method $method -resource_Uri $requestPath
+        foreach ($n in $Id) {
+            $requestPath = "/api/v2/containers/$n"
+
+            # Try to get the container name to output for the ID when using the Verbose preference
+            if ($VerbosePreference -eq 'Continue') {
+                try {
+                    $containerName = (Get-DBPoolContainer -Id $n).name
+                } catch {
+                    Write-Warning "Failed to get the container name for ID $n. Error: $_"
+                    $containerName = '## FailedToGetContainerName ##'
+                }
+            }
+
+            if ($PSCmdlet.ShouldProcess("Container [ ID: $n ]", 'Destroy')) {
+                Write-Verbose "Destroying Container [ ID: $n, Name: $containerName ]"
+                Invoke-DBPoolRequest -method $method -resource_Uri $requestPath
+            }
         }
         
     }
