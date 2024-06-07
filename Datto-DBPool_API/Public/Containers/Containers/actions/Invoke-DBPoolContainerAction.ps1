@@ -27,13 +27,13 @@ function Invoke-DBPoolContainerAction {
         N/A
 #>
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Medium')]
     param (
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateRange(1, [int]::MaxValue)]
         [int[]]$Id,
 
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true, Position = 1)]
         [ValidateSet('refresh', 'schema-merge', 'start', 'restart', 'stop', IgnoreCase = $false)]
         [string]$Action
     )
@@ -49,19 +49,22 @@ function Invoke-DBPoolContainerAction {
         foreach ($n in $Id) {
             $requestPath = "/api/v2/containers/$n/actions/$Action"
 
-            # Try to get the container name for the ID when using the Verbose preference
+            # Try to get the container name to output for the ID when using the Verbose preference
             if ($VerbosePreference -eq 'Continue') {
                 try {
                     $containerName = (Get-DBPoolContainer -Id $n).name
                 } catch {
                     Write-Warning "Failed to get the container name for ID $n. Error: $_"
+                    $containerName = '## FailedToGetContainerName ##'
                 }
             }
 
-            Write-Verbose "Performing action [ $Action ] on container [ $containerName ]: $n"
-
-            Invoke-DBPoolRequest -method $method -resource_Uri $requestPath
+            if ($PSCmdlet.ShouldProcess("Container [ ID: $n ]", "[ $Action ]")) {
+                Write-Verbose "Peforming action [ $Action ] on Container [ ID: $n, Name: $containerName ]"
+                Invoke-DBPoolRequest -method $method -resource_Uri $requestPath
+            }
         }
+
     }
     
     end {}
