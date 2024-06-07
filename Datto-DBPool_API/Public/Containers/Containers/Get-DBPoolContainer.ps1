@@ -21,8 +21,21 @@ function Get-DBPoolContainer {
         The ChildContainer parameter is used to get a list of child containers from the DBPool API.
 
     .EXAMPLE
-        Test-MyTestFunction -Verbose
-        Explanation of the function or its result. You can include multiple examples with additional .EXAMPLE lines
+        Get-DBPoolContainer
+        Get-DBPoolContainer -Id 12345
+
+        Get a list of containers from the DBPool API, or by ID
+
+    .EXAMPLE
+        Get-DBPoolContainer -ParentContainer
+        Get-DBPoolContainer -ParentContainer -Id 12345
+
+        Get a list of parent containers from the DBPool API, or by ID
+
+    .EXAMPLE
+        Get-DBPoolContainer -ChildContainer
+
+        Get a list of child containers from the DBPool API
 
     .NOTES
         N/A
