@@ -106,6 +106,8 @@ function Get-DBPoolContainer {
             $originalResponse = $response
 
             # Filter the response by name if provided
+            Write-Verbose "Filtering the response by name [ $Name ]"
+
             switch ($PSCmdlet.ParameterSetName) {
                 'ListContainer' {
                     if ($PSBoundParameters.ContainsKey('Id')) {
@@ -129,7 +131,8 @@ function Get-DBPoolContainer {
             }
         }
 
-        return $response
+        # Return the response
+        $response
 
     }
     

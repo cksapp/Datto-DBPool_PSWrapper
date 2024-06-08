@@ -48,11 +48,11 @@ function Test-DBPoolApi {
         Write-Verbose -Message "Checking API availability for URL $Uri"
         try {
             Invoke-WebRequest -Method 'HEAD' -Uri $Uri | Out-Null
-            return $true
+            $true
         } catch {
             if ($_.Exception.Response.StatusCode -ne 200) {
                 Write-Error $_.Exception.Message
-                return $false
+                $false
             }
         }
 

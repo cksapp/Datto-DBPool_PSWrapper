@@ -90,7 +90,8 @@ function ConvertTo-DBPoolQueryString {
         $uri_Request = [System.UriBuilder]($DBPool_Base_URI + $resource_Uri)
         $uri_Request.Query = $query_Parameters.ToString()
 
-        return $uri_Request
+        # Return the full uri
+        $uri_Request
 
     }
 

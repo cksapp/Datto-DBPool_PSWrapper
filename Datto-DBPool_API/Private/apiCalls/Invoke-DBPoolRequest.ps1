@@ -204,10 +204,11 @@ function Invoke-DBPoolRequest {
                 }
             }
 
-            return $api_Response
+            # Return the response
+            $api_Response
 
         }
-        else{ return $api_Response }
+        else{ $api_Response }
 
     }
 
