@@ -29,30 +29,35 @@
 Param(
 	[Parameter(
 		Position = 0, 
-		Mandatory=$False
+		Mandatory = $false,
+		ValueFromPipeline = $true,
+		ValueFromPipelineByPropertyName = $true
 	)]
-	$apiUrl,
+	[string]$apiUrl,
 
 	[Parameter(
 		Position = 1, 
-		Mandatory=$False
+		Mandatory = $false,
+		ValueFromPipeline = $true,
+		ValueFromPipelineByPropertyName = $true
 	)]
-	$apiKey
+	[string]$apiKey
 )
 
-# Functions Directory Path
-$functionsDir = Join-Path -path $PSScriptRoot -ChildPath "functions"
-$functionsPath = Join-Path -path $functionsDir -ChildPath "*.ps1"
+# Directories to import from
+$directory = "Public", "Private"
 
 # Import functions
-$Functions = @( Get-ChildItem -Path $functionsPath -ErrorAction SilentlyContinue ) 
-foreach ($Import in @($Functions)){
-  try{
-    . $Import.fullname
-  }
-  catch{
-    throw "Could not import function $($Import.fullname): $_"
-  }
+foreach ($dir in $directory) {
+	$dirPath = Join-Path -Path ($PSScriptRoot) -ChildPath $dir
+	$Functions = @( Get-ChildItem -Path $dirPath -Filter "*.ps1" -Recurse -ErrorAction SilentlyContinue ) 
+	foreach ($Import in @($Functions)) {
+		try {
+			. $Import.fullname
+		} catch {
+			throw "Could not import function $($Import.fullname): $_"
+		}
+	}
 }
 
 # Set API parameters

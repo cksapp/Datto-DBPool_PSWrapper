@@ -1,91 +1,64 @@
+function Test-DBPoolApi {
 <#
-.SYNOPSIS
-   Checks the availability of an API using a HEAD request.
+    .SYNOPSIS
+    Checks the availability of an API using a HEAD request.
 
-.DESCRIPTION
-   This function sends an HTTP HEAD request to the specified API URL using Invoke-WebRequest
-   and checks if the HTTP status code is 200, indicating that the API is available.
+    .DESCRIPTION
+    This function sends an HTTP HEAD request to the specified API URL using Invoke-WebRequest
+    and checks if the HTTP status code is 200, indicating that the API is available.
 
-.PARAMETER apiUrl
-   The URL of the API to be checked.
+    .PARAMETER DBPool_Base_URI
+    The URL of the API to be checked.
 
-.PARAMETER ApiKey
-   Optional: Access token for authorization.
+    .PARAMETER ApiKey
+    Optional: Access token for authorization.
 
-.EXAMPLE
-   Test-ApiAvailability -apiUrl "https://api.example.com" -ApiKey "your_access_token"
+    .EXAMPLE
+    Test-DBPoolApi -DBPool_Base_URI "https://api.example.com"
 #>
-function Test-ApiAvailability {
-    [CmdletBinding()]
-    [OutputType([System.Boolean], ParameterSetName = "API Available")]
-    param (
-        [Parameter( 
-            Position = 0, 
-            Mandatory = $False, 
-            ValueFromPipeline = $True, 
-            ValueFromPipelineByPropertyName = $True, 
-            HelpMessage="The URL of the API to be checked."
-        )]
-        [string]$apiUrl,
 
-        [Parameter( 
-            Position = 1, 
-            Mandatory = $False,
-            ValueFromPipeline = $True, 
-            ValueFromPipelineByPropertyName = $True, 
-            HelpMessage="API Key for authorization."
-        )]
-        [string]$apiKey
+    [CmdletBinding()]
+    [OutputType([System.Boolean], ParameterSetName = "API_Available")]
+    param (
+        [Parameter(Position = 0, ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $True, HelpMessage = "The URL of the API to be checked.")]
+        [string]$base_uri = $global:DBPool_Base_URI,
+
+        [Parameter(Position = 1, Mandatory = $false)]
+        [string]$resource_Uri = '/api/docs/openapi.json'
     )
 
     begin {
+
         # Check if API Parameters are set
-        #Write-Verbose -Message "Api URL is $apiUrl"
-        if (!($apiUrl) -or !($apiKey)) {
-            Write-Output "API Parameters missing, please run Set-DdbpApiParameters first!"
+        Write-Debug -Message "Api URL is $base_uri"
+        Write-Debug -Message "Api Key is $DBPool_ApiKey"
+        if (!($base_uri -and $DBPool_ApiKey)) {
+            Write-Warning "API Parameters missing, please run Set-DBPoolApiParameters first!"
             break
         }
 
         # Sets the variable for the document URI to check, filtered to replace ending with /v2 with openapi docs
-        $apiUrl = $apiUrl -replace '/v2$', '/docs/openapi.json'
+        $base_uri = $base_uri.TrimEnd('/')
+        $Uri = $base_uri + $resource_Uri
+
     }
 
     process {
-        Write-Verbose -Message "Checking API availability for URL $apiUrl"
-        try
-        {
-            <#$Response = Invoke-RestMethod -Uri $apiUrl -Method Head
-            Write-Output "$Response"#>
 
-            $Response = Invoke-WebRequest -Uri $apiUrl -Method Head
-            Write-Output "$Response"
-
-            return $true
-        }
-        catch
-        {
-            if ($null -ne $_.Exception.Response -and $_.Exception.Response.StatusCode -eq 404)
-            {
-                Write-Error -Message "Error 404: Page not found.`nPlease check your parameters and try again."
-            }
-            <#elseif ($null -ne $_.Exception.Response -and $_.Exception.Contains("No such host is known"))
-            {
-                Write-Error "Error: No such host is known.`nPlease check your connection, VPN, and try again."
-            }#>
-            else
-            {
-                #Write-Error $_.Exception
+        Write-Verbose -Message "Checking API availability for URL $Uri"
+        try {
+            Invoke-WebRequest -Method 'HEAD' -Uri $Uri | Out-Null
+            $true
+        } catch {
+            if ($_.Exception.Response.StatusCode -ne 200) {
                 Write-Error $_.Exception.Message
+                $false
             }
-            return $false
         }
+
     }
 
-    end {
-        # Return the apiUrl variable without the openAPI docs URI
-        $apiUrl = $apiUrl -replace 'api/docs/openapi.json', ''
-        Set-Variable -name apiUrl -value $apiUrl -Force -Scope global
-    }
+    end {}
 
 
 }

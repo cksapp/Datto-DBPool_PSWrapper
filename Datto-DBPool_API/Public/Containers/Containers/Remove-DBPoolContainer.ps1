@@ -1,0 +1,62 @@
+function Remove-DBPoolContainer {
+    <#
+    .SYNOPSIS
+        The Remove-DBPoolContainer function is used to delete a container in the DBPool.
+
+    .DESCRIPTION
+        The Remove-DBPoolContainer function is used to delete containers in the DBPool based on the provided container ID.
+        This is a destructive operation and will destory the container.
+
+    .PARAMETER Id
+        The ID of the container to delete.
+        This accepts an array of integers.
+
+    .EXAMPLE
+        Remove-DBPoolContainer -Id '12345'
+        @( 12345, 98765 ) | Remove-DBPoolContainer -Confirm:$false
+
+        This will delete the provided containers by ID.
+
+    .NOTES
+        N/A
+
+    .LINK
+        N/A
+#>
+
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
+    param (
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [ValidateRange(1, [int]::MaxValue)]
+        [int[]]$Id
+    )
+    
+    begin {
+        $method = 'DELETE'
+    }
+    
+    process {
+
+        foreach ($n in $Id) {
+            $requestPath = "/api/v2/containers/$n"
+
+            # Try to get the container name to output for the ID when using the Verbose preference
+            if ($VerbosePreference -eq 'Continue') {
+                try {
+                    $containerName = (Get-DBPoolContainer -Id $n).name
+                } catch {
+                    Write-Warning "Failed to get the container name for ID $n. Error: $_"
+                    $containerName = '## FailedToGetContainerName ##'
+                }
+            }
+
+            if ($PSCmdlet.ShouldProcess("Container [ ID: $n ]", 'Destroy')) {
+                Write-Verbose "Destroying Container [ ID: $n, Name: $containerName ]"
+                Invoke-DBPoolRequest -method $method -resource_Uri $requestPath
+            }
+        }
+        
+    }
+    
+    end {}
+}
