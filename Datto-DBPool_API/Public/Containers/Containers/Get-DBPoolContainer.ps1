@@ -10,6 +10,10 @@ function Get-DBPoolContainer {
     .PARAMETER Id
         The ID of the container to get. This parameter is required when using the ParentContainer or ChildContainer parameter sets.
 
+    .PARAMETER status
+        Gets the status of a container by ID.
+        Returns basic container details, and dockerContainerRunning, mysqlServiceResponding, and mysqlServiceRespondingCached statuses.
+
     .PARAMETER ListContainer
         Retrieves a list of containers from the DBPool API. This is the default parameter set.
 
@@ -28,6 +32,12 @@ function Get-DBPoolContainer {
         Get-DBPoolContainer -Id 12345
 
         Get a list of containers from the DBPool API, or by ID
+
+    .EXAMPLE
+        Get-DBPoolContainer -status
+        Get-DBPoolContainer -status -Id 12345
+
+        Get the status of a container by ID
 
     .EXAMPLE
         Get-DBPoolContainer -ParentContainer
@@ -60,6 +70,8 @@ function Get-DBPoolContainer {
     param (
         [Parameter(ParameterSetName = 'ParentContainer', Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [Parameter(ParameterSetName = 'ListContainer', Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [Parameter(ParameterSetName = 'ContainerStatus', Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [ValidateNotNullOrEmpty()]
         #[ValidateRange(0, [int]::MaxValue)]
         [int[]]$Id,
 
@@ -74,7 +86,10 @@ function Get-DBPoolContainer {
 
         [Parameter(ParameterSetName = 'ListContainer')]
         [Parameter(ParameterSetName = 'ParentContainer')]
-        [string]$Name
+        [string]$Name,
+
+        [Parameter(ParameterSetName = 'ContainerStatus')]
+        [switch]$status
     )
 
     begin {
@@ -83,6 +98,9 @@ function Get-DBPoolContainer {
         switch ($PSCmdlet.ParameterSetName) {
             'ListContainer' {
                 $requestPath = '/api/v2/containers'
+            }
+            'ContainerStatus' {
+                $requestPath = "/api/v2/containers"
             }
             'ParentContainer' {
                 $requestPath = '/api/v2/parents'
@@ -95,11 +113,22 @@ function Get-DBPoolContainer {
     }
 
     process {
+        if ($PSCmdlet.ParameterSetName -eq 'ContainerStatus' -and -not $PSBoundParameters.ContainsKey('Id')) {
+            Write-Error "The -status parameter requires the -Id parameter to be specified."
+            return
+        }
 
         if ($PSBoundParameters.ContainsKey('Id')) {
             $response = foreach ($n in $Id) {
                 Write-Verbose "Running the [ $($PSCmdlet.ParameterSetName) ] parameter set for ID $n"
-                $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri "$requestPath/$n"
+
+                # Define the ContainerStatus parameter set request path if set
+                if ($PSCmdlet.ParameterSetName -eq 'ContainerStatus') {
+                    $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri "$requestPath/$n/status"
+                } else {
+                    $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri "$requestPath/$n"
+                }
+
                 if ($null -ne $requestResponse) {
                     $requestResponse | ConvertFrom-Json
                 }
