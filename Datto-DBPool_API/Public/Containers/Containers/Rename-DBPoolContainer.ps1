@@ -45,10 +45,16 @@ function Rename-DBPoolContainer {
     
     process {
 
-        foreach ($n in $Id) {
+        $response = foreach ($n in $Id) {
             $requestPath = "/api/v2/containers/$n"
-            Invoke-DBPoolRequest -method $method -resource_Uri $requestPath -data $body
+            $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath -data $body
+            if ($null -ne $requestResponse) {
+                $requestResponse | ConvertFrom-Json
+            }
         }
+
+        # Return the response
+        $response
 
     }
     

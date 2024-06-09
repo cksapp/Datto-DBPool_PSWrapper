@@ -54,12 +54,15 @@ function New-DBPoolContainer {
     )
 
     begin {
+
         $method = 'POST'
         $requestPath = "/api/v2/containers"
         $body = @{}
+
     }
 
     process {
+
         $body['name'] = $ContainerName
 
         if (-not ($PSBoundParameters.ContainsKey('ParentId') -or $PSBoundParameters.ContainsKey('ParentName') -or $PSBoundParameters.ContainsKey('ParentDefaultDatabase'))) {
@@ -78,9 +81,16 @@ function New-DBPoolContainer {
             $body.'parent.defaultDatabase' = $ParentDefaultDatabase
         }
 
-        Invoke-DBPoolRequest -method $method -resource_Uri $requestPath -data $body
+        $response = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath -data $body
+        if ($null -ne $response) {
+            $response = $response | ConvertFrom-Json
+        }
+
+        # Return the response
+        $response
+
     }
     
-    end {
-    }
+    end {}
+
 }

@@ -52,7 +52,10 @@ function Remove-DBPoolContainer {
 
             if ($PSCmdlet.ShouldProcess("Container [ ID: $n ]", 'Destroy')) {
                 Write-Verbose "Destroying Container [ ID: $n, Name: $containerName ]"
-                Invoke-DBPoolRequest -method $method -resource_Uri $requestPath
+                $response = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath
+                if ($response.StatusCode -eq 204) {
+                    Write-Output "Success: Container [ ID: $n ] destroyed."
+                }
             }
         }
         

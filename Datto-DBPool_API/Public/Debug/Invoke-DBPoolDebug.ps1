@@ -32,6 +32,8 @@ function Invoke-DBPoolDebug {
     
     process {
 
+        Write-Debug "Invoking DBPool Debug Exception API with method [ $method ]"
+
         Invoke-DBPoolRequest -method $method -resource_Uri $requestPath
 
     }

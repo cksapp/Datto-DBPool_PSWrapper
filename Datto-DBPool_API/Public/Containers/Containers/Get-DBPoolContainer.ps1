@@ -1,24 +1,27 @@
 function Get-DBPoolContainer {
 <#
     .SYNOPSIS
-        The Get-DBPoolContainer function is used to get container information from the DBPool API.
+        The Get-DBPoolContainer function retrieves container information from the DBPool API.
 
     .DESCRIPTION
-        The Get-DBPoolContainer function is used to get container details from the DBPool API.
-        This function is used to get the list of containers, parent containers, or child containers; and parent or child containers by ID.
+        This function retrieves container details from the DBPool API.
+        It can get containers, parent containers, or child containers, and also retrieve containers by ID and also filter by container name.
 
     .PARAMETER Id
         The ID of the container to get. This parameter is required when using the ParentContainer or ChildContainer parameter sets.
 
     .PARAMETER ListContainer
-        The ListContainer parameter is used to get a list of containers from the DBPool API.
-        This is the default parameter set.
+        Retrieves a list of containers from the DBPool API. This is the default parameter set.
 
     .PARAMETER ParentContainer
-        The ParentContainer parameter is used to get a list of parent containers from the DBPool API.
+        Retrieves a list of parent containers from the DBPool API.
 
     .PARAMETER ChildContainer
-        The ChildContainer parameter is used to get a list of child containers from the DBPool API.
+        Retrieves a list of child containers from the DBPool API.
+
+    .PARAMETER Name
+        Filters containers returned from the DBPool API by name.
+        Accepts '*' for wildcard input.
 
     .EXAMPLE
         Get-DBPoolContainer
@@ -46,7 +49,8 @@ function Get-DBPoolContainer {
 
     .NOTES
         The '-Name' parameter is not a native endpoint of the DBPool API.
-        This is a custom method which uses 'Where-Object' to filter the response with the provided name, if no match is found the original response is returned.
+        This is a custom method which uses 'Where-Object' to filter the response with the provided name.
+        If no match is found, the original response is returned.
 
     .LINK
         N/A
@@ -56,7 +60,6 @@ function Get-DBPoolContainer {
     param (
         [Parameter(ParameterSetName = 'ParentContainer', Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [Parameter(ParameterSetName = 'ListContainer', Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-        #[ValidateNotNullOrEmpty()]
         #[ValidateRange(0, [int]::MaxValue)]
         [int[]]$Id,
 
@@ -73,56 +76,61 @@ function Get-DBPoolContainer {
         [Parameter(ParameterSetName = 'ParentContainer')]
         [string]$Name
     )
-    
+
     begin {
 
         $method = 'GET'
         switch ($PSCmdlet.ParameterSetName) {
             'ListContainer' {
-                $requestPath = '/api/v2/containers' 
+                $requestPath = '/api/v2/containers'
             }
             'ParentContainer' {
-                $requestPath = '/api/v2/parents' 
+                $requestPath = '/api/v2/parents'
             }
             'ChildContainer' {
-                $requestPath = '/api/v2/children' 
+                $requestPath = '/api/v2/children'
             }
         }
 
     }
-    
+
     process {
+
         if ($PSBoundParameters.ContainsKey('Id')) {
-            foreach ($n in $Id) {
-                Write-Verbose "Running the [ $($PSCmdlet.ParameterSetName) ] parameterSet for ID $n"
-                $response = Invoke-DBPoolRequest -method $method -resource_Uri "$requestPath/$n"
+            $response = foreach ($n in $Id) {
+                Write-Verbose "Running the [ $($PSCmdlet.ParameterSetName) ] parameter set for ID $n"
+                $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri "$requestPath/$n"
+                if ($null -ne $requestResponse) {
+                    $requestResponse | ConvertFrom-Json
+                }
             }
         } else {
-            Write-Verbose "Running the [ $($PSCmdlet.ParameterSetName) ] parameterSet"
-            $response = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath
+            Write-Verbose "Running the [ $($PSCmdlet.ParameterSetName) ] parameter set"
+            $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath
+            if ($null -ne $requestResponse) {
+                $response = $requestResponse | ConvertFrom-Json
+            }
         }
 
+        # Filter the response by name if provided
         if ($PSBoundParameters.ContainsKey('Name')) {
             $originalResponse = $response
 
-            # Filter the response by name if provided
             Write-Verbose "Filtering the response by name [ $Name ]"
 
-            switch ($PSCmdlet.ParameterSetName) {
+            $filterKey = switch ($PSCmdlet.ParameterSetName) {
                 'ListContainer' {
-                    if ($PSBoundParameters.ContainsKey('Id')) {
-                        $response = $response | Where-Object { $_.name -like $Name }
-                    } else {
-                        $response = $($response.containers) | Where-Object { $_.name -like $Name }
-                    }
+                    'containers' 
                 }
                 'ParentContainer' {
-                    if ($PSBoundParameters.ContainsKey('Id')) {
-                        $response = $response | Where-Object { $_.name -like $Name }
-                    } else {
-                        $response = $($response.parents) | Where-Object { $_.name -like $Name }
-                    }
+                    'parents' 
                 }
+            }
+
+            if ($PSBoundParameters.ContainsKey('Id')) {
+                $response = $response | Where-Object { $_.name -like $Name }
+            } else {
+                $response = $($response.$filterKey) | Where-Object { $_.name -like $Name }
             }
 
             if (!$response) {
@@ -135,6 +143,7 @@ function Get-DBPoolContainer {
         $response
 
     }
-    
+
     end {}
+
 }

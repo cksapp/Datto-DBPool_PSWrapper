@@ -35,7 +35,7 @@ function Get-DBPoolOpenAPI {
     
     process {
 
-        Invoke-DBPoolRequest -Method Get -resource_Uri $requestPath
+        ConvertFrom-Json $( Invoke-DBPoolRequest -Method Get -resource_Uri $requestPath )
 
     }
     

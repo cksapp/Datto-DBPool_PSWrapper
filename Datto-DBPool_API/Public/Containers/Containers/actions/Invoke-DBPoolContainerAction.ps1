@@ -61,7 +61,11 @@ function Invoke-DBPoolContainerAction {
 
             if ($PSCmdlet.ShouldProcess("Container [ ID: $n ]", "[ $Action ]")) {
                 Write-Verbose "Peforming action [ $Action ] on Container [ ID: $n, Name: $containerName ]"
-                Invoke-DBPoolRequest -method $method -resource_Uri $requestPath
+
+                $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath
+                if ($requestResponse.StatusCode -eq 204) {
+                    Write-Output "Success: Invoking Action [ $Action ] on Container [ ID: $n ]."
+                }
             }
         }
 

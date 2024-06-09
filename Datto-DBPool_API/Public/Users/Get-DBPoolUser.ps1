@@ -41,13 +41,23 @@ function Get-DBPoolUser {
     process {
 
         if ($null -eq $Username -or $Username.Count -eq 0) {
-            Invoke-DBPoolRequest -Method $method -resource_Uri '/api/v2/self'
+            $response = Invoke-DBPoolRequest -Method $method -resource_Uri '/api/v2/self'
+            if ($null -ne $response) {
+                    $response = $response | ConvertFrom-Json
+                }
         } else {
-            foreach ($user in $Username) {
-                $requestPath = "/api/v2/users/$user"
-                Invoke-DBPoolRequest -Method $method -resource_Uri $requestPath
+            $response = foreach ($uName in $Username) {
+                Write-Verbose "Running the [ $($PSCmdlet.ParameterSetName) ] parameter set for Username $uName"
+                $requestPath = "/api/v2/users/$uName"
+                $requestResponse = Invoke-DBPoolRequest -Method $method -resource_Uri $requestPath
+                if ($null -ne $requestResponse) {
+                    $requestResponse | ConvertFrom-Json
+                }
             }
         }
+
+        # Return the response
+        $response
 
     }
     
