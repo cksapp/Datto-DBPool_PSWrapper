@@ -27,6 +27,10 @@ function Get-DBPoolContainer {
         Filters containers returned from the DBPool API by name.
         Accepts '*' for wildcard input.
 
+    .PARAMETER DefaultDatabase
+        Filters containers returned from the DBPool API by database.
+        Accepts '*' for wildcard input.
+
     .EXAMPLE
         Get-DBPoolContainer
         Get-DBPoolContainer -Id 12345
@@ -57,9 +61,15 @@ function Get-DBPoolContainer {
         Get a list of containers from the DBPool API, or parent containers by name
         Accepts '*' for wildcard input
 
+    .EXAMPLE
+        Get-DBPoolContainer -DefaultDatabase 'Database'
+        Get-DBPoolContainer -ParentContainer -DefaultDatabase '*Database*'
+
+        Get a list of containers from the DBPool API, or parent containers by database
+        Accepts '*' for wildcard input
     .NOTES
-        The '-Name' parameter is not a native endpoint of the DBPool API.
-        This is a custom method which uses 'Where-Object' to filter the response with the provided name.
+        The '-Name', and -DefaultDatabase parameters are not native endpoints of the DBPool API.
+        This is a custom method which uses 'Where-Object' to filter the response with the provided filter.
         If no match is found, the original response is returned.
 
     .LINK
@@ -84,12 +94,17 @@ function Get-DBPoolContainer {
         [Parameter(ParameterSetName = 'ChildContainer')]
         [switch]$ChildContainer,
 
-        [Parameter(ParameterSetName = 'ListContainer')]
-        [Parameter(ParameterSetName = 'ParentContainer')]
+        [Parameter(ParameterSetName = 'ContainerStatus')]
+        [switch]$Status,
+
+        [Parameter(ParameterSetName = 'ListContainer', ValueFromPipelineByPropertyName = $true)]
+        [Parameter(ParameterSetName = 'ParentContainer', ValueFromPipelineByPropertyName = $true)]
         [string]$Name,
 
-        [Parameter(ParameterSetName = 'ContainerStatus')]
-        [switch]$Status
+        [Parameter(ParameterSetName = 'ListContainer', ValueFromPipelineByPropertyName = $true)]
+        [Parameter(ParameterSetName = 'ParentContainer', ValueFromPipelineByPropertyName = $true)]
+        [Alias('Database')]
+        [string]$DefaultDatabase
     )
 
     begin {
@@ -138,11 +153,20 @@ function Get-DBPoolContainer {
             }
         }
 
-        # Filter the response by name if provided
-        if ($PSBoundParameters.ContainsKey('Name')) {
+        # Filter the response by name or DefaultDatabase if provided
+        if ($PSBoundParameters.ContainsKey('Name') -or $PSBoundParameters.ContainsKey('DefaultDatabase')) {
             $originalResponse = $response
 
-            Write-Verbose "Filtering the response by name [ $Name ]"
+            if ($PSBoundParameters.ContainsKey('Name')) {
+                Write-Verbose "Filtering the response by name [ $Name ]"
+                $Filter = 'Name'
+                $filterParameter = $Name
+            }
+            if ($PSBoundParameters.ContainsKey('DefaultDatabase')) {
+                Write-Verbose "Filtering the response by database [ $DefaultDatabase ]"
+                $Filter = 'DefaultDatabase'
+                $filterParameter = $DefaultDatabase
+            }
 
             $filterKey = switch ($PSCmdlet.ParameterSetName) {
                 'ListContainer' {
@@ -154,13 +178,19 @@ function Get-DBPoolContainer {
             }
 
             if ($PSBoundParameters.ContainsKey('Id')) {
-                $response = $response | Where-Object { $_.name -like $Name }
+                $response = $response | Where-Object {
+                    ($PSBoundParameters.ContainsKey('Name') -and $_.name -like $Name) -or
+                    ($PSBoundParameters.ContainsKey('DefaultDatabase') -and $_.defaultDatabase -like $DefaultDatabase)
+                }
             } else {
-                $response = $($response.$filterKey) | Where-Object { $_.name -like $Name }
+                $response = $($response.$filterKey) | Where-Object {
+                    ($PSBoundParameters.ContainsKey('Name') -and $_.name -like $Name) -or
+                    ($PSBoundParameters.ContainsKey('DefaultDatabase') -and $_.defaultDatabase -like $DefaultDatabase)
+                }
             }
 
             if (!$response) {
-                Write-Error "No container found matching the name [ $Name ] returning fetched containers."
+                Write-Error "No container found matching the [ $Filter ] filter parameter [ $filterParameter ] returning fetched containers."
                 $response = $originalResponse
             }
         }
