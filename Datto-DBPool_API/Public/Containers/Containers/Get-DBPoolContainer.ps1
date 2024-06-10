@@ -70,7 +70,7 @@ function Get-DBPoolContainer {
     param (
         [Parameter(ParameterSetName = 'ParentContainer', Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [Parameter(ParameterSetName = 'ListContainer', Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-        [Parameter(ParameterSetName = 'ContainerStatus', Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [Parameter(ParameterSetName = 'ContainerStatus', Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
         #[ValidateRange(0, [int]::MaxValue)]
         [int[]]$Id,
@@ -89,7 +89,7 @@ function Get-DBPoolContainer {
         [string]$Name,
 
         [Parameter(ParameterSetName = 'ContainerStatus')]
-        [switch]$status
+        [switch]$Status
     )
 
     begin {
@@ -99,35 +99,32 @@ function Get-DBPoolContainer {
             'ListContainer' {
                 $requestPath = '/api/v2/containers'
             }
-            'ContainerStatus' {
-                $requestPath = "/api/v2/containers"
-            }
             'ParentContainer' {
                 $requestPath = '/api/v2/parents'
             }
             'ChildContainer' {
                 $requestPath = '/api/v2/children'
             }
+            'ContainerStatus' {
+                $requestPath = '/api/v2/containers'
+            }
         }
 
     }
 
     process {
-        if ($PSCmdlet.ParameterSetName -eq 'ContainerStatus' -and -not $PSBoundParameters.ContainsKey('Id')) {
-            Write-Error "The -status parameter requires the -Id parameter to be specified."
-            return
-        }
 
         if ($PSBoundParameters.ContainsKey('Id')) {
             $response = foreach ($n in $Id) {
                 Write-Verbose "Running the [ $($PSCmdlet.ParameterSetName) ] parameter set for ID $n"
 
-                # Define the ContainerStatus parameter set request path if set
-                if ($PSCmdlet.ParameterSetName -eq 'ContainerStatus') {
-                    $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri "$requestPath/$n/status"
-                } else {
-                    $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri "$requestPath/$n"
+                # Define the ContainerStatus parameter request path if set
+                $uri = "$requestPath/$n"
+                if ($Status) {
+                    Write-Verbose "Getting the status of container ID $n"
+                    $uri += '/status'
                 }
+                $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri $uri
 
                 if ($null -ne $requestResponse) {
                     $requestResponse | ConvertFrom-Json
