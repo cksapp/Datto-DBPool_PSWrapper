@@ -100,7 +100,9 @@ function Get-DBPoolContainer {
                 $requestPath = '/api/v2/containers'
             }
             'ContainerStatus' {
-                $requestPath = "/api/v2/containers"
+                if (-not $PSBoundParameters.ContainsKey('Id')) {
+                    throw "-status parameter requires the -Id parameter"
+                }
             }
             'ParentContainer' {
                 $requestPath = '/api/v2/parents'
@@ -113,21 +115,17 @@ function Get-DBPoolContainer {
     }
 
     process {
-        if ($PSCmdlet.ParameterSetName -eq 'ContainerStatus' -and -not $PSBoundParameters.ContainsKey('Id')) {
-            Write-Error "The -status parameter requires the -Id parameter to be specified."
-            return
-        }
 
         if ($PSBoundParameters.ContainsKey('Id')) {
             $response = foreach ($n in $Id) {
                 Write-Verbose "Running the [ $($PSCmdlet.ParameterSetName) ] parameter set for ID $n"
 
-                # Define the ContainerStatus parameter set request path if set
-                if ($PSCmdlet.ParameterSetName -eq 'ContainerStatus') {
-                    $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri "$requestPath/$n/status"
-                } else {
-                    $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri "$requestPath/$n"
+                # Define the ContainerStatus parameter request path if set
+                $uri = "$requestPath/$n"
+                if ($status) {
+                    $uri += "/status"
                 }
+                $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri $uri
 
                 if ($null -ne $requestResponse) {
                     $requestResponse | ConvertFrom-Json
