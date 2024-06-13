@@ -131,6 +131,7 @@ function Get-DBPoolContainer {
 
         if ($PSBoundParameters.ContainsKey('Id')) {
             $response = foreach ($n in $Id) {
+                $requestResponse = $null
                 Write-Verbose "Running the [ $($PSCmdlet.ParameterSetName) ] parameter set for ID $n"
 
                 # Define the ContainerStatus parameter request path if set
@@ -145,6 +146,7 @@ function Get-DBPoolContainer {
                 }
                 catch {
                     Write-Error $_
+                    continue
                 }
 
                 if ($null -ne $requestResponse) {
