@@ -125,6 +125,67 @@ function Get-DBPoolContainer {
             }
         }
 
+        # Internal Function to filter the response by Container Name or DefaultDatabase if provided
+        function Select-DBPoolContainers {
+            param(
+                [Parameter(Mandatory = $true)]
+                [PSObject]$Container,
+
+                [Parameter(Mandatory = $false)]
+                [string]$Name,
+
+                [Parameter(Mandatory = $false)]
+                [string]$DefaultDatabase,
+
+                [Parameter(Mandatory = $false)]
+                [int[]]$Id,
+
+                [Parameter(Mandatory = $true)]
+                [string]$ParameterSetName
+            )
+
+            $originalContainer = $Container
+
+            if ($Name) {
+                Write-Verbose "Filtering the response by name [ $Name ]"
+                $Filter = 'Name'
+                $filterParameter = $Name
+            }
+            if ($DefaultDatabase) {
+                Write-Verbose "Filtering the response by database [ $DefaultDatabase ]"
+                $Filter = 'DefaultDatabase'
+                $filterParameter = $DefaultDatabase
+            }
+
+            $filterKey = switch ($ParameterSetName) {
+                'ListContainer' {
+                    'containers' 
+                }
+                'ParentContainer' {
+                    'parents' 
+                }
+            }
+
+            if ($Id) {
+                $Container = $Container | Where-Object {
+                    ($Name -and $_.name -like $Name) -or
+                    ($DefaultDatabase -and $_.defaultDatabase -like $DefaultDatabase)
+                }
+            } else {
+                $Container = $($Container.$filterKey) | Where-Object {
+                    ($Name -and $_.name -like $Name) -or
+                    ($DefaultDatabase -and $_.defaultDatabase -like $DefaultDatabase)
+                }
+            }
+
+            if (!$Container) {
+                Write-Error "No container found matching the [ $Filter ] filter parameter [ $filterParameter ] returning all fetched containers."
+                $Container = $originalContainer
+            }
+
+            $Container
+        }
+
     }
 
     process {
@@ -170,43 +231,11 @@ function Get-DBPoolContainer {
 
         # Filter the response by name or DefaultDatabase if provided
         if ($PSBoundParameters.ContainsKey('Name') -or $PSBoundParameters.ContainsKey('DefaultDatabase')) {
-            $originalResponse = $response
-
-            if ($PSBoundParameters.ContainsKey('Name')) {
-                Write-Verbose "Filtering the response by name [ $Name ]"
-                $Filter = 'Name'
-                $filterParameter = $Name
+            try {
+                $response = Select-DBPoolContainers -Container $response -Name $Name -DefaultDatabase $DefaultDatabase -Id $Id -ParameterSetName $PSCmdlet.ParameterSetName -ErrorAction Stop
             }
-            if ($PSBoundParameters.ContainsKey('DefaultDatabase')) {
-                Write-Verbose "Filtering the response by database [ $DefaultDatabase ]"
-                $Filter = 'DefaultDatabase'
-                $filterParameter = $DefaultDatabase
-            }
-
-            $filterKey = switch ($PSCmdlet.ParameterSetName) {
-                'ListContainer' {
-                    'containers' 
-                }
-                'ParentContainer' {
-                    'parents' 
-                }
-            }
-
-            if ($PSBoundParameters.ContainsKey('Id')) {
-                $response = $response | Where-Object {
-                    ($PSBoundParameters.ContainsKey('Name') -and $_.name -like $Name) -or
-                    ($PSBoundParameters.ContainsKey('DefaultDatabase') -and $_.defaultDatabase -like $DefaultDatabase)
-                }
-            } else {
-                $response = $($response.$filterKey) | Where-Object {
-                    ($PSBoundParameters.ContainsKey('Name') -and $_.name -like $Name) -or
-                    ($PSBoundParameters.ContainsKey('DefaultDatabase') -and $_.defaultDatabase -like $DefaultDatabase)
-                }
-            }
-
-            if (!$response) {
-                Write-Error "No container found matching the [ $Filter ] filter parameter [ $filterParameter ] returning fetched containers."
-                $response = $originalResponse
+            catch {
+                Write-Warning $_
             }
         }
 
