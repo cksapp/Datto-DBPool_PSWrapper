@@ -113,6 +113,10 @@ function Invoke-DBPoolRequest {
             Add-Type -Assembly System.Web
         }
 
+        if (!($DBPool_base_URI)) {
+            Write-Warning "The DBPool base URI is not set. Run Add-DBPoolBaseURI to set the base URI."
+        }
+
         $query_String = ConvertTo-DBPoolQueryString -resource_Uri $resource_Uri -uri_Filter $uri_Filter
 
         Set-Variable -Name 'DBPool_queryString' -Value $query_String -Scope Global -Force
@@ -178,6 +182,13 @@ function Invoke-DBPoolRequest {
             switch -Wildcard ($exceptionError) {
                 '*404*' { Write-Error "Invoke-DBPoolRequest : [ $resource_Uri ] not found!" }
                 '*429*' { Write-Error 'Invoke-DBPoolRequest : API rate limited' }
+                '*500*' {
+                    $e = $(Get-Error).ErrorDetails.Message
+                    if ($null -ne $e) {
+                        $e = $( $e | ConvertFrom-Json ).error.message
+                    }
+                    Write-Error "Invoke-DBPoolRequest : 500 Internal Server Error. $e" 
+                }
                 '*504*' { Write-Error "Invoke-DBPoolRequest : Gateway Timeout" }
                 default { Write-Error $_ }
             }
