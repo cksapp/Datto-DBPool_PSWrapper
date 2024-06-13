@@ -139,7 +139,13 @@ function Get-DBPoolContainer {
                     Write-Verbose "Getting the status of container ID $n"
                     $uri += '/status'
                 }
-                $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri $uri
+
+                try {
+                    $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri $uri -ErrorAction Stop
+                }
+                catch {
+                    Write-Error $_
+                }
 
                 if ($null -ne $requestResponse) {
                     $requestResponse | ConvertFrom-Json
@@ -147,7 +153,14 @@ function Get-DBPoolContainer {
             }
         } else {
             Write-Verbose "Running the [ $($PSCmdlet.ParameterSetName) ] parameter set"
-            $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath
+
+            try {
+                $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath -ErrorAction Stop
+            }
+            catch {
+                Write-Error $_
+            }
+
             if ($null -ne $requestResponse) {
                 $response = $requestResponse | ConvertFrom-Json
             }

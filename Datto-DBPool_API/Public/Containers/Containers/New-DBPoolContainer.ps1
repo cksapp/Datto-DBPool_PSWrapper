@@ -81,7 +81,13 @@ function New-DBPoolContainer {
             $body.'parent.defaultDatabase' = $ParentDefaultDatabase
         }
 
-        $response = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath -data $body
+        try {
+            $response = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath -data $body -ErrorAction Stop
+        }
+        catch {
+            Write-Error $_
+        }
+
         if ($null -ne $response) {
             $response = $response | ConvertFrom-Json
         }

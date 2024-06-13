@@ -43,16 +43,23 @@ function Remove-DBPoolContainer {
             # Try to get the container name to output for the ID when using the Verbose preference
             if ($VerbosePreference -eq 'Continue') {
                 try {
-                    $containerName = (Get-DBPoolContainer -Id $n).name
+                    $containerName = (Get-DBPoolContainer -Id $n -ErrorAction Stop).name
                 } catch {
-                    Write-Warning "Failed to get the container name for ID $n. Error: $_"
+                    Write-Error "Failed to get the container name for ID $n. $_"
                     $containerName = '## FailedToGetContainerName ##'
                 }
             }
 
             if ($PSCmdlet.ShouldProcess("Container [ ID: $n ]", 'Destroy')) {
                 Write-Verbose "Destroying Container [ ID: $n, Name: $containerName ]"
-                $response = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath
+                
+                try {
+                    $response = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath -ErrorAction Stop
+                }
+                catch {
+                    Write-Error $_
+                }
+
                 if ($response.StatusCode -eq 204) {
                     Write-Output "Success: Container [ ID: $n ] destroyed."
                 }

@@ -85,32 +85,38 @@ function Invoke-DBPoolContainerAccess {
                 }
 
                 if ($method) {
-                    $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath
+                    
+                    try {
+                        $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath -ErrorAction Stop
+                    }
+                    catch {
+                        Write-Error $_
+                    }
 
                     if ($null -ne $requestResponse) {
-                        $statusCode = $requestResponse.StatusCode
-                        $responseContent = $requestResponse.Content | ConvertFrom-Json
-
-                        switch ($PSCmdlet.ParameterSetName) {
-                            'GetAccess' {
-                                $responseContent
-                            }
-                            'AddAccess' {
-                                if ($statusCode -eq 200) {
-                                    Write-Verbose "User access for [ $uName ] already exists."
-                                } elseif ($statusCode -eq 201) {
-                                    Write-Verbose "User access for [ $uName ] was created."
-                                }
-                                $responseContent
-                            }
-                            'RemoveAccess' {
-                                if ($statusCode -eq 204) {
-                                    Write-Verbose "User access for [ $uName ] was removed."
-                                }
-                                $responseContent
-                            }
+                            $statusCode = $requestResponse.StatusCode
+                            $responseContent = $requestResponse.Content | ConvertFrom-Json
                         }
-                    }
+
+                    switch ($PSCmdlet.ParameterSetName) {
+                                'GetAccess' {
+                                    $responseContent
+                                }
+                                'AddAccess' {
+                                    if ($statusCode -eq 200) {
+                                        Write-Verbose "User access for [ $uName ] already exists."
+                                    } elseif ($statusCode -eq 201) {
+                                        Write-Verbose "User access for [ $uName ] was created."
+                                    }
+                                    $responseContent
+                                }
+                                'RemoveAccess' {
+                                    if ($statusCode -eq 204) {
+                                        Write-Verbose "User access for [ $uName ] was removed."
+                                    }
+                                    $responseContent
+                                }
+                            }
                 }
             }
         }
