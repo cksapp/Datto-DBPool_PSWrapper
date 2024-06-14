@@ -1,30 +1,53 @@
 function Get-DBPoolContainer {
-<#
+    <#
     .SYNOPSIS
-        The Get-DBPoolContainer function is used to get container information from the DBPool API.
+        The Get-DBPoolContainer function retrieves container information from the DBPool API.
 
     .DESCRIPTION
-        The Get-DBPoolContainer function is used to get container details from the DBPool API.
-        This function is used to get the list of containers, parent containers, or child containers; and parent or child containers by ID.
+        This function retrieves container details from the DBPool API.
+        It can get containers, parent containers, or child containers, and also retrieve containers by ID and also filter by container name.
 
     .PARAMETER Id
         The ID of the container to get. This parameter is required when using the ParentContainer or ChildContainer parameter sets.
 
+    .PARAMETER status
+        Gets the status of a container by ID.
+        Returns basic container details, and dockerContainerRunning, mysqlServiceResponding, and mysqlServiceRespondingCached statuses.
+
     .PARAMETER ListContainer
-        The ListContainer parameter is used to get a list of containers from the DBPool API.
-        This is the default parameter set.
+        Retrieves a list of containers from the DBPool API. This is the default parameter set.
 
     .PARAMETER ParentContainer
-        The ParentContainer parameter is used to get a list of parent containers from the DBPool API.
+        Retrieves a list of parent containers from the DBPool API.
 
     .PARAMETER ChildContainer
-        The ChildContainer parameter is used to get a list of child containers from the DBPool API.
+        Retrieves a list of child containers from the DBPool API.
+
+    .PARAMETER Name
+        Filters containers returned from the DBPool API by name.
+        Accepts '*' for wildcard input.
+
+    .PARAMETER DefaultDatabase
+        Filters containers returned from the DBPool API by database.
+        Accepts '*' for wildcard input.
+
+    .PARAMETER NotLike
+        Filters containers returned from the DBPool API by name or DefaultDatabase using the -NotLike switch.
+        Requires the -Name or -DefaultDatabase parameter to be specified.
+
+        Returns containers where the name or DefaultDatabase does not match the provided filter.
 
     .EXAMPLE
         Get-DBPoolContainer
         Get-DBPoolContainer -Id 12345
 
         Get a list of containers from the DBPool API, or by ID
+
+    .EXAMPLE
+        Get-DBPoolContainer -status
+        Get-DBPoolContainer -status -Id 12345
+
+        Get the status of a container by ID
 
     .EXAMPLE
         Get-DBPoolContainer -ParentContainer
@@ -44,9 +67,31 @@ function Get-DBPoolContainer {
         Get a list of containers from the DBPool API, or parent containers by name
         Accepts '*' for wildcard input
 
+    .EXAMPLE
+        Get-DBPoolContainer -Name 'MyContainer' -NotLike
+        Get-DBPoolContainer -ParentContainer -Name '*ParentContainer*' -NotLike
+
+        Get a list of containers from the DBPool API, or parent containers where the name does not match the filter
+        Accepts '*' for wildcard input
+
+    .EXAMPLE
+        Get-DBPoolContainer -DefaultDatabase 'Database'
+        Get-DBPoolContainer -ParentContainer -DefaultDatabase '*Database*'
+
+        Get a list of containers from the DBPool API, or parent containers by database
+        Accepts '*' for wildcard input
+
+    .EXAMPLE
+        Get-DBPoolContainer -DefaultDatabase 'Database' -NotLike
+        Get-DBPoolContainer -ParentContainer -DefaultDatabase '*Database*' -NotLike
+
+        Get a list of containers from the DBPool API, or parent containers where the database does not match the filter
+        Accepts '*' for wildcard input
+
     .NOTES
-        The '-Name' parameter is not a native endpoint of the DBPool API.
-        This is a custom method which uses 'Where-Object' to filter the response with the provided name, if no match is found the original response is returned.
+        The '-Name', and -DefaultDatabase parameters are not native endpoints of the DBPool API.
+        This is a custom function which uses 'Where-Object', along with the optional '-NotLike' parameter to return the response using the provided filter.
+        If no match is found an error is thrown, and the original response is returned.
 
     .LINK
         N/A
@@ -56,7 +101,8 @@ function Get-DBPoolContainer {
     param (
         [Parameter(ParameterSetName = 'ParentContainer', Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [Parameter(ParameterSetName = 'ListContainer', Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-        #[ValidateNotNullOrEmpty()]
+        [Parameter(ParameterSetName = 'ContainerStatus', Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [ValidateNotNullOrEmpty()]
         #[ValidateRange(0, [int]::MaxValue)]
         [int[]]$Id,
 
@@ -69,65 +115,162 @@ function Get-DBPoolContainer {
         [Parameter(ParameterSetName = 'ChildContainer')]
         [switch]$ChildContainer,
 
+        [Parameter(ParameterSetName = 'ContainerStatus')]
+        [switch]$Status,
+
+        [Parameter(ParameterSetName = 'ListContainer', ValueFromPipelineByPropertyName = $true)]
+        [Parameter(ParameterSetName = 'ParentContainer', ValueFromPipelineByPropertyName = $true)]
+        [string]$Name,
+
+        [Parameter(ParameterSetName = 'ListContainer', ValueFromPipelineByPropertyName = $true)]
+        [Parameter(ParameterSetName = 'ParentContainer', ValueFromPipelineByPropertyName = $true)]
+        [Alias('Database')]
+        [string]$DefaultDatabase,
+
         [Parameter(ParameterSetName = 'ListContainer')]
         [Parameter(ParameterSetName = 'ParentContainer')]
-        [string]$Name
+        [switch]$NotLike
     )
-    
+
     begin {
 
         $method = 'GET'
         switch ($PSCmdlet.ParameterSetName) {
-            'ListContainer' {
-                $requestPath = '/api/v2/containers' 
+            'ListContainer' { $requestPath = '/api/v2/containers' }
+            'ParentContainer' { $requestPath = '/api/v2/parents' }
+            'ChildContainer' { $requestPath = '/api/v2/children' }
+            'ContainerStatus' { $requestPath = '/api/v2/containers' }
+        }
+
+        # Internal Function to filter the response by Container Name or DefaultDatabase if provided
+        function Select-DBPoolContainers {
+            param(
+                [Parameter(Mandatory = $true)]
+                [PSObject]$Container,
+
+                [Parameter(Mandatory = $false)]
+                [string]$Name,
+
+                [Parameter(Mandatory = $false)]
+                [string]$DefaultDatabase,
+
+                [Parameter(Mandatory = $false)]
+                [int[]]$Id,
+
+                [Parameter(Mandatory = $true)]
+                [string]$ParameterSetName,
+
+                [Parameter(Mandatory = $false)]
+                [switch]$NotLike
+            )
+
+            $Filter = $null
+            $filterParameter = $null
+
+            if ($Name) {
+                $Filter = 'Name'
+                $filterParameter = $Name
+            } elseif ($DefaultDatabase) {
+                $Filter = 'DefaultDatabase'
+                $filterParameter = $DefaultDatabase
             }
-            'ParentContainer' {
-                $requestPath = '/api/v2/parents' 
+
+            $filterKey = switch ($ParameterSetName) {
+                'ListContainer' { 'containers' }
+                'ParentContainer' { 'parents' }
             }
-            'ChildContainer' {
-                $requestPath = '/api/v2/children' 
+
+            # Write verbose output for filter parameters include or exclude
+            if ($NotLike) {
+                Write-Verbose "Excluding the response by $Filter [ $filterParameter ]"
+            } else {
+                Write-Verbose "Filtering the response by $Filter [ $filterParameter ]"
+            }
+
+            if ($Id) {
+                $Container = $Container | Where-Object {
+                    if ($NotLike) {
+                        ($Name -and $_.name -notlike $Name) -or
+                        ($DefaultDatabase -and $_.defaultDatabase -notlike $DefaultDatabase)
+                    } else {
+                        ($Name -and $_.name -like $Name) -or
+                        ($DefaultDatabase -and $_.defaultDatabase -like $DefaultDatabase)
+                    }
+                }
+            } else {
+                $Container = $($Container.$filterKey) | Where-Object {
+                    if ($NotLike) {
+                        ($Name -and $_.name -notlike $Name) -or
+                        ($DefaultDatabase -and $_.defaultDatabase -notlike $DefaultDatabase)
+                    } else {
+                        ($Name -and $_.name -like $Name) -or
+                        ($DefaultDatabase -and $_.defaultDatabase -like $DefaultDatabase)
+                    }
+                }
+            }
+
+            if (!$Container) {
+                Write-Error "No container found matching the [ $Filter ] filter parameter [ $filterParameter ]. Returning all fetched containers." -ErrorAction Stop
+            }
+
+            $Container
+        }
+
+        # Validate filter parameters for name or DefaultDatabase if -NotLike switch is used
+        if ($PSCmdlet.ParameterSetName -eq 'ListContainer' -or $PSCmdlet.ParameterSetName -eq 'ParentContainer') {
+            if ($NotLike -and -not ($Name -or $DefaultDatabase)) {
+                throw "The -NotLike switch requires either the -Name or -DefaultDatabase parameter to be specified."
             }
         }
 
     }
-    
+
     process {
+
+        # Get list of containers by ID
         if ($PSBoundParameters.ContainsKey('Id')) {
-            foreach ($n in $Id) {
-                Write-Verbose "Running the [ $($PSCmdlet.ParameterSetName) ] parameterSet for ID $n"
-                $response = Invoke-DBPoolRequest -method $method -resource_Uri "$requestPath/$n"
+            $response = foreach ($n in $Id) {
+                $requestResponse = $null
+                Write-Verbose "Running the [ $($PSCmdlet.ParameterSetName) ] parameter set for ID $n"
+
+                # Define the ContainerStatus parameter request path if set
+                $uri = "$requestPath/$n"
+                if ($Status) {
+                    Write-Verbose "Getting the status of container ID $n"
+                    $uri += '/status'
+                }
+
+                try {
+                    $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri $uri -ErrorAction Stop
+                } catch {
+                    Write-Error $_
+                    continue
+                }
+
+                if ($null -ne $requestResponse) {
+                    $requestResponse | ConvertFrom-Json
+                }
             }
         } else {
-            Write-Verbose "Running the [ $($PSCmdlet.ParameterSetName) ] parameterSet"
-            $response = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath
-        }
+            Write-Verbose "Running the [ $($PSCmdlet.ParameterSetName) ] parameter set"
 
-        if ($PSBoundParameters.ContainsKey('Name')) {
-            $originalResponse = $response
-
-            # Filter the response by name if provided
-            Write-Verbose "Filtering the response by name [ $Name ]"
-
-            switch ($PSCmdlet.ParameterSetName) {
-                'ListContainer' {
-                    if ($PSBoundParameters.ContainsKey('Id')) {
-                        $response = $response | Where-Object { $_.name -like $Name }
-                    } else {
-                        $response = $($response.containers) | Where-Object { $_.name -like $Name }
-                    }
-                }
-                'ParentContainer' {
-                    if ($PSBoundParameters.ContainsKey('Id')) {
-                        $response = $response | Where-Object { $_.name -like $Name }
-                    } else {
-                        $response = $($response.parents) | Where-Object { $_.name -like $Name }
-                    }
-                }
+            try {
+                $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath -ErrorAction Stop
+            } catch {
+                Write-Error $_
             }
 
-            if (!$response) {
-                Write-Error "No container found matching the name [ $Name ] returning fetched containers."
-                $response = $originalResponse
+            if ($null -ne $requestResponse) {
+                $response = $requestResponse | ConvertFrom-Json
+            }
+        }
+
+        # Filter the response by name or DefaultDatabase if provided
+        if ($PSBoundParameters.ContainsKey('Name') -or $PSBoundParameters.ContainsKey('DefaultDatabase')) {
+            try {
+                $response = Select-DBPoolContainers -Container $response -Name $Name -DefaultDatabase $DefaultDatabase -Id $Id -ParameterSetName $PSCmdlet.ParameterSetName -NotLike:$NotLike -ErrorAction Stop
+            } catch {
+                Write-Error $_
             }
         }
 
@@ -135,6 +278,7 @@ function Get-DBPoolContainer {
         $response
 
     }
-    
+
     end {}
+
 }

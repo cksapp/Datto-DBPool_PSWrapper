@@ -113,6 +113,10 @@ function Invoke-DBPoolRequest {
             Add-Type -Assembly System.Web
         }
 
+        if (!($DBPool_base_URI)) {
+            Write-Warning "The DBPool base URI is not set. Run Add-DBPoolBaseURI to set the base URI."
+        }
+
         $query_String = ConvertTo-DBPoolQueryString -resource_Uri $resource_Uri -uri_Filter $uri_Filter
 
         Set-Variable -Name 'DBPool_queryString' -Value $query_String -Scope Global -Force
@@ -151,7 +155,7 @@ function Invoke-DBPoolRequest {
                     $parameters['Uri'] = $query_String.Uri -replace '_page=\d+',"_page=$page_Number"
 
                     Write-Verbose "Making API request to Uri: [ $($parameters['Uri']) ]"
-                    $current_Page = Invoke-RestMethod @parameters -ErrorAction Stop
+                    $current_Page = Invoke-WebRequest @parameters -ErrorAction Stop
 
                     Write-Verbose "[ $page_Number ] of [ $($current_Page.pagination.totalPages) ] pages"
 
@@ -166,7 +170,7 @@ function Invoke-DBPoolRequest {
             }
             else{
                 Write-Verbose "Making API request to Uri: [ $($parameters['Uri']) ]"
-                $api_Response = Invoke-RestMethod @parameters -ErrorAction Stop
+                $api_Response = Invoke-WebRequest @parameters -ErrorAction Stop
             }
 
         }
@@ -178,6 +182,13 @@ function Invoke-DBPoolRequest {
             switch -Wildcard ($exceptionError) {
                 '*404*' { Write-Error "Invoke-DBPoolRequest : [ $resource_Uri ] not found!" }
                 '*429*' { Write-Error 'Invoke-DBPoolRequest : API rate limited' }
+                '*500*' {
+                    $e = $(Get-Error).ErrorDetails.Message
+                    if ($null -ne $e) {
+                        $e = $( $e | ConvertFrom-Json ).error.message
+                    }
+                    Write-Error "Invoke-DBPoolRequest : 500 Internal Server Error. $e" 
+                }
                 '*504*' { Write-Error "Invoke-DBPoolRequest : Gateway Timeout" }
                 default { Write-Error $_ }
             }

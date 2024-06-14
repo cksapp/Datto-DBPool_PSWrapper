@@ -52,16 +52,26 @@ function Invoke-DBPoolContainerAction {
             # Try to get the container name to output for the ID when using the Verbose preference
             if ($VerbosePreference -eq 'Continue') {
                 try {
-                    $containerName = (Get-DBPoolContainer -Id $n).name
+                    $containerName = (Get-DBPoolContainer -Id $n -ErrorAction stop).name
                 } catch {
-                    Write-Warning "Failed to get the container name for ID $n. Error: $_"
+                    Write-Error "Failed to get the container name for ID $n. $_"
                     $containerName = '## FailedToGetContainerName ##'
                 }
             }
 
             if ($PSCmdlet.ShouldProcess("Container [ ID: $n ]", "[ $Action ]")) {
                 Write-Verbose "Peforming action [ $Action ] on Container [ ID: $n, Name: $containerName ]"
-                Invoke-DBPoolRequest -method $method -resource_Uri $requestPath
+
+                try {
+                    $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath -ErrorAction Stop
+                }
+                catch {
+                    Write-Error $_
+                }
+
+                if ($requestResponse.StatusCode -eq 204) {
+                        Write-Output "Success: Invoking Action [ $Action ] on Container [ ID: $n ]."
+                    }
             }
         }
 

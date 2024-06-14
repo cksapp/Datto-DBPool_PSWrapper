@@ -61,30 +61,71 @@ function Invoke-DBPoolContainerAccess {
     begin {}
 
     process {
-        foreach ($n in $Id) {
+
+        $response = foreach ($n in $Id) {
             foreach ($uName in $Username) {
                 $requestPath = "/api/v2/containers/$n/access/$uName"
+                $method = $null
+                $requestResponse = $null
 
                 switch ($PSCmdlet.ParameterSetName) {
                     'GetAccess' {
                         $method = 'GET'
                     }
                     'AddAccess' {
-                        if ($PSCmdlet.ShouldProcess("Target", "Operation")) {
-                            $method = 'PUT'   
+                        if ($PSCmdlet.ShouldProcess("[ $uName ] for Container [ ID: $n ]", "[ $($PSCmdlet.ParameterSetName) ]")) {
+                            $method = 'PUT'
                         }
                     }
                     'RemoveAccess' {
-                        if ($PSCmdlet.ShouldProcess("Target", "Operation")) {
-                            $method = 'DELETE'   
+                        if ($PSCmdlet.ShouldProcess("[ $uName ] for Container [ ID: $n ]", "[ $($PSCmdlet.ParameterSetName) ]")) {
+                            $method = 'DELETE'
                         }
                     }
                 }
 
-                Invoke-DBPoolRequest -method $method -resource_Uri $requestPath
+                if ($method) {
+                    
+                    try {
+                        $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath -ErrorAction Stop
+                    }
+                    catch {
+                        Write-Error $_
+                    }
+
+                    if ($null -ne $requestResponse) {
+                            $statusCode = $requestResponse.StatusCode
+                            $responseContent = $requestResponse.Content | ConvertFrom-Json
+                        }
+
+                    switch ($PSCmdlet.ParameterSetName) {
+                                'GetAccess' {
+                                    $responseContent
+                                }
+                                'AddAccess' {
+                                    if ($statusCode -eq 200) {
+                                        Write-Verbose "User access for [ $uName ] already exists."
+                                    } elseif ($statusCode -eq 201) {
+                                        Write-Verbose "User access for [ $uName ] was created."
+                                    }
+                                    $responseContent
+                                }
+                                'RemoveAccess' {
+                                    if ($statusCode -eq 204) {
+                                        Write-Verbose "User access for [ $uName ] was removed."
+                                    }
+                                    $responseContent
+                                }
+                            }
+                }
             }
         }
+
+        # Return the responses
+        $response
+
     }
     
     end {}
+
 }

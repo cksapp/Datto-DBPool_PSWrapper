@@ -32,7 +32,20 @@ function Invoke-DBPoolDebug {
     
     process {
 
-        Invoke-DBPoolRequest -method $method -resource_Uri $requestPath
+        Write-Debug "Invoking DBPool Debug Exception API with method [ $method ]"
+
+        try {
+            $response = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath -ErrorAction Stop
+        } catch {
+            Write-Error $_
+        }
+
+        if ($null -ne $response) {
+                $response = $response | ConvertFrom-Json
+            }
+
+        # Return the response
+        $response
 
     }
     
