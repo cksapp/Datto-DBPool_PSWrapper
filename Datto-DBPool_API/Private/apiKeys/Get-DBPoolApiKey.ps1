@@ -29,9 +29,7 @@ function Get-DBPoolApiKey {
 
     [cmdletbinding()]
     Param (
-        [Parameter(
-            Mandatory = $false
-        )]
+        [Parameter( Mandatory = $false )]
         [Switch]$plainText
     )
 
@@ -44,11 +42,26 @@ function Get-DBPoolApiKey {
             if ($DBPool_ApiKey) {
 
                 if ($plainText) {
-                    $ApiKey = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($DBPool_ApiKey)
+                    if ($isWindows -or $PSEdition -eq 'Desktop') {
+                        $ApiKeyBSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($DBPool_ApiKey)
+                        try {
+                            $ApiKeyPlainText = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($ApiKeyBSTR)
+                            [PSCustomObject]@{
+                                "ApiKey" = $ApiKeyPlainText
+                            }
+                        } finally {
+                            [System.Runtime.InteropServices.Marshal]::ZeroFreeBSTR($ApiKeyBSTR)
+                        }
+                    } else {
+                        $ApiKeyPlainText = ConvertFrom-SecureString -SecureString $DBPool_ApiKey -AsPlainText
 
-                    [PSCustomObject]@{
-                        "ApiKey" = ( [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($ApiKey) ).ToString()
+                        [PSCustomObject]@{
+                            "ApiKey" = $ApiKeyPlainText
+                        }
                     }
+
+                    $ApiKeyPlainText = $null
+
                 } else {
                     [PSCustomObject]@{
                         "ApiKey" = $DBPool_ApiKey
@@ -62,8 +75,8 @@ function Get-DBPoolApiKey {
         } catch {
             Write-Error $_
         } finally {
-            if ($ApiKey) {
-                [System.Runtime.InteropServices.Marshal]::ZeroFreeBSTR($ApiKey)
+            if ($ApiKeyBSTR) {
+                [System.Runtime.InteropServices.Marshal]::ZeroFreeBSTR($ApiKeyBSTR)
             }
         }
 
