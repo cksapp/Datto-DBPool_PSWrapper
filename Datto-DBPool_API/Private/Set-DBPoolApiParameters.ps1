@@ -27,7 +27,7 @@ function Set-DBPoolApiParameters {
     [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Low')]
 	Param(
         [Parameter(Position = 0, Mandatory=$False, ValueFromPipeline=$True, ValueFromPipelineByPropertyName=$True, HelpMessage="API URL to be used.")]
-        [Uri]$DBPool_Base_URI = "https://dbpool.datto.net",
+        [Uri]$base_uri = "https://dbpool.datto.net",
 
         [Parameter(Position = 1, Mandatory=$True, ValueFromPipeline=$True, ValueFromPipelineByPropertyName=$True, HelpMessage="API Key for authorization.")]
         [securestring]$apiKey
@@ -48,14 +48,14 @@ function Set-DBPoolApiParameters {
     Process {
 
         # Cast URI Variable to string type
-        [String]$DBPool_Base_URI = $DBPool_Base_URI.AbsoluteUri
+        [String]$base_uri = $base_uri.AbsoluteUri
 
         # Check for trailing slash and remove if present
-        $DBPool_Base_URI = $DBPool_Base_URI.TrimEnd('/')
+        $base_uri = $base_uri.TrimEnd('/')
 
         # Set or replace the parameters
-        if ($PSCmdlet.ShouldProcess('$DBPool_Base_URI', "Set to $DBPool_Base_URI")) {
-            Add-DBPoolBaseURI -base_uri $DBPool_Base_URI
+        if ($PSCmdlet.ShouldProcess('$base_uri', "Set to $base_uri")) {
+            Add-DBPoolBaseURI -base_uri $base_uri
         }
 
         if ($PSCmdlet.ShouldProcess('$DBPool_APIKey', "Add")) {
