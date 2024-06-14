@@ -58,7 +58,16 @@ function Invoke-DBPoolContainerAccess {
         [Switch]$RemoveAccess
     )
 
-    begin {}
+    begin {
+
+        # Pass the InformationAction parameter if bound, default to 'Continue'
+        if ($PSBoundParameters.ContainsKey('InformationAction')) {
+            $InformationPreference = $PSBoundParameters['InformationAction']
+        } else {
+            $InformationPreference = 'Continue'
+        }
+
+    }
 
     process {
 
@@ -67,6 +76,7 @@ function Invoke-DBPoolContainerAccess {
                 $requestPath = "/api/v2/containers/$n/access/$uName"
                 $method = $null
                 $requestResponse = $null
+                $responseContent = $null
 
                 switch ($PSCmdlet.ParameterSetName) {
                     'GetAccess' {
@@ -90,11 +100,11 @@ function Invoke-DBPoolContainerAccess {
                         $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath -ErrorAction Stop
                     }
                     catch {
+                        $requestResponse = $null
                         Write-Error $_
                     }
 
                     if ($null -ne $requestResponse) {
-                            $statusCode = $requestResponse.StatusCode
                             $responseContent = $requestResponse.Content | ConvertFrom-Json
                         }
 
@@ -103,16 +113,16 @@ function Invoke-DBPoolContainerAccess {
                                     $responseContent
                                 }
                                 'AddAccess' {
-                                    if ($statusCode -eq 200) {
-                                        Write-Verbose "User access for [ $uName ] already exists."
-                                    } elseif ($statusCode -eq 201) {
-                                        Write-Verbose "User access for [ $uName ] was created."
+                                    if ($requestResponse.StatusCode -eq 200) {
+                                        Write-Information "User access on Container [ ID: $n ] already exists for [ $uName ]"
+                                    } elseif ($requestResponse.StatusCode -eq 201) {
+                                        Write-Information "User access on Container [ ID: $n ] successfully created for [ $uName ]"
                                     }
                                     $responseContent
                                 }
                                 'RemoveAccess' {
-                                    if ($statusCode -eq 204) {
-                                        Write-Verbose "User access for [ $uName ] was removed."
+                                    if ($requestResponse.StatusCode -eq 204) {
+                                        Write-Information "User access on Container [ ID: $n ] successfully removed for [ $uName ]"
                                     }
                                     $responseContent
                                 }

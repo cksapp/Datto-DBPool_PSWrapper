@@ -61,6 +61,7 @@ function Get-DBPoolUser {
                     $requestResponse = Invoke-DBPoolRequest -Method $method -resource_Uri $requestPath -ErrorAction Stop
                 }
                 catch {
+                    $requestResponse = $null
                     Write-Error $_
                 }
 

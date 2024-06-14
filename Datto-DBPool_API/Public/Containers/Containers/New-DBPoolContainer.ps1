@@ -65,18 +65,18 @@ function New-DBPoolContainer {
 
         $body['name'] = $ContainerName
 
+        # Check if at least one parent parameter is provided
         if (-not ($PSBoundParameters.ContainsKey('ParentId') -or $PSBoundParameters.ContainsKey('ParentName') -or $PSBoundParameters.ContainsKey('ParentDefaultDatabase'))) {
             throw "At least one parent parameter must be provided."
         }
 
+        # Insert specified parent parameters into the request body
         if ($PSBoundParameters.ContainsKey('ParentId')) {
             $body.'parent.id' = $ParentId
         }
-
         if ($PSBoundParameters.ContainsKey('ParentName')) {
             $body.'parent.name' = $ParentName
         }
-
         if ($PSBoundParameters.ContainsKey('ParentDefaultDatabase')) {
             $body.'parent.defaultDatabase' = $ParentDefaultDatabase
         }

@@ -41,15 +41,37 @@ function Rename-DBPoolContainer {
             name = $Name
         }
 
+        # Pass the InformationAction parameter if bound, default to 'Continue'
+        if ($PSBoundParameters.ContainsKey('InformationAction')) {
+            $InformationPreference = $PSBoundParameters['InformationAction']
+        } else {
+            $InformationPreference = 'Continue'
+        }
+
     }
     
     process {
 
         $response = foreach ($n in $Id) {
+            $requestResponse = $null
             $requestPath = "/api/v2/containers/$n"
 
+            # Try to get the container name to output for the ID when using the Verbose preference
+            if ($VerbosePreference -eq 'Continue') {
+                try {
+                    $containerName = (Get-DBPoolContainer -Id $n -ErrorAction Stop).name
+                } catch {
+                    Write-Warning "Failed to get the container name for ID $n. $_"
+                    $containerName = '## FailedToGetContainerName ##'
+                }
+            }
+
             try {
+                Write-Verbose "Updating Container [ ID: $n, Name: $containerName ]"
                 $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath -data $body -ErrorAction Stop
+                if ($requestResponse.StatusCode -eq 200) {
+                    Write-Information "Successfully updated Container [ ID: $n ]"
+                }
             }
             catch {
                 Write-Error $_

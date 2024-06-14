@@ -47,6 +47,7 @@ function Invoke-DBPoolContainerAction {
     process {
 
         foreach ($n in $Id) {
+            $requestResponse = $null
             $requestPath = "/api/v2/containers/$n/actions/$Action"
 
             # Try to get the container name to output for the ID when using the Verbose preference

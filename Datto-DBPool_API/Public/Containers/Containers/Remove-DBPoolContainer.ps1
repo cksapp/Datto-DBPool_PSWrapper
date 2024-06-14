@@ -38,6 +38,7 @@ function Remove-DBPoolContainer {
     process {
 
         foreach ($n in $Id) {
+            $response = $null
             $requestPath = "/api/v2/containers/$n"
 
             # Try to get the container name to output for the ID when using the Verbose preference
@@ -45,7 +46,7 @@ function Remove-DBPoolContainer {
                 try {
                     $containerName = (Get-DBPoolContainer -Id $n -ErrorAction Stop).name
                 } catch {
-                    Write-Error "Failed to get the container name for ID $n. $_"
+                    Write-Warning "Failed to get the container name for ID $n. $_"
                     $containerName = '## FailedToGetContainerName ##'
                 }
             }
