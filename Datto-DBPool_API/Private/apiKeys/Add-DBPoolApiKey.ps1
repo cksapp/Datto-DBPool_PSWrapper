@@ -19,9 +19,10 @@ function Add-DBPoolApiKey {
         Prompts to enter in your personal API key.
 
     .EXAMPLE
-        Add-DBPoolApiKey -ApiKey "0207e066-a779-4849-8aab-0105abf360d8"
+        Add-DBPoolApiKey -ApiKey $secureString
+        Read-Host "Enter your DBPool API Key" -AsSecureString | Add-DBPoolApiKey
 
-        Sets the API key to
+        Sets the API key for the DBPool.
 
     .NOTES
         N/A
