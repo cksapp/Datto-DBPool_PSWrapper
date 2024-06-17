@@ -204,7 +204,7 @@ function Get-DBPoolContainer {
         # Validate filter parameters for name or DefaultDatabase if -NotLike switch is used
         if ($PSCmdlet.ParameterSetName -eq 'ListContainer' -or $PSCmdlet.ParameterSetName -eq 'ParentContainer') {
             if ($NotLike -and -not ($Name -or $DefaultDatabase)) {
-                throw "The -NotLike switch requires either the -Name or -DefaultDatabase parameter to be specified."
+                Write-Error "The -NotLike switch requires either the -Name or -DefaultDatabase parameter to be specified." -ErrorAction Stop
             }
         }
 
