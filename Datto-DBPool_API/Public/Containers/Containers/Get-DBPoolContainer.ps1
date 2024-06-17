@@ -5,7 +5,9 @@ function Get-DBPoolContainer {
 
     .DESCRIPTION
         This function retrieves container details from the DBPool API.
-        It can get containers, parent containers, or child containers, and also retrieve containers by ID and also filter by container name.
+
+        It can get containers, parent containers, or child containers, and also retrieve containers or container status by ID.
+        This also can filter by container name or database.
 
     .PARAMETER Id
         The ID of the container to get. This parameter is required when using the ParentContainer or ChildContainer parameter sets.
@@ -39,21 +41,28 @@ function Get-DBPoolContainer {
 
     .EXAMPLE
         Get-DBPoolContainer
-        Get-DBPoolContainer -Id 12345
 
-        Get a list of containers from the DBPool API, or by ID
+        Get a list of all containers from the DBPool API
 
     .EXAMPLE
-        Get-DBPoolContainer -status
-        Get-DBPoolContainer -status -Id 12345
+        Get-DBPoolContainer -Id 12345
 
-        Get the status of a container by ID
+        Get a list of containers from the DBPool API by ID
+
+    .EXAMPLE
+        Get-DBPoolContainer -Status -Id @( 12345, 67890 )
+
+        Get the status of an array of containers by IDs
 
     .EXAMPLE
         Get-DBPoolContainer -ParentContainer
+
+        Get a list of parent containers from the DBPool API
+
+    .EXAMPLE
         Get-DBPoolContainer -ParentContainer -Id 12345
 
-        Get a list of parent containers from the DBPool API, or by ID
+        Get a list of parent containers from the DBPool API by ID
 
     .EXAMPLE
         Get-DBPoolContainer -ChildContainer
@@ -91,6 +100,7 @@ function Get-DBPoolContainer {
     .NOTES
         The '-Name', and -DefaultDatabase parameters are not native endpoints of the DBPool API.
         This is a custom function which uses 'Where-Object', along with the optional '-NotLike' parameter to return the response using the provided filter.
+        
         If no match is found an error is thrown, and the original response is returned.
 
     .LINK

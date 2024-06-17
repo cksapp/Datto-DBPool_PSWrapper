@@ -6,14 +6,16 @@ function Set-DBPoolApiParameters {
     .DESCRIPTION
         The Set-DBPoolApiParameters function is used to set the API URL and API Key for the Datto DBPool API.
 
-    .PARAMETER Url
-        Provide the URL of the Datto DBPool API. The default value is https://dbpool.datto.net.
+    .PARAMETER base_uri
+        Provide the URL of the Datto DBPool API.
+        The default value is https://dbpool.datto.net.
 
 	.PARAMETER apiKey
-	    Provide Dattto DBPool API Key. You can find your user API key at [/web/self](https://dbpool.datto.net/web/self).
+	    Provide Datto DBPool API Key for authorization.
+        You can find your user API key at [ /web/self ](https://dbpool.datto.net/web/self).
 
     .EXAMPLE
-        Set-DBPoolApiParameters -Url "https://dbpool.datto.net" -apiKey "0207e066-a779-4849-8aab-0105abf360d8"
+        Set-DBPoolApiParameters -base_uri "https://dbpool.datto.net" -apiKey "0207e066-a779-4849-8aab-0105abf360d8"
 
         Set the API URL and API Key for the Datto DBPool API.
 
@@ -26,10 +28,10 @@ function Set-DBPoolApiParameters {
 	
     [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Low')]
 	Param(
-        [Parameter(Position = 0, Mandatory=$False, ValueFromPipeline=$True, ValueFromPipelineByPropertyName=$True, HelpMessage="API URL to be used.")]
+        [Parameter(Position = 0, Mandatory = $False, ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $True, HelpMessage = "Provide the base URL of the DBPool API.")]
         [Uri]$base_uri = "https://dbpool.datto.net",
 
-        [Parameter(Position = 1, Mandatory=$True, ValueFromPipeline=$True, ValueFromPipelineByPropertyName=$True, HelpMessage="API Key for authorization.")]
+        [Parameter(Position = 1, Mandatory = $True, ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $True, HelpMessage = "Provide Datto DBPool API Key for authorization.")]
         [securestring]$apiKey
     )
  

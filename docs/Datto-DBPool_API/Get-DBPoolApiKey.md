@@ -1,0 +1,68 @@
+---
+external help file: Datto-DBPool_API-help.xml
+Module Name: Datto-DBPool_API
+online version:
+schema: 2.0.0
+---
+
+# Get-DBPoolApiKey
+
+## SYNOPSIS
+Gets the DBPool API key global variable.
+
+## SYNTAX
+
+```
+Get-DBPoolApiKey [-plainText] [<CommonParameters>]
+```
+
+## DESCRIPTION
+The Get-DBPoolApiKey cmdlet gets the DBPool API key global variable and returns this as an object.
+
+## EXAMPLES
+
+### EXAMPLE 1
+```
+Get-DBPoolApiKey
+```
+
+Gets the DBPool API key global variable and returns this as an object with the secret key as a SecureString.
+
+### EXAMPLE 2
+```
+Get-DBPoolApiKey -plainText
+```
+
+Gets the DBPool API key global variable and returns this as an object with the secret key as plain text.
+
+## PARAMETERS
+
+### -plainText
+Decrypt and return the API key in plain text.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
+
+## INPUTS
+
+## OUTPUTS
+
+## NOTES
+N\A
+
+## RELATED LINKS
+
+[N/A]()
+

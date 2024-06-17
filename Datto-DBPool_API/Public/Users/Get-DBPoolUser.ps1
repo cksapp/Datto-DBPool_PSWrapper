@@ -13,10 +13,12 @@ function Get-DBPoolUser {
 
     .EXAMPLE
         Get-DBPoolUser
+
         This will get the user details for the current authenticated user.
 
     .EXAMPLE
         Get-DBPoolUser -username "John.Doe"
+
         This will get the user details for the user "John.Doe".
 
     .NOTES
