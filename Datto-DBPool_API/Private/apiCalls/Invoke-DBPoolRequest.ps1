@@ -17,7 +17,7 @@ function Invoke-DBPoolRequest {
     .PARAMETER resource_Uri
         Defines the resource uri (url) to use when creating the API call
 
-    #.PARAMETER uri_Filter
+    .PARAMETER uri_Filter
         Used with the internal function [ ConvertTo-DBPoolQueryString ] to combine
         a functions parameters with the resource_Uri parameter.
 
@@ -35,7 +35,7 @@ function Invoke-DBPoolRequest {
     .PARAMETER DBPool_JSON_Conversion_Depth
         Defines the depth of the JSON conversion for the 'data' parameter request body
 
-    #.PARAMETER allPages
+    .PARAMETER allPages
         Returns all items from an endpoint
 
         When using this parameter there is no need to use either the page or perPage
@@ -46,31 +46,25 @@ function Invoke-DBPoolRequest {
 
     .EXAMPLE
         Invoke-DBPoolRequest -method GET -resource_Uri '/api/v2/self' -uri_Filter $uri_Filter
+        Name                           Value
+        ----                           -----
+        Method                         GET
+        Uri                            https://dbpool.datto.net/api/v2/self
+        Headers                        {X-App-Apikey = 3feb2b29-919c-409c-985d-e99cbae43a6d}
+        Body
 
         Invoke a rest method against the defined resource using any of the provided parameters
-
-        Example:
-            Name                           Value
-            ----                           -----
-            Method                         GET
-            Uri                            https://dbpool.datto.net/api/v2/self
-            Headers                        {X-App-Apikey = 3feb2b29-919c-409c-985d-e99cbae43a6d}
-            Body
-
 
     .EXAMPLE
         Invoke-DBPoolRequest -method GET -resource_Uri '/api/openapi.json' -uri_Filter $uri_Filter
+        Name                           Value
+        ----                           -----
+        Method                         GET
+        Uri                            https://dbpool.datto.net/api/openapi.json
+        Headers                        {X-App-Apikey = 3feb2b29-919c-409c-985d-e99cbae43a6d}
+        Body
 
         Invoke a rest method against the defined resource using any of the provided parameters
-
-        Example:
-            Name                           Value
-            ----                           -----
-            Method                         GET
-            Uri                            https://dbpool.datto.net/api/openapi.json
-            Headers                        {X-App-Apikey = 3feb2b29-919c-409c-985d-e99cbae43a6d}
-            Body
-
 
     .NOTES
         N/A
@@ -89,18 +83,18 @@ function Invoke-DBPoolRequest {
         [Parameter(Mandatory = $true)]
         [String]$resource_Uri,
 
-        #[Parameter(Mandatory = $false)]
-        #[Hashtable]$uri_Filter = $null,
+        [Parameter(DontShow, Mandatory = $false)]
+        [Hashtable]$uri_Filter = $null,
 
         [Parameter(Mandatory = $false)]
         [Hashtable]$data = $null,
 
         [Parameter(Mandatory = $false)]
         #[ValidateRange(0, [int]::MaxValue)]
-        [int]$DBPool_JSON_Conversion_Depth = 5<#,
+        [int]$DBPool_JSON_Conversion_Depth = 5,
 
-        [Parameter(Mandatory = $false)]
-        [Switch]$allPages#>
+        [Parameter(DontShow, Mandatory = $false)]
+        [Switch]$allPages
 
     )
 

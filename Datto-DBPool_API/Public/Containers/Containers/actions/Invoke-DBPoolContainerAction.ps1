@@ -21,7 +21,22 @@ function Invoke-DBPoolContainerAction {
         This will restart the container with ID 12345
 
     .NOTES
-        N/A
+        Actions:
+            refresh:
+                Recreate the Docker container and ZFS snapshot for the container.
+
+            schema-merge:
+                Attempt to apply upstream changes to the parent container to this child container.
+                This may break your container. Refreshing a container is the supported way to update a child container's database schema.
+
+            start:
+                Start the Docker container for the container.
+
+            restart:
+                Stop and start the Docker container.
+
+            stop:
+                Stop the Docker container.
 
     .LINK
         N/A
@@ -41,6 +56,12 @@ function Invoke-DBPoolContainerAction {
     begin {
 
         $method = 'POST'
+
+        # Write warning when using deprecated 'schema-merge' action
+        if ($Action -eq 'schema-merge') {
+            Write-Warning "The action [ schema-merge ] is deprecated! Use the [ refresh ] action as the supported way to update a container."
+            $ConfirmPreference = 'Medium'
+        }
 
     }
 
