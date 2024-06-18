@@ -8,7 +8,7 @@ schema: 2.0.0
 # Remove-DBPoolApiKey
 
 ## SYNOPSIS
-Removes the DBPool API key global variable.
+Removes the DBPool API Key global variable.
 
 ## SYNTAX
 
@@ -17,7 +17,7 @@ Remove-DBPoolApiKey [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Remove-DBPoolAPIKey cmdlet removes the DBPool API key global variable.
+The Remove-DBPoolAPIKey cmdlet removes the DBPool API Key global variable.
 
 ## EXAMPLES
 
@@ -26,7 +26,7 @@ The Remove-DBPoolAPIKey cmdlet removes the DBPool API key global variable.
 Remove-DBPoolAPIKey
 ```
 
-Removes the DBPool API key global variable.
+Removes the DBPool API Key global variable.
 
 ## PARAMETERS
 

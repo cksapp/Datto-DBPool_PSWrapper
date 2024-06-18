@@ -8,7 +8,7 @@ schema: 2.0.0
 # Export-DBPoolModuleSettings
 
 ## SYNOPSIS
-Exports the DBPool BaseURI, API, & JSON configuration information to file.
+Exports the DBPool BaseURI, API Key, & JSON configuration information to file.
 
 ## SYNTAX
 
@@ -17,7 +17,7 @@ Export-DBPoolModuleSettings [-DBPoolConfPath <String>] [-DBPoolConfFile <String>
 ```
 
 ## DESCRIPTION
-The Export-DBPoolModuleSettings cmdlet exports the DBPool BaseURI, API, & JSON configuration information to file.
+The Export-DBPoolModuleSettings cmdlet exports the DBPool BaseURI, API Key, & JSON configuration information to file.
 
 Making use of PowerShell's System.Security.SecureString type, exporting module settings encrypts your API key in a format
 that can only be unencrypted with the your Windows account as this encryption is tied to your user principal.
@@ -30,7 +30,7 @@ This means that you cannot copy your configuration file to another computer or u
 Export-DBPoolModuleSettings
 ```
 
-Validates that the BaseURI, API, and JSON depth are set then exports their values
+Validates that the BaseURI, API Key, and JSON depth are set then exports their values
 to the current user's DBPool configuration file located at:
     $env:USERPROFILE\DBPoolAPI\config.psd1
 
@@ -39,7 +39,7 @@ to the current user's DBPool configuration file located at:
 Export-DBPoolModuleSettings -DBPoolConfPath C:\DBPoolAPI -DBPoolConfFile MyConfig.psd1
 ```
 
-Validates that the BaseURI, API, and JSON depth are set then exports their values
+Validates that the BaseURI, API Key, and JSON depth are set then exports their values
 to the current user's DBPool configuration file located at:
     C:\DBPoolAPI\MyConfig.psd1
 

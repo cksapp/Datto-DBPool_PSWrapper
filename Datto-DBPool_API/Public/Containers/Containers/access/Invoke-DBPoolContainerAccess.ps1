@@ -14,21 +14,30 @@ function Invoke-DBPoolContainerAccess {
         The username to access the container.
         This accepts an array of strings.
 
+    .PARAMETER GetAccess
+        Gets the current access to a container by ID for the given username.
+    
+    .PARAMETER AddAccess
+        Adds access to a container by ID for the given username.
+    
+    .PARAMETER RemoveAccess
+        Removes access to a container by ID for the given username.
+
     .EXAMPLE
         Invoke-DBPoolContainerAccess -Id '12345' -Username 'John.Doe'
         Invoke-DBPoolContainerAccess -Id '12345' -Username 'John.Doe' -GetAccess
 
-        This will get access to the container with ID 12345 for the user John.Doe
+        This will get access to the container with ID 12345 for the user "John.Doe"
 
     .EXAMPLE
-        Invoke-DBPoolContainerAccess -Id @('12345', '56789') -Username 'John.Doe' -AddAccess
+        Invoke-DBPoolContainerAccess -Id @( '12345', '56789' ) -Username 'John.Doe' -AddAccess
 
-        This will add access to the containers with ID 12345, and 56789 for the user John.Doe
+        This will add access to the containers with ID 12345, and 56789 for the user "John.Doe"
 
     .EXAMPLE
-        Invoke-DBPoolContainerAccess -Id '12345' -Username @('Jane.Doe', 'John.Doe') -RemoveAccess
+        Invoke-DBPoolContainerAccess -Id '12345' -Username @( 'Jane.Doe', 'John.Doe' ) -RemoveAccess
 
-        This will remove access to the container with ID 12345 for the users Jane.Doe, and John.Doe
+        This will remove access to the container with ID 12345 for the users "Jane.Doe", and "John.Doe"
 
     .NOTES
         N/A
@@ -41,6 +50,7 @@ function Invoke-DBPoolContainerAccess {
     param (
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         #[ValidateRange(1, [int]::MaxValue)]
+        [Alias('ContainerId')]
         [int[]]$Id,
 
         [Parameter(Mandatory = $true, Position = 1, ParameterSetName = 'GetAccess', ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]

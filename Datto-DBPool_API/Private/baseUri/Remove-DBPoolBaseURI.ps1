@@ -26,7 +26,7 @@ function Remove-DBPoolBaseURI {
     process {
 
         switch ([bool]$DBPool_Base_URI) {
-            $true   { Remove-Variable -Name "DBPool_Base_URI" -Scope global -Force }
+            $true   { Remove-Variable -Name "DBPool_Base_URI" -Scope Global -Force }
             $false  { Write-Warning "The DBPool base URI variable is not set. Nothing to remove" }
         }
 

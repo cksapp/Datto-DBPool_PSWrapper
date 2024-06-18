@@ -8,7 +8,7 @@ schema: 2.0.0
 # Test-DBPoolApiKey
 
 ## SYNOPSIS
-Test the DBPool API key.
+Test the DBPool API Key.
 
 ## SYNTAX
 
@@ -17,29 +17,26 @@ Test-DBPoolApiKey [[-base_uri] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Test-DBPoolApiKey cmdlet tests the base URI & API key that were defined in the
-Add-DBPoolBaseURI & Add-DBPoolAPIKey cmdlets.
+The Test-DBPoolApiKey cmdlet tests the base URI & API Key that were defined in the Add-DBPoolBaseURI & Add-DBPoolAPIKey cmdlets.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Test-DBPoolBaseURI
+Test-DBPoolApiKey
 ```
 
-Tests the base URI & API key that was defined in the
-Add-DBPoolBaseURI & Add-DBPoolAPIKey cmdlets.
+Tests the base URI & API key that was defined in the Add-DBPoolBaseURI & Add-DBPoolAPIKey cmdlets.
 
 The default full base uri test path is:
     https://dbpool.datto.net/api/v2/self
 
 ### EXAMPLE 2
 ```
-Test-DBPoolBaseURI -base_uri http://dbpool.example.com
+Test-DBPoolApiKey -base_uri http://dbpool.example.com
 ```
 
-Tests the base URI & API key that was defined in the
-Add-DBPoolBaseURI & Add-DBPoolAPIKey cmdlets.
+Tests the base URI & API key that was defined in the Add-DBPoolBaseURI & Add-DBPoolAPIKey cmdlets.
 
 The full base uri test path in this example is:
     http://dbpool.example.com/api/v2/self

@@ -1,15 +1,15 @@
 function Remove-DBPoolApiKey {
 <#
     .SYNOPSIS
-        Removes the DBPool API key global variable.
+        Removes the DBPool API Key global variable.
 
     .DESCRIPTION
-        The Remove-DBPoolAPIKey cmdlet removes the DBPool API key global variable.
+        The Remove-DBPoolAPIKey cmdlet removes the DBPool API Key global variable.
 
     .EXAMPLE
         Remove-DBPoolAPIKey
 
-        Removes the DBPool API key global variable.
+        Removes the DBPool API Key global variable.
 
     .NOTES
         N/A

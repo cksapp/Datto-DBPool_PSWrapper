@@ -18,7 +18,9 @@ Remove-DBPoolContainer [-Id] <Int32[]> [-WhatIf] [-Confirm] [<CommonParameters>]
 
 ## DESCRIPTION
 The Remove-DBPoolContainer function is used to delete containers in the DBPool based on the provided container ID.
-This is a destructive operation and will destory the container.
+
+!!
+This is a destructive operation and will destory the container !!
 
 ## EXAMPLES
 
@@ -27,9 +29,14 @@ This is a destructive operation and will destory the container.
 Remove-DBPoolContainer -Id '12345'
 ```
 
-@( 12345, 98765 ) | Remove-DBPoolContainer -Confirm:$false
+This will delete the provided container by ID.
 
-This will delete the provided containers by ID.
+### EXAMPLE 2
+```
+@( 12345, 56789 ) | Remove-DBPoolContainer -Confirm:$false
+```
+
+This will delete the containers with ID 12345, and 56789.
 
 ## PARAMETERS
 
@@ -40,7 +47,7 @@ This accepts an array of integers.
 ```yaml
 Type: System.Int32[]
 Parameter Sets: (All)
-Aliases:
+Aliases: ContainerId
 
 Required: True
 Position: 1

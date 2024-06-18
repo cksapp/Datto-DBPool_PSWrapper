@@ -1,11 +1,15 @@
 function Invoke-DBPoolDebug {
 <#
     .SYNOPSIS
-        Provides an example exception response from the DBPool for debugging purposes.
+        Provides an example exception response from the DBPool API for debugging purposes.
 
     .DESCRIPTION
         Uses the Invoke-DBPoolRequest function to make a request to the DBPool API.
         Returns an example exception response for debugging and testing purposes.
+
+    .PARAMETER method
+        The HTTP method to use when making the request to the DBPool API.
+        Default is 'GET'.
 
     .EXAMPLE
         Invoke-DBPoolDebug -method GET

@@ -1,30 +1,28 @@
 function Test-DBPoolApiKey {
 <#
     .SYNOPSIS
-        Test the DBPool API key.
+        Test the DBPool API Key.
 
     .DESCRIPTION
-        The Test-DBPoolApiKey cmdlet tests the base URI & API key that were defined in the
-        Add-DBPoolBaseURI & Add-DBPoolAPIKey cmdlets.
+        The Test-DBPoolApiKey cmdlet tests the base URI & API Key that were defined in the Add-DBPoolBaseURI & Add-DBPoolAPIKey cmdlets.
 
     .PARAMETER base_uri
         Define the base URI for the DBPool API connection using Datto's DBPool URI or a custom URI.
 
         The default base URI is https://dbpool.datto.net/api
-    .EXAMPLE
-        Test-DBPoolBaseURI
 
-        Tests the base URI & API key that was defined in the
-        Add-DBPoolBaseURI & Add-DBPoolAPIKey cmdlets.
+    .EXAMPLE
+        Test-DBPoolApiKey
+
+        Tests the base URI & API key that was defined in the Add-DBPoolBaseURI & Add-DBPoolAPIKey cmdlets.
 
         The default full base uri test path is:
             https://dbpool.datto.net/api/v2/self
 
     .EXAMPLE
-        Test-DBPoolBaseURI -base_uri http://dbpool.example.com
+        Test-DBPoolApiKey -base_uri http://dbpool.example.com
 
-        Tests the base URI & API key that was defined in the
-        Add-DBPoolBaseURI & Add-DBPoolAPIKey cmdlets.
+        Tests the base URI & API key that was defined in the Add-DBPoolBaseURI & Add-DBPoolAPIKey cmdlets.
 
         The full base uri test path in this example is:
             http://dbpool.example.com/api/v2/self
@@ -38,13 +36,7 @@ function Test-DBPoolApiKey {
 
     [cmdletbinding()]
     Param (
-        [parameter(
-            Position = 0,
-            Mandatory = $false,
-            ValueFromPipeline = $true,
-            ValueFromPipelineByPropertyName = $true,
-            HelpMessage = "Define the base URI for the DBPool connection. Default is Datto's DBPool URI or set a custom URI."
-        )]
+        [parameter( Position = 0, Mandatory = $false, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true, HelpMessage = "Define the base URI for the DBPool connection. Default is Datto's DBPool URI or set a custom URI." )]
         [string]$base_uri = $DBPool_Base_URI
     )
 

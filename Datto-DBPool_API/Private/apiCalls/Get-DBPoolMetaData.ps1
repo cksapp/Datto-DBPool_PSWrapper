@@ -1,10 +1,10 @@
 function Get-DBPoolMetaData {
 <#
     .SYNOPSIS
-        Gets various Api metadata values
+        Gets various API metadata values
 
     .DESCRIPTION
-        The Get-DBPoolMetaData cmdlet gets various Api metadata values from an
+        The Get-DBPoolMetaData cmdlet gets various API metadata values from an
         Invoke-WebRequest to assist in various troubleshooting scenarios such
         as rate-limiting.
 
@@ -16,7 +16,7 @@ function Get-DBPoolMetaData {
     .EXAMPLE
         Get-DBPoolMetaData
 
-        Gets various Api metadata values from an Invoke-WebRequest to assist
+        Gets various API metadata values from an Invoke-WebRequest to assist
         in various troubleshooting scenarios such as rate-limiting.
 
         The default full base uri test path is:
@@ -25,7 +25,7 @@ function Get-DBPoolMetaData {
     .EXAMPLE
         Get-DBPoolMetaData -base_uri http://dbpool.example.com
 
-        Gets various Api metadata values from an Invoke-WebRequest to assist
+        Gets various API metadata values from an Invoke-WebRequest to assist
         in various troubleshooting scenarios such as rate-limiting.
 
         The full base uri test path in this example is:
@@ -59,7 +59,7 @@ function Get-DBPoolMetaData {
 
             $DBPool_Headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
             $DBPool_Headers.Add("Content-Type", 'application/json')
-            $DBPool_Headers.Add('X-App-Apikey', $api_Key)
+            $DBPool_Headers.Add('X-App-APIkey', $api_Key)
 
             $rest_output = Invoke-WebRequest -method $method -uri ($base_uri + $resource_uri) -headers $DBPool_Headers -ErrorAction Stop
         }

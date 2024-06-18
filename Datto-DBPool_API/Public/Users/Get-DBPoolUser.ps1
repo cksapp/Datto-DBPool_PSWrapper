@@ -30,9 +30,9 @@ function Get-DBPoolUser {
 #>
 
 
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'Self')]
     param (
-        [Parameter(Mandatory = $false, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [Parameter(ParameterSetName = 'User', Mandatory = $false, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [string[]]$Username
     )
     
@@ -43,6 +43,7 @@ function Get-DBPoolUser {
     process {
 
         if ($null -eq $Username -or $Username.Count -eq 0) {
+            Write-Verbose "Running the [ $($PSCmdlet.ParameterSetName) ] parameter set"
 
             try {
                 $response = Invoke-DBPoolRequest -Method $method -resource_Uri '/api/v2/self' -ErrorAction Stop
@@ -56,6 +57,7 @@ function Get-DBPoolUser {
                 }
         } else {
             $response = foreach ($uName in $Username) {
+                $requestResponse = $null
                 Write-Verbose "Running the [ $($PSCmdlet.ParameterSetName) ] parameter set for Username $uName"
                 $requestPath = "/api/v2/users/$uName"
 
@@ -63,7 +65,6 @@ function Get-DBPoolUser {
                     $requestResponse = Invoke-DBPoolRequest -Method $method -resource_Uri $requestPath -ErrorAction Stop
                 }
                 catch {
-                    $requestResponse = $null
                     Write-Error $_
                 }
 

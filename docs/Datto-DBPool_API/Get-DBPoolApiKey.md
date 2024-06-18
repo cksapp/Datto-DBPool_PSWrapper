@@ -13,7 +13,7 @@ Gets the DBPool API key global variable.
 ## SYNTAX
 
 ```
-Get-DBPoolApiKey [-plainText] [<CommonParameters>]
+Get-DBPoolApiKey [-AsPlainText] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -30,14 +30,14 @@ Gets the DBPool API key global variable and returns this as an object with the s
 
 ### EXAMPLE 2
 ```
-Get-DBPoolApiKey -plainText
+Get-DBPoolApiKey -AsPlainText
 ```
 
 Gets the DBPool API key global variable and returns this as an object with the secret key as plain text.
 
 ## PARAMETERS
 
-### -plainText
+### -AsPlainText
 Decrypt and return the API key in plain text.
 
 ```yaml
