@@ -7,12 +7,13 @@ function Get-DBPoolContainer {
         This function retrieves container details from the DBPool API.
 
         It can get containers, parent containers, or child containers, and also retrieve containers or container status by ID.
-        This also can filter by container name or database.
+        This also can filter or exclude by container name or database.
 
     .PARAMETER Id
-        The ID of the container to get. This parameter is required when using the ParentContainer or ChildContainer parameter sets.
+        The ID of the container details to get from the DBPool.
+        This parameter is required when using the 'ContainerStatus' parameter set.
 
-    .PARAMETER status
+    .PARAMETER Status
         Gets the status of a container by ID.
         Returns basic container details, and dockerContainerRunning, mysqlServiceResponding, and mysqlServiceRespondingCached statuses.
 
@@ -27,17 +28,17 @@ function Get-DBPoolContainer {
 
     .PARAMETER Name
         Filters containers returned from the DBPool API by name.
-        Accepts '*' for wildcard input.
+        Accepts wildcard input.
 
     .PARAMETER DefaultDatabase
         Filters containers returned from the DBPool API by database.
-        Accepts '*' for wildcard input.
+        Accepts wildcard input.
 
     .PARAMETER NotLike
-        Filters containers returned from the DBPool API by name or DefaultDatabase using the -NotLike switch.
+        Excludes containers returned from the DBPool API by Name or DefaultDatabase using the -NotLike switch.
         Requires the -Name or -DefaultDatabase parameter to be specified.
 
-        Returns containers where the name or DefaultDatabase does not match the provided filter.
+        Returns containers where the Name or DefaultDatabase does not match the provided filter.
 
     .EXAMPLE
         Get-DBPoolContainer
@@ -71,37 +72,37 @@ function Get-DBPoolContainer {
 
     .EXAMPLE
         Get-DBPoolContainer -Name 'MyContainer'
-        Get-DBPoolContainer -ParentContainer -Name '*ParentContainer*'
+        Get-DBPoolContainer -ParentContainer -Name 'ParentContainer*'
 
-        Get a list of containers from the DBPool API, or parent containers by name
-        Accepts '*' for wildcard input
+        Uses 'Where-Object' to get a list of containers from the DBPool API, or parent containers by name
+        Accepts wildcard input
 
     .EXAMPLE
         Get-DBPoolContainer -Name 'MyContainer' -NotLike
-        Get-DBPoolContainer -ParentContainer -Name '*ParentContainer*' -NotLike
+        Get-DBPoolContainer -ParentContainer -Name 'ParentContainer*' -NotLike
 
-        Get a list of containers from the DBPool API, or parent containers where the name does not match the filter
-        Accepts '*' for wildcard input
+        Uses 'Where-Object' to get a list of containers from the DBPool API, or parent containers where the name does not match the filter
+        Accepts wildcard input
 
     .EXAMPLE
         Get-DBPoolContainer -DefaultDatabase 'Database'
-        Get-DBPoolContainer -ParentContainer -DefaultDatabase '*Database*'
+        Get-DBPoolContainer -ParentContainer -DefaultDatabase 'Database*'
 
         Get a list of containers from the DBPool API, or parent containers by database
-        Accepts '*' for wildcard input
+        Accepts wildcard input
 
     .EXAMPLE
         Get-DBPoolContainer -DefaultDatabase 'Database' -NotLike
-        Get-DBPoolContainer -ParentContainer -DefaultDatabase '*Database*' -NotLike
+        Get-DBPoolContainer -ParentContainer -DefaultDatabase 'Database*' -NotLike
 
         Get a list of containers from the DBPool API, or parent containers where the database does not match the filter
-        Accepts '*' for wildcard input
+        Accepts wildcard input
 
     .NOTES
-        The '-Name', and -DefaultDatabase parameters are not native endpoints of the DBPool API.
-        This is a custom function which uses 'Where-Object', along with the optional '-NotLike' parameter to return the response using the provided filter.
+        The -Name, and -DefaultDatabase parameters are not native endpoints of the DBPool API.
+        This is a custom function which uses 'Where-Object', along with the optional -NotLike parameter to return the response using the provided filter.
         
-        If no match is found an error is thrown, and the original response is returned.
+        If no match is found an error is output, and the original response is returned.
 
     .LINK
         N/A
@@ -109,13 +110,6 @@ function Get-DBPoolContainer {
 
     [CmdletBinding(DefaultParameterSetName = 'ListContainer')]
     param (
-        [Parameter(ParameterSetName = 'ParentContainer', Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-        [Parameter(ParameterSetName = 'ListContainer', Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-        [Parameter(ParameterSetName = 'ContainerStatus', Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-        [ValidateNotNullOrEmpty()]
-        #[ValidateRange(0, [int]::MaxValue)]
-        [int[]]$Id,
-
         [Parameter(ParameterSetName = 'ListContainer')]
         [switch]$ListContainer,
 
@@ -125,17 +119,24 @@ function Get-DBPoolContainer {
         [Parameter(ParameterSetName = 'ChildContainer')]
         [switch]$ChildContainer,
 
+        [Parameter(ParameterSetName = 'ParentContainer', Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [Parameter(ParameterSetName = 'ListContainer', Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [Parameter(ParameterSetName = 'ContainerStatus', Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [ValidateNotNullOrEmpty()]
+        #[ValidateRange(0, [int]::MaxValue)]
+        [int[]]$Id,
+
         [Parameter(ParameterSetName = 'ContainerStatus')]
         [switch]$Status,
 
         [Parameter(ParameterSetName = 'ListContainer', ValueFromPipelineByPropertyName = $true)]
         [Parameter(ParameterSetName = 'ParentContainer', ValueFromPipelineByPropertyName = $true)]
-        [string]$Name,
+        [SupportsWildcards()][string]$Name,
 
         [Parameter(ParameterSetName = 'ListContainer', ValueFromPipelineByPropertyName = $true)]
         [Parameter(ParameterSetName = 'ParentContainer', ValueFromPipelineByPropertyName = $true)]
         [Alias('Database')]
-        [string]$DefaultDatabase,
+        [SupportsWildcards()][string]$DefaultDatabase,
 
         [Parameter(ParameterSetName = 'ListContainer')]
         [Parameter(ParameterSetName = 'ParentContainer')]

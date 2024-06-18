@@ -42,21 +42,21 @@ Invoke-DBPoolContainerAccess -Id '12345' -Username 'John.Doe'
 
 Invoke-DBPoolContainerAccess -Id '12345' -Username 'John.Doe' -GetAccess
 
-This will get access to the container with ID 12345 for the user John.Doe
+This will get access to the container with ID 12345 for the user "John.Doe"
 
 ### EXAMPLE 2
 ```
-Invoke-DBPoolContainerAccess -Id @('12345', '56789') -Username 'John.Doe' -AddAccess
+Invoke-DBPoolContainerAccess -Id @( '12345', '56789' ) -Username 'John.Doe' -AddAccess
 ```
 
-This will add access to the containers with ID 12345, and 56789 for the user John.Doe
+This will add access to the containers with ID 12345, and 56789 for the user "John.Doe"
 
 ### EXAMPLE 3
 ```
-Invoke-DBPoolContainerAccess -Id '12345' -Username @('Jane.Doe', 'John.Doe') -RemoveAccess
+Invoke-DBPoolContainerAccess -Id '12345' -Username @( 'Jane.Doe', 'John.Doe' ) -RemoveAccess
 ```
 
-This will remove access to the container with ID 12345 for the users Jane.Doe, and John.Doe
+This will remove access to the container with ID 12345 for the users "Jane.Doe", and "John.Doe"
 
 ## PARAMETERS
 
@@ -67,7 +67,7 @@ This accepts an array of integers.
 ```yaml
 Type: System.Int32[]
 Parameter Sets: (All)
-Aliases:
+Aliases: ContainerId
 
 Required: True
 Position: 1
@@ -93,7 +93,7 @@ Accept wildcard characters: False
 ```
 
 ### -GetAccess
-{{ Fill GetAccess Description }}
+Gets the current access to a container by ID for the given username.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -108,7 +108,7 @@ Accept wildcard characters: False
 ```
 
 ### -AddAccess
-{{ Fill AddAccess Description }}
+Adds access to a container by ID for the given username.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -123,7 +123,7 @@ Accept wildcard characters: False
 ```
 
 ### -RemoveAccess
-{{ Fill RemoveAccess Description }}
+Removes access to a container by ID for the given username.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter

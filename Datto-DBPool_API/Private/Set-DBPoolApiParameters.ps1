@@ -15,9 +15,14 @@ function Set-DBPoolApiParameters {
         You can find your user API key at [ /web/self ](https://dbpool.datto.net/web/self).
 
     .EXAMPLE
-        Set-DBPoolApiParameters -base_uri "https://dbpool.datto.net" -apiKey "0207e066-a779-4849-8aab-0105abf360d8"
+        Set-DBPoolApiParameters
 
-        Set the API URL and API Key for the Datto DBPool API.
+        Sets the default base URI and prompts for the API Key.
+
+    .EXAMPLE
+        Set-DBPoolApiParameters -base_uri "https://dbpool.example.com" -apiKey $secureString
+
+        Sets the base URI to https://dbpool.example.com and sets the API Key.
 
     .NOTES
         See Datto DBPool API help files for more information.

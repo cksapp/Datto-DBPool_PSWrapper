@@ -1,7 +1,7 @@
 function Invoke-DBPoolRequest {
 <#
     .SYNOPSIS
-        Makes an API request to the DBPool
+        Internal function to make an API request to the DBPool API
 
     .DESCRIPTION
         The Invoke-DBPoolRequest cmdlet invokes an API request to DBPool API
@@ -46,6 +46,7 @@ function Invoke-DBPoolRequest {
 
     .EXAMPLE
         Invoke-DBPoolRequest -method GET -resource_Uri '/api/v2/self' -uri_Filter $uri_Filter
+
         Name                           Value
         ----                           -----
         Method                         GET
@@ -53,7 +54,7 @@ function Invoke-DBPoolRequest {
         Headers                        {X-App-Apikey = 3feb2b29-919c-409c-985d-e99cbae43a6d}
         Body
 
-        Invoke a rest method against the defined resource using any of the provided parameters
+        Invoke an API request against the defined resource using any of the provided parameters
 
     .EXAMPLE
         Invoke-DBPoolRequest -method GET -resource_Uri '/api/openapi.json' -uri_Filter $uri_Filter
@@ -64,7 +65,7 @@ function Invoke-DBPoolRequest {
         Headers                        {X-App-Apikey = 3feb2b29-919c-409c-985d-e99cbae43a6d}
         Body
 
-        Invoke a rest method against the defined resource using any of the provided parameters
+        Invoke an API request against the defined resource using any of the provided parameters
 
     .NOTES
         N/A
@@ -122,7 +123,7 @@ function Invoke-DBPoolRequest {
         }
 
         try {
-            $api_Key = $(Get-DBPoolAPIKey -plainText).'ApiKey'
+            $api_Key = $(Get-DBPoolAPIKey -AsPlainText).'ApiKey'
 
             $parameters = [ordered] @{
                 "Method"    = $method

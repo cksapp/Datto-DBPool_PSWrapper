@@ -26,7 +26,14 @@ The Rename-DBPoolContainer function is used to change the name a container in th
 Rename-DBPoolContainer -Id 12345 -Name 'NewContainerName'
 ```
 
-@( 12345, 98765 ) | Rename-DBPoolContainer -Name 'NewContainerName'
+This will update the container with ID 12345 to have the name 'NewContainerName'
+
+### EXAMPLE 2
+```
+@( 12345, 56789 ) | Rename-DBPoolContainer -Name 'NewContainerName'
+```
+
+This will update the containers with ID 12345, and 56789 to have the name 'NewContainerName'
 
 ## PARAMETERS
 
@@ -37,7 +44,7 @@ This accepts an array of integers.
 ```yaml
 Type: System.Int32[]
 Parameter Sets: (All)
-Aliases:
+Aliases: ContainerId
 
 Required: True
 Position: 1

@@ -28,6 +28,13 @@ Invoke-DBPoolContainerAction -Id '12345' -Action 'restart'
 
 This will restart the container with ID 12345
 
+### EXAMPLE 2
+```
+Invoke-DBPoolContainerAction -Id @( '12345', '56789' ) -Action 'refresh'
+```
+
+This will refresh the containers with ID 12345, and 56789
+
 ## PARAMETERS
 
 ### -Id
@@ -36,7 +43,7 @@ The ID of the container to perform the action on.
 ```yaml
 Type: System.Int32[]
 Parameter Sets: (All)
-Aliases:
+Aliases: ContainerId
 
 Required: True
 Position: 1
@@ -104,6 +111,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 Actions:
+
     refresh:
         Recreate the Docker container and ZFS snapshot for the container.
 

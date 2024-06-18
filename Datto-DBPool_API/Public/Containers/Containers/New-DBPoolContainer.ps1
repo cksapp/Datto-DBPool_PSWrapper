@@ -24,8 +24,12 @@ function New-DBPoolContainer {
     .EXAMPLE
         New-DBPoolContainer -ContainerName 'MyNewContainer' -ParentId 12345
 
+        This will create a new container named 'MyNewContainer' based on the parent container with ID 12345.
+
     .EXAMPLE
         Get-DBPoolContainer -ParentContainer -Id 1 | New-DBPoolContainer -ContainerName 'MyNewContainer'
+
+        This will create a new container named 'MyNewContainer' based on the piped in parent container.
 
     .NOTES
         N/A

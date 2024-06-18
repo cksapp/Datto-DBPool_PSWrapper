@@ -8,7 +8,7 @@ schema: 2.0.0
 # Invoke-DBPoolDebug
 
 ## SYNOPSIS
-Provides an example exception response from the DBPool for debugging purposes.
+Provides an example exception response from the DBPool API for debugging purposes.
 
 ## SYNTAX
 
@@ -32,7 +32,8 @@ Sends a 'GET' request to the DBPool API and returns a '418' exception response e
 ## PARAMETERS
 
 ### -method
-{{ Fill method Description }}
+The HTTP method to use when making the request to the DBPool API.
+Default is 'GET'.
 
 ```yaml
 Type: System.String

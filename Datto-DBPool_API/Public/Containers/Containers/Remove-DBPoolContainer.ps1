@@ -5,7 +5,8 @@ function Remove-DBPoolContainer {
 
     .DESCRIPTION
         The Remove-DBPoolContainer function is used to delete containers in the DBPool based on the provided container ID.
-        This is a destructive operation and will destory the container.
+
+        !! This is a destructive operation and will destory the container !!
 
     .PARAMETER Id
         The ID of the container to delete.
@@ -13,9 +14,13 @@ function Remove-DBPoolContainer {
 
     .EXAMPLE
         Remove-DBPoolContainer -Id '12345'
-        @( 12345, 98765 ) | Remove-DBPoolContainer -Confirm:$false
 
-        This will delete the provided containers by ID.
+        This will delete the provided container by ID.
+
+    .EXAMPLE
+        @( 12345, 56789 ) | Remove-DBPoolContainer -Confirm:$false
+
+        This will delete the containers with ID 12345, and 56789.
 
     .NOTES
         N/A
@@ -28,6 +33,7 @@ function Remove-DBPoolContainer {
     param (
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateRange(1, [int]::MaxValue)]
+        [Alias('ContainerId')]
         [int[]]$Id
     )
     

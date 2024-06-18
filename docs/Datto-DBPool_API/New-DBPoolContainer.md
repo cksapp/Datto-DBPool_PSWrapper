@@ -30,10 +30,14 @@ If multiple parent fields are specified, both conditions will have to match a pa
 New-DBPoolContainer -ContainerName 'MyNewContainer' -ParentId 12345
 ```
 
+This will create a new container named 'MyNewContainer' based on the parent container with ID 12345.
+
 ### EXAMPLE 2
 ```
 Get-DBPoolContainer -ParentContainer -Id 1 | New-DBPoolContainer -ContainerName 'MyNewContainer'
 ```
+
+This will create a new container named 'MyNewContainer' based on the piped in parent container.
 
 ## PARAMETERS
 

@@ -23,10 +23,17 @@ The Set-DBPoolApiParameters function is used to set the API URL and API Key for 
 
 ### EXAMPLE 1
 ```
-Set-DBPoolApiParameters -base_uri "https://dbpool.datto.net" -apiKey "0207e066-a779-4849-8aab-0105abf360d8"
+Set-DBPoolApiParameters
 ```
 
-Set the API URL and API Key for the Datto DBPool API.
+Sets the default base URI and prompts for the API Key.
+
+### EXAMPLE 2
+```
+Set-DBPoolApiParameters -base_uri "https://dbpool.example.com" -apiKey $secureString
+```
+
+Sets the base URI to https://dbpool.example.com and sets the API Key.
 
 ## PARAMETERS
 

@@ -8,7 +8,7 @@ schema: 2.0.0
 # Invoke-DBPoolRequest
 
 ## SYNOPSIS
-Makes an API request to the DBPool
+Internal function to make an API request to the DBPool API
 
 ## SYNTAX
 
@@ -36,7 +36,7 @@ Uri                            https://dbpool.datto.net/api/v2/self
 Headers                        {X-App-Apikey = 3feb2b29-919c-409c-985d-e99cbae43a6d}
 Body
 
-Invoke a rest method against the defined resource using any of the provided parameters
+Invoke an API request against the defined resource using any of the provided parameters
 
 ### EXAMPLE 2
 ```
@@ -50,7 +50,7 @@ Uri                            https://dbpool.datto.net/api/openapi.json
 Headers                        {X-App-Apikey = 3feb2b29-919c-409c-985d-e99cbae43a6d}
 Body
 
-Invoke a rest method against the defined resource using any of the provided parameters
+Invoke an API request against the defined resource using any of the provided parameters
 
 ## PARAMETERS
 

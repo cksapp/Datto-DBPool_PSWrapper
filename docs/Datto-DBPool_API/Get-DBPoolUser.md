@@ -12,6 +12,12 @@ Get a user from DBPool
 
 ## SYNTAX
 
+### Self (Default)
+```
+Get-DBPoolUser [<CommonParameters>]
+```
+
+### User
 ```
 Get-DBPoolUser [[-Username] <String[]>] [<CommonParameters>]
 ```
@@ -44,7 +50,7 @@ This accepts an array of strings.
 
 ```yaml
 Type: System.String[]
-Parameter Sets: (All)
+Parameter Sets: User
 Aliases:
 
 Required: False

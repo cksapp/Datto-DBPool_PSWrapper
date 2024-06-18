@@ -31,10 +31,10 @@ The base URI will use https://dbpool.datto.net which is DBPool's default URI.
 
 ### EXAMPLE 2
 ```
-Add-DBPoolBaseURI -instance DEFAULT
+Add-DBPoolBaseURI -instance Datto
 ```
 
-The base URI will use https://dbpool.datto.net which is DBPool's DEFAULT URI.
+The base URI will use https://dbpool.datto.net which is DBPool's default URI.
 
 ### EXAMPLE 3
 ```

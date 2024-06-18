@@ -15,7 +15,13 @@ function Rename-DBPoolContainer {
     
     .EXAMPLE
         Rename-DBPoolContainer -Id 12345 -Name 'NewContainerName'
-        @( 12345, 98765 ) | Rename-DBPoolContainer -Name 'NewContainerName'
+
+        This will update the container with ID 12345 to have the name 'NewContainerName'
+
+    .EXAMPLE
+        @( 12345, 56789 ) | Rename-DBPoolContainer -Name 'NewContainerName'
+
+        This will update the containers with ID 12345, and 56789 to have the name 'NewContainerName'
 
     .NOTES
         N/A
@@ -28,6 +34,7 @@ function Rename-DBPoolContainer {
     param (
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateRange(1, [int]::MaxValue)]
+        [Alias('ContainerId')]
         [int[]]$Id,
 
         [Parameter(Mandatory = $true, Position = 1, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]

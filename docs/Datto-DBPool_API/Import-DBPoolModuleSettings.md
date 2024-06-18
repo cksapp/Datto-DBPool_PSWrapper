@@ -8,7 +8,7 @@ schema: 2.0.0
 # Import-DBPoolModuleSettings
 
 ## SYNOPSIS
-Imports the DBPool BaseURI, API, & JSON configuration information to the current session.
+Imports the DBPool BaseURI, API Key, & JSON configuration information to the current session.
 
 ## SYNTAX
 
@@ -17,7 +17,7 @@ Import-DBPoolModuleSettings [-DBPoolConfPath <String>] [-DBPoolConfFile <String>
 ```
 
 ## DESCRIPTION
-The Import-DBPoolModuleSettings cmdlet imports the DBPool BaseURI, API, & JSON configuration
+The Import-DBPoolModuleSettings cmdlet imports the DBPool BaseURI, API Key, & JSON configuration
 information stored in the DBPool configuration file to the users current session.
 
 By default the configuration file is stored in the following location:
@@ -93,7 +93,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
-N\A
+N/A
 
 ## RELATED LINKS
 

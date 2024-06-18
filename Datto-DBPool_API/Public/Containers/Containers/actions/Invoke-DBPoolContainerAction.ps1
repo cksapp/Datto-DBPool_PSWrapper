@@ -20,8 +20,14 @@ function Invoke-DBPoolContainerAction {
 
         This will restart the container with ID 12345
 
+    .EXAMPLE
+        Invoke-DBPoolContainerAction -Id @( '12345', '56789' ) -Action 'refresh'
+
+        This will refresh the containers with ID 12345, and 56789
+
     .NOTES
         Actions:
+
             refresh:
                 Recreate the Docker container and ZFS snapshot for the container.
 
@@ -46,6 +52,7 @@ function Invoke-DBPoolContainerAction {
     param (
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateRange(1, [int]::MaxValue)]
+        [Alias('ContainerId')]
         [int[]]$Id,
 
         [Parameter(Mandatory = $true, Position = 1)]

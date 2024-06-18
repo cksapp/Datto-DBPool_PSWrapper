@@ -1,11 +1,11 @@
 function Test-DBPoolApi {
 <#
     .SYNOPSIS
-        Checks the availability of an API using a HEAD request.
+        Checks the availability of the DBPool API using an HTTP HEAD request.
 
     .DESCRIPTION
-        This function sends an HTTP HEAD request to the specified API URL using Invoke-WebRequest
-        and checks if the HTTP status code is 200, indicating that the API is available.
+        This function sends an HTTP HEAD request to the specified API URL using Invoke-WebRequest.
+        Checks if the HTTP status code is 200, indicating that the API is available.
 
     .PARAMETER base_uri
         The base URL of the API to be checked.

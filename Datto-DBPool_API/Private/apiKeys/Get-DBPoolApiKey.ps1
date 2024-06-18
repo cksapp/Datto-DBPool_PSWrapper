@@ -6,7 +6,7 @@ function Get-DBPoolApiKey {
     .DESCRIPTION
         The Get-DBPoolApiKey cmdlet gets the DBPool API key global variable and returns this as an object.
 
-    .PARAMETER plainText
+    .PARAMETER AsPlainText
         Decrypt and return the API key in plain text.
 
     .EXAMPLE
@@ -15,7 +15,7 @@ function Get-DBPoolApiKey {
         Gets the DBPool API key global variable and returns this as an object with the secret key as a SecureString.
 
     .EXAMPLE
-        Get-DBPoolApiKey -plainText
+        Get-DBPoolApiKey -AsPlainText
 
         Gets the DBPool API key global variable and returns this as an object with the secret key as plain text.
 
@@ -30,7 +30,7 @@ function Get-DBPoolApiKey {
     [cmdletbinding()]
     Param (
         [Parameter( Mandatory = $false )]
-        [Switch]$plainText
+        [Switch]$AsPlainText
     )
 
     begin {}
@@ -41,7 +41,7 @@ function Get-DBPoolApiKey {
 
             if ($DBPool_ApiKey) {
 
-                if ($plainText) {
+                if ($AsPlainText) {
                     if ($isWindows -or $PSEdition -eq 'Desktop') {
                         $ApiKeyBSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($DBPool_ApiKey)
                         try {
