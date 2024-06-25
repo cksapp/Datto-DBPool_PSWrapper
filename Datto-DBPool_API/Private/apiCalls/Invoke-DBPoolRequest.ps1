@@ -171,20 +171,21 @@ function Invoke-DBPoolRequest {
         }
         catch {
 
-            $exceptionError = $_.Exception.Message
+            $exceptionError = $_
             Write-Warning 'The [ DBPool_invokeParameters, DBPool_queryString, & DBPool_CmdletNameParameters ] variables can provide extra details'
 
-            switch -Wildcard ($exceptionError) {
-                '*404*' { Write-Error "Invoke-DBPoolRequest : [ $resource_Uri ] not found!" }
-                '*429*' { Write-Error 'Invoke-DBPoolRequest : API rate limited' }
+            switch -Wildcard ( $($exceptionError.Exception.Message) ) {
+                '*401*' { Write-Error 'Status 401 : Unauthorized. Invalid API key' }
+                '*404*' { Write-Error "Status 404 : [ $( $DBPool_base_URI + $resource_Uri ) ] not found!" }
+                '*429*' { Write-Error 'Status 429 : API rate limited' }
                 '*500*' {
-                    $e = $(Get-Error).ErrorDetails.Message
+                    $e = $($exceptionError.ErrorDetails.Message)
                     if ($null -ne $e) {
-                        $e = $( $e | ConvertFrom-Json ).error.message
+                        [string]$e = $( $e | ConvertFrom-Json ).error.message
                     }
-                    Write-Error "Invoke-DBPoolRequest : 500 Internal Server Error. $e" 
+                    Write-Error "Status 500 : Internal Server Error. $e"
                 }
-                '*504*' { Write-Error "Invoke-DBPoolRequest : Gateway Timeout" }
+                '*504*' { Write-Error "Status 504 : Gateway Timeout" }
                 default { Write-Error $_ }
             }
 
