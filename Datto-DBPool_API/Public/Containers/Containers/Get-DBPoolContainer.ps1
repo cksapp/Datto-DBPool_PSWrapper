@@ -166,45 +166,60 @@ function Get-DBPoolContainer {
                 [string]$DefaultDatabase,
 
                 [Parameter(Mandatory = $false)]
-                [int[]]$Id,
+                [switch]$NotLike,
 
                 [Parameter(Mandatory = $true)]
-                [string]$ParameterSetName,
-
-                [Parameter(Mandatory = $false)]
-                [switch]$NotLike
+                [string]$ParameterSetName
             )
 
-            $Filter = $null
-            $filterParameter = $null
+            $Filter = @()
+            $filterParameter = @()
 
             if ($Name) {
-                $Filter = 'Name'
-                $filterParameter = $Name
-            } elseif ($DefaultDatabase) {
-                $Filter = 'DefaultDatabase'
-                $filterParameter = $DefaultDatabase
+                $Filter += 'Name'
+                $filterParameter += $Name
+            }
+            if ($DefaultDatabase) {
+                $Filter += 'DefaultDatabase'
+                $filterParameter += $DefaultDatabase
             }
 
             # Write verbose output for filter parameters include or exclude
             if ($NotLike) {
-                Write-Verbose "Excluding the response by $Filter [ $filterParameter ]"
+                Write-Verbose "Excluding the response by $($Filter -join ', ') [ $($filterParameter -join ', ') ]"
             } else {
-                Write-Verbose "Filtering the response by $Filter [ $filterParameter ]"
+                Write-Verbose "Filtering the response by $($Filter -join ', ') [ $($filterParameter -join ', ') ]"
             }
 
             $Container = $Container | Where-Object {
+
+                # Handle the -NotLike switch
                 if ($NotLike) {
-                    ($Name -and $_.name -notlike $Name) -or
-                    ($DefaultDatabase -and $_.defaultDatabase -notlike $DefaultDatabase)
+                    # Filter the response by both Name and DefaultDatabase
+                    if ($Name -and $DefaultDatabase) {
+                        $_.name -notlike $Name -and $_.defaultDatabase -notlike $DefaultDatabase
+                        # Filter the response by just Name or DefaultDatabase
+                    } else {
+                        ($Name -and $_.name -notlike $Name) -or
+                        ($DefaultDatabase -and $_.defaultDatabase -notlike $DefaultDatabase)
+                    }
+
+                # Handle the default select filter
                 } else {
-                    ($Name -and $_.name -like $Name) -or
-                    ($DefaultDatabase -and $_.defaultDatabase -like $DefaultDatabase)
+                    # Filter the response by both Name and DefaultDatabase
+                    if ($Name -and $DefaultDatabase) {
+                        $_.name -like $Name -and $_.defaultDatabase -like $DefaultDatabase
+                    # Filter the response by just Name or DefaultDatabase
+                    } else {
+                        ($Name -and $_.name -like $Name) -or
+                        ($DefaultDatabase -and $_.defaultDatabase -like $DefaultDatabase)
+                    }
                 }
+
             }
 
             if (!$Container) {
-                Write-Error "No container found matching the [ $Filter ] filter parameter [ $filterParameter ]. Returning all fetched containers." -ErrorAction Stop
+                Write-Error "No container found matching the [ $($Filter -join ', ') ] filter parameter [ $($filterParameter -join ', ') ]. Returning all fetched containers." -ErrorAction Stop
             }
 
             # Return the container
@@ -247,7 +262,7 @@ function Get-DBPoolContainer {
                     $requestResponse | ConvertFrom-Json
                 }
             }
-        # Get list of containers based on the parameter set, returns 
+        # Get list of containers based on the parameter set, returns all listed containers
         } else {
             Write-Verbose "Running the [ $($PSCmdlet.ParameterSetName) ] parameter set"
 
@@ -270,10 +285,10 @@ function Get-DBPoolContainer {
         }
 
 
-        # Filter the response by Name or DefaultDatabase if provided
+        # Filter the response by Name or DefaultDatabase if provided using internal helper function
         if ($PSBoundParameters.ContainsKey('Name') -or $PSBoundParameters.ContainsKey('DefaultDatabase')) {
             try {
-                $response = Select-DBPoolContainers -Container $response -Name $Name -DefaultDatabase $DefaultDatabase -Id $Id -ParameterSetName $PSCmdlet.ParameterSetName -NotLike:$NotLike -ErrorAction Stop
+                $response = Select-DBPoolContainers -Container $response -Name $Name -DefaultDatabase $DefaultDatabase -ParameterSetName $PSCmdlet.ParameterSetName -NotLike:$NotLike -ErrorAction Stop
             } catch {
                 Write-Error $_
             }
