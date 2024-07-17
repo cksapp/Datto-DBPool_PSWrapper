@@ -247,7 +247,6 @@ function Get-DBPoolContainer {
                 # Define the ContainerStatus parameter request path if set
                 $uri = "$requestPath/$n"
                 if ($Status) {
-                    Write-Verbose "Getting the status of container ID $n"
                     $uri += '/status'
                 }
 

@@ -34,7 +34,9 @@ function Remove-DBPoolContainer {
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateRange(1, [int]::MaxValue)]
         [Alias('ContainerId')]
-        [int[]]$Id
+        [int[]]$Id,
+
+        [switch]$Force
     )
     
     begin {
@@ -57,7 +59,7 @@ function Remove-DBPoolContainer {
                 }
             }
 
-            if ($PSCmdlet.ShouldProcess("Container [ ID: $n ]", 'Destroy')) {
+            if ($Force -or $PSCmdlet.ShouldProcess("Container [ ID: $n ]", 'Destroy')) {
                 Write-Verbose "Destroying Container [ ID: $n, Name: $containerName ]"
                 
                 try {

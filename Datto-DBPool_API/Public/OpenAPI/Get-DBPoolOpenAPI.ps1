@@ -24,6 +24,7 @@ function Get-DBPoolOpenAPI {
 
 
     [CmdletBinding()]
+    [Alias("Get-DBPoolApiSpec", "Get-DBPoolSwagger")]
     param (
         [Parameter(Mandatory = $false)]
         [string]$OpenAPI_Path = '/api/docs/openapi.json'
