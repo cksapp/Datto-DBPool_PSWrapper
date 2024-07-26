@@ -69,8 +69,7 @@ function Export-DBPoolModuleSettings {
 
             if ($IsWindows -or $PSEdition -eq 'Desktop') {
                 New-Item -Path $DBPoolConfPath -ItemType Directory -Force | ForEach-Object { $_.Attributes = $_.Attributes -bor "Hidden" }
-            }
-            else{
+            } else {
                 New-Item -Path $DBPoolConfPath -ItemType Directory -Force
             }
 @"
@@ -80,8 +79,8 @@ function Export-DBPoolModuleSettings {
         DBPool_JSON_Conversion_Depth = '$DBPool_JSON_Conversion_Depth'
     }
 "@ | Out-File -FilePath $DBPoolConfig -Force
-        }
-        else {
+            Write-Verbose "DBPool Module settings exported to [ $DBPoolConfig ]"
+        } else {
             Write-Error "Failed to export DBPool Module settings to [ $DBPoolConfig ]"
             Write-Error $_
             exit 1
