@@ -53,8 +53,10 @@ function Get-DBPoolUser {
             }
 
             if ($null -ne $response) {
-                    $response = $response | ConvertFrom-Json
+                $response = $response | ConvertFrom-Json | ForEach-Object {
+                    [DBPoolAuthUser]::new($_.id, $_.username, $_.displayName, $_.email, $( $_.apiKey | ConvertTo-SecureString -AsPlainText -Force ))
                 }
+            }
         } else {
             $response = foreach ($uName in $Username) {
                 $requestResponse = $null
@@ -69,7 +71,10 @@ function Get-DBPoolUser {
                 }
 
                 if ($null -ne $requestResponse) {
-                    $requestResponse | ConvertFrom-Json
+                    $requestResponse | ConvertFrom-Json | ForEach-Object {
+                        $user = [DBPoolUser]::new($_.id, $_.username, $_.displayName, $_.email)
+                        $user
+                    }
                 }
             }
         }

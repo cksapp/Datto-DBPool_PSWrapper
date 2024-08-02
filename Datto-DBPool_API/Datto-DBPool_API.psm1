@@ -35,7 +35,7 @@ Param(
 )
 
 # Directories to import from
-$directory = "Public", "Private"
+$directory = "Classes", "Public", "Private"
 
 # Import functions
 foreach ($dir in $directory) {

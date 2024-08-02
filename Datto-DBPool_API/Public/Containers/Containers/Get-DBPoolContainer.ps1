@@ -276,9 +276,75 @@ function Get-DBPoolContainer {
                 $response = $requestResponse | ConvertFrom-Json
 
                 if ($PSCmdlet.ParameterSetName -eq 'ParentContainer') {
-                    $response = $response.parents
+                    $response = $response.parents | ForEach-Object {
+                        [DBPoolParentContainer]::new(
+                            $_.id, 
+                            $_.image, 
+                            $_.name, 
+                            $_.defaultDatabase, 
+                            [DBPoolNode]::new(
+                                $_.node.id, 
+                                $_.node.name, 
+                                $_.node.ip, 
+                                $_.node.fqdn, 
+                                $_.node.total_containers, 
+                                $_.node.powered_on_containers, 
+                                $_.node.powered_off_containers, 
+                                $_.node.remaining_containers, 
+                                $_.node.maximum_containers
+                            ), 
+                            $_.useNewSync, 
+                            $_.sync
+                        )
+                    }
                 } elseif ($PSCmdlet.ParameterSetName -eq 'ListContainer') {
-                    $response = $response.containers
+                    $response = $response.containers | ForEach-Object {
+                        [DBPoolContainer]::new(
+                            $_.id,
+                            $_.image,
+                            $_.name,
+                            $_.power,
+                            $_.defaultDatabase,
+                            $_.dateCreated,
+                            $_.dateStarted,
+                            $_.dateStopped,
+                            $_.host,
+                            $_.port,
+                            $_.username,
+                            $( $_.password | ConvertTo-SecureString -AsPlainText -Force ),
+                            [DBPoolNode]::new(
+                                $_.node.id, 
+                                $_.node.name, 
+                                $_.node.ip, 
+                                $_.node.fqdn, 
+                                $_.node.total_containers, 
+                                $_.node.powered_on_containers, 
+                                $_.node.powered_off_containers, 
+                                $_.node.remaining_containers, 
+                                $_.node.maximum_containers
+                            ),
+                            [DBPoolParentContainer]::new(
+                                $_.parent.id, 
+                                $_.parent.image, 
+                                $_.parent.name, 
+                                $_.parent.defaultDatabase, 
+                                [DBPoolNode]::new(
+                                    $_.node.id, 
+                                    $_.node.name, 
+                                    $_.node.ip, 
+                                    $_.node.fqdn, 
+                                    $_.node.total_containers, 
+                                    $_.node.powered_on_containers, 
+                                    $_.node.powered_off_containers, 
+                                    $_.node.remaining_containers, 
+                                    $_.node.maximum_containers
+                                ), 
+                                $_.parent.useNewSync, 
+                                $_.parent.sync
+                            ),
+                            [DBPoolUser]::new($_.users.id, $_.users.username, $_.users.displayName, $_.users.email)
+                        )
+                    }
                 }
             }
         }
