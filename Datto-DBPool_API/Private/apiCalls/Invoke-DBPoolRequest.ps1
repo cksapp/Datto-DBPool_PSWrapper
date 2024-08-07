@@ -219,6 +219,16 @@ function Invoke-DBPoolRequest {
 
     }
 
-    end {}
+    end {
+        # Varaibles to remove
+        $var = @(
+            'api_Key',
+            'parameters',
+            'Auth'
+        )
+        foreach ($v in $var) {
+            Remove-Variable -Name $v -ErrorAction SilentlyContinue -Force
+        }
+    }
 
 }
