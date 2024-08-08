@@ -13,7 +13,8 @@ The Invoke-DBPoolContainerAction function is used to interact with various conta
 ## SYNTAX
 
 ```
-Invoke-DBPoolContainerAction [-Id] <Int32[]> [-Action] <String> [-WhatIf] [-Confirm] [<CommonParameters>]
+Invoke-DBPoolContainerAction [-Id] <Int32[]> [-Action] <String> [-ProgressAction <ActionPreference>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -41,7 +42,7 @@ This will refresh the containers with ID 12345, and 56789
 The ID of the container to perform the action on.
 
 ```yaml
-Type: System.Int32[]
+Type: Int32[]
 Parameter Sets: (All)
 Aliases: ContainerId
 
@@ -60,7 +61,7 @@ Start, Stop, and Restart are all considered minor actions and will not require a
 Refresh and Schema-Merge are considered major actions and will require a confirmation prompt.
 
 ```yaml
-Type: System.String
+Type: String
 Parameter Sets: (All)
 Aliases:
 
@@ -76,7 +77,7 @@ Shows what would happen if the cmdlet runs.
 The cmdlet is not run.
 
 ```yaml
-Type: System.Management.Automation.SwitchParameter
+Type: SwitchParameter
 Parameter Sets: (All)
 Aliases: wi
 
@@ -91,9 +92,24 @@ Accept wildcard characters: False
 Prompts you for confirmation before running the cmdlet.
 
 ```yaml
-Type: System.Management.Automation.SwitchParameter
+Type: SwitchParameter
 Parameter Sets: (All)
 Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

@@ -13,7 +13,8 @@ Sets the base URI for the DBPool API connection.
 ## SYNTAX
 
 ```
-Add-DBPoolBaseURI [[-base_uri] <String>] [[-instance] <String>] [<CommonParameters>]
+Add-DBPoolBaseURI [[-base_uri] <String>] [[-instance] <String>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -49,7 +50,7 @@ A custom API gateway of http://dbpool.example.com will be used for all API calls
 Define the base URI for the DBPool API connection using Datto's DBPool URI or a custom URI.
 
 ```yaml
-Type: System.String
+Type: String
 Parameter Sets: (All)
 Aliases:
 
@@ -70,12 +71,27 @@ The accepted values for this parameter are:
 Placeholder for other data centers.
 
 ```yaml
-Type: System.String
+Type: String
 Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: 2
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

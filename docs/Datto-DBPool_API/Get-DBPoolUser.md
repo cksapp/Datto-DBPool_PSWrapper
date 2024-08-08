@@ -14,12 +14,12 @@ Get a user from DBPool
 
 ### Self (Default)
 ```
-Get-DBPoolUser [<CommonParameters>]
+Get-DBPoolUser [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### User
 ```
-Get-DBPoolUser [[-Username] <String[]>] [<CommonParameters>]
+Get-DBPoolUser [[-Username] <String[]>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -49,7 +49,7 @@ The username of the user to get details for.
 This accepts an array of strings.
 
 ```yaml
-Type: System.String[]
+Type: String[]
 Parameter Sets: User
 Aliases:
 
@@ -57,6 +57,21 @@ Required: False
 Position: 1
 Default value: None
 Accept pipeline input: True (ByPropertyName, ByValue)
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

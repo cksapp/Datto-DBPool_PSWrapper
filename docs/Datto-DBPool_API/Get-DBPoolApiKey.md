@@ -13,7 +13,7 @@ Gets the DBPool API key global variable.
 ## SYNTAX
 
 ```
-Get-DBPoolApiKey [-AsPlainText] [<CommonParameters>]
+Get-DBPoolApiKey [-AsPlainText] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -41,13 +41,28 @@ Gets the DBPool API key global variable and returns this as an object with the s
 Decrypt and return the API key in plain text.
 
 ```yaml
-Type: System.Management.Automation.SwitchParameter
+Type: SwitchParameter
 Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

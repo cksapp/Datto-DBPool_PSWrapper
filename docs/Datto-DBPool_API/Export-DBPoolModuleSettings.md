@@ -13,7 +13,8 @@ Exports the DBPool BaseURI, API Key, & JSON configuration information to file.
 ## SYNTAX
 
 ```
-Export-DBPoolModuleSettings [-DBPoolConfPath <String>] [-DBPoolConfFile <String>] [<CommonParameters>]
+Export-DBPoolModuleSettings [-DBPoolConfPath <String>] [-DBPoolConfFile <String>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -52,7 +53,7 @@ By default the configuration file is stored in the following location:
     $env:USERPROFILE\DBPoolAPI
 
 ```yaml
-Type: System.String
+Type: String
 Parameter Sets: (All)
 Aliases:
 
@@ -70,13 +71,28 @@ By default the configuration file is named:
     config.psd1
 
 ```yaml
-Type: System.String
+Type: String
 Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: Named
 Default value: Config.psd1
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

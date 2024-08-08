@@ -13,7 +13,7 @@ Gets various API metadata values
 ## SYNTAX
 
 ```
-Get-DBPoolMetaData [[-base_uri] <String>] [<CommonParameters>]
+Get-DBPoolMetaData [[-base_uri] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -53,7 +53,7 @@ Define the base URI for the DBPool API connection using Datto's DBPool URI or a 
 The default base URI is https://dbpool.datto.net
 
 ```yaml
-Type: System.String
+Type: String
 Parameter Sets: (All)
 Aliases:
 
@@ -61,6 +61,21 @@ Required: False
 Position: 1
 Default value: $DBPool_Base_URI
 Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

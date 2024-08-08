@@ -13,7 +13,7 @@ Gets the DBPool OpenAPI documentation.
 ## SYNTAX
 
 ```
-Get-DBPoolOpenAPI [[-OpenAPI_Path] <String>] [<CommonParameters>]
+Get-DBPoolOpenAPI [[-OpenAPI_Path] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -35,13 +35,28 @@ The path to the OpenAPI json spec.
 This defaults to '/api/docs/openapi.json'
 
 ```yaml
-Type: System.String
+Type: String
 Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: 1
 Default value: /api/docs/openapi.json
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

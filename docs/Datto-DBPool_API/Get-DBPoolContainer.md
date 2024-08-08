@@ -15,23 +15,23 @@ The Get-DBPoolContainer function retrieves container information from the DBPool
 ### ListContainer (Default)
 ```
 Get-DBPoolContainer [-ListContainer] [[-Id] <Int32[]>] [-Name <String>] [-DefaultDatabase <String>] [-NotLike]
- [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### ParentContainer
 ```
 Get-DBPoolContainer [-ParentContainer] [[-Id] <Int32[]>] [-Name <String>] [-DefaultDatabase <String>]
- [-NotLike] [<CommonParameters>]
+ [-NotLike] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### ChildContainer
 ```
-Get-DBPoolContainer [-ChildContainer] [<CommonParameters>]
+Get-DBPoolContainer [-ChildContainer] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### ContainerStatus
 ```
-Get-DBPoolContainer [-Id] <Int32[]> [-Status] [<CommonParameters>]
+Get-DBPoolContainer [-Id] <Int32[]> [-Status] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -131,7 +131,7 @@ Retrieves a list of containers from the DBPool API.
 This is the default parameter set.
 
 ```yaml
-Type: System.Management.Automation.SwitchParameter
+Type: SwitchParameter
 Parameter Sets: ListContainer
 Aliases:
 
@@ -146,7 +146,7 @@ Accept wildcard characters: False
 Retrieves a list of parent containers from the DBPool API.
 
 ```yaml
-Type: System.Management.Automation.SwitchParameter
+Type: SwitchParameter
 Parameter Sets: ParentContainer
 Aliases:
 
@@ -161,7 +161,7 @@ Accept wildcard characters: False
 Retrieves a list of child containers from the DBPool API.
 
 ```yaml
-Type: System.Management.Automation.SwitchParameter
+Type: SwitchParameter
 Parameter Sets: ChildContainer
 Aliases:
 
@@ -177,7 +177,7 @@ The ID of the container details to get from the DBPool.
 This parameter is required when using the 'ContainerStatus' parameter set.
 
 ```yaml
-Type: System.Int32[]
+Type: Int32[]
 Parameter Sets: ListContainer, ParentContainer
 Aliases:
 
@@ -189,7 +189,7 @@ Accept wildcard characters: False
 ```
 
 ```yaml
-Type: System.Int32[]
+Type: Int32[]
 Parameter Sets: ContainerStatus
 Aliases:
 
@@ -205,7 +205,7 @@ Gets the status of a container by ID.
 Returns basic container details, and dockerContainerRunning, mysqlServiceResponding, and mysqlServiceRespondingCached statuses.
 
 ```yaml
-Type: System.Management.Automation.SwitchParameter
+Type: SwitchParameter
 Parameter Sets: ContainerStatus
 Aliases:
 
@@ -221,7 +221,7 @@ Filters containers returned from the DBPool API by name.
 Accepts wildcard input.
 
 ```yaml
-Type: System.String
+Type: String
 Parameter Sets: ListContainer, ParentContainer
 Aliases:
 
@@ -237,7 +237,7 @@ Filters containers returned from the DBPool API by database.
 Accepts wildcard input.
 
 ```yaml
-Type: System.String
+Type: String
 Parameter Sets: ListContainer, ParentContainer
 Aliases: Database
 
@@ -255,13 +255,28 @@ Requires the -Name or -DefaultDatabase parameter to be specified.
 Returns containers where the Name or DefaultDatabase does not match the provided filter.
 
 ```yaml
-Type: System.Management.Automation.SwitchParameter
+Type: SwitchParameter
 Parameter Sets: ListContainer, ParentContainer
 Aliases:
 
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

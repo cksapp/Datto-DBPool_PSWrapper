@@ -13,7 +13,7 @@ Sets the API key for the DBPool.
 ## SYNTAX
 
 ```
-Add-DBPoolApiKey [-apiKey] <SecureString> [<CommonParameters>]
+Add-DBPoolApiKey [-apiKey] <SecureString> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -47,7 +47,7 @@ Sets the API key for the DBPool.
 Defines your API key for the DBPool.
 
 ```yaml
-Type: System.Security.SecureString
+Type: SecureString
 Parameter Sets: (All)
 Aliases:
 
@@ -55,6 +55,21 @@ Required: True
 Position: 1
 Default value: None
 Accept pipeline input: True (ByPropertyName, ByValue)
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

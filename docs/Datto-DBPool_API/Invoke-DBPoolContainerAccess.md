@@ -14,20 +14,20 @@ The Invoke-DBPoolContainerAccess function is used to interact with various conta
 
 ### GetAccess (Default)
 ```
-Invoke-DBPoolContainerAccess [-Id] <Int32[]> [-Username] <String[]> [-GetAccess] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Invoke-DBPoolContainerAccess [-Id] <Int32[]> [-Username] <String[]> [-GetAccess]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### RemoveAccess
 ```
-Invoke-DBPoolContainerAccess [-Id] <Int32[]> [-Username] <String[]> [-RemoveAccess] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Invoke-DBPoolContainerAccess [-Id] <Int32[]> [-Username] <String[]> [-RemoveAccess]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### AddAccess
 ```
-Invoke-DBPoolContainerAccess [-Id] <Int32[]> [-Username] <String[]> [-AddAccess] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Invoke-DBPoolContainerAccess [-Id] <Int32[]> [-Username] <String[]> [-AddAccess]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -65,7 +65,7 @@ The ID of the container to access.
 This accepts an array of integers.
 
 ```yaml
-Type: System.Int32[]
+Type: Int32[]
 Parameter Sets: (All)
 Aliases: ContainerId
 
@@ -81,7 +81,7 @@ The username to access the container.
 This accepts an array of strings.
 
 ```yaml
-Type: System.String[]
+Type: String[]
 Parameter Sets: (All)
 Aliases:
 
@@ -96,7 +96,7 @@ Accept wildcard characters: False
 Gets the current access to a container by ID for the given username.
 
 ```yaml
-Type: System.Management.Automation.SwitchParameter
+Type: SwitchParameter
 Parameter Sets: GetAccess
 Aliases:
 
@@ -111,7 +111,7 @@ Accept wildcard characters: False
 Adds access to a container by ID for the given username.
 
 ```yaml
-Type: System.Management.Automation.SwitchParameter
+Type: SwitchParameter
 Parameter Sets: AddAccess
 Aliases:
 
@@ -126,7 +126,7 @@ Accept wildcard characters: False
 Removes access to a container by ID for the given username.
 
 ```yaml
-Type: System.Management.Automation.SwitchParameter
+Type: SwitchParameter
 Parameter Sets: RemoveAccess
 Aliases:
 
@@ -142,7 +142,7 @@ Shows what would happen if the cmdlet runs.
 The cmdlet is not run.
 
 ```yaml
-Type: System.Management.Automation.SwitchParameter
+Type: SwitchParameter
 Parameter Sets: (All)
 Aliases: wi
 
@@ -157,9 +157,24 @@ Accept wildcard characters: False
 Prompts you for confirmation before running the cmdlet.
 
 ```yaml
-Type: System.Management.Automation.SwitchParameter
+Type: SwitchParameter
 Parameter Sets: (All)
 Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

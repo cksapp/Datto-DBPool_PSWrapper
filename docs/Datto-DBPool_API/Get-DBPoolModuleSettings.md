@@ -14,12 +14,13 @@ Gets the saved DBPool configuration settings
 
 ### index (Default)
 ```
-Get-DBPoolModuleSettings [-DBPoolConfPath <String>] [-DBPoolConfFile <String>] [<CommonParameters>]
+Get-DBPoolModuleSettings [-DBPoolConfPath <String>] [-DBPoolConfFile <String>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### show
 ```
-Get-DBPoolModuleSettings [-openConfFile] [<CommonParameters>]
+Get-DBPoolModuleSettings [-openConfFile] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -61,7 +62,7 @@ By default the configuration file is stored in the following location:
     $env:USERPROFILE\DBPoolAPI
 
 ```yaml
-Type: System.String
+Type: String
 Parameter Sets: index
 Aliases:
 
@@ -79,7 +80,7 @@ By default the configuration file is named:
     config.psd1
 
 ```yaml
-Type: System.String
+Type: String
 Parameter Sets: index
 Aliases:
 
@@ -94,13 +95,28 @@ Accept wildcard characters: False
 Opens the DBPool configuration file
 
 ```yaml
-Type: System.Management.Automation.SwitchParameter
+Type: SwitchParameter
 Parameter Sets: show
 Aliases:
 
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

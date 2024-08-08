@@ -16,7 +16,8 @@ This is only provided to allow forward compatibility
 ## SYNTAX
 
 ```
-ConvertTo-DBPoolQueryString [[-uri_Filter] <Hashtable>] [-resource_Uri] <String> [<CommonParameters>]
+ConvertTo-DBPoolQueryString [[-uri_Filter] <Hashtable>] [-resource_Uri] <String>
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -60,7 +61,7 @@ As of June 2024, DBPool does not support any query parameters.
 This is only provided to allow forward compatibility
 
 ```yaml
-Type: System.Collections.Hashtable
+Type: Hashtable
 Parameter Sets: (All)
 Aliases:
 
@@ -75,12 +76,27 @@ Accept wildcard characters: False
 Defines the short resource uri (url) to use when creating the API call
 
 ```yaml
-Type: System.String
+Type: String
 Parameter Sets: (All)
 Aliases:
 
 Required: True
 Position: 2
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

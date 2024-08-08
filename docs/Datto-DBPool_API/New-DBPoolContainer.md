@@ -14,7 +14,7 @@ The New-DBPoolContainer function is used to create a new container from the DBPo
 
 ```
 New-DBPoolContainer [-ContainerName] <String> [-ParentId <Int32>] [-ParentName <String>]
- [-ParentDefaultDatabase <String>] [<CommonParameters>]
+ [-ParentDefaultDatabase <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -45,7 +45,7 @@ This will create a new container named 'MyNewContainer' based on the piped in pa
 The name for the container to create.
 
 ```yaml
-Type: System.String
+Type: String
 Parameter Sets: (All)
 Aliases:
 
@@ -60,7 +60,7 @@ Accept wildcard characters: False
 The ID of the parent container to clone.
 
 ```yaml
-Type: System.Int32
+Type: Int32
 Parameter Sets: (All)
 Aliases: Id
 
@@ -75,7 +75,7 @@ Accept wildcard characters: False
 The name of the parent container to clone.
 
 ```yaml
-Type: System.String
+Type: String
 Parameter Sets: (All)
 Aliases: Name
 
@@ -90,7 +90,7 @@ Accept wildcard characters: False
 The default database of the parent container to clone.
 
 ```yaml
-Type: System.String
+Type: String
 Parameter Sets: (All)
 Aliases: DefaultDatabase
 
@@ -98,6 +98,21 @@ Required: False
 Position: Named
 Default value: None
 Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

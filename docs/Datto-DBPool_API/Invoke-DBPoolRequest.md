@@ -13,8 +13,9 @@ Internal function to make an API request to the DBPool API
 ## SYNTAX
 
 ```
-Invoke-DBPoolRequest [[-method] <String>] [-resource_Uri] <String> [[-data] <Hashtable>]
- [[-DBPool_JSON_Conversion_Depth] <Int32>] [<CommonParameters>]
+Invoke-DBPoolRequest [[-method] <String>] [-resource_Uri] <String> [[-uri_Filter] <Hashtable>]
+ [[-data] <Hashtable>] [[-DBPool_JSON_Conversion_Depth] <Int32>] [-allPages]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -61,7 +62,7 @@ Allowed values:
 'DEFAULT', 'DELETE', 'GET', 'HEAD', 'PATCH', 'POST', 'PUT'
 
 ```yaml
-Type: System.String
+Type: String
 Parameter Sets: (All)
 Aliases:
 
@@ -76,7 +77,7 @@ Accept wildcard characters: False
 Defines the resource uri (url) to use when creating the API call
 
 ```yaml
-Type: System.String
+Type: String
 Parameter Sets: (All)
 Aliases:
 
@@ -87,11 +88,35 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -uri_Filter
+Used with the internal function [ ConvertTo-DBPoolQueryString ] to combine
+a functions parameters with the resource_Uri parameter.
+
+This allows for the full uri query to occur
+
+The full resource path is made with the following data
+$DBPool_Base_URI + $resource_Uri + ConvertTo-DBPoolQueryString
+
+As of June 2024, DBPool does not support any query parameters.
+This is only provided to allow forward compatibility
+
+```yaml
+Type: Hashtable
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 3
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -data
 Defines the data to be sent with the API request body when using POST or PATCH
 
 ```yaml
-Type: System.Collections.Hashtable
+Type: Hashtable
 Parameter Sets: (All)
 Aliases:
 
@@ -106,13 +131,49 @@ Accept wildcard characters: False
 Defines the depth of the JSON conversion for the 'data' parameter request body
 
 ```yaml
-Type: System.Int32
+Type: Int32
 Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: 5
 Default value: 5
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -allPages
+Returns all items from an endpoint
+
+When using this parameter there is no need to use either the page or perPage
+parameters
+
+As of June 2024, DBPool does not support any paging parameters.
+This is only provided to allow forward compatibility
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
