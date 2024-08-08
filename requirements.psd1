@@ -21,6 +21,6 @@
         Version = '0.6.1'
     }
     'PSScriptAnalyzer' = @{
-        Version = '1.19.1'
+        Version = '1.22.0
     }
 }
