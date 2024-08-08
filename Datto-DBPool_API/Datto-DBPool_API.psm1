@@ -17,10 +17,10 @@
     See https://github.com/cksapp/Datto-DBPool_PSWrapper/blob/main/LICENSE for license information.
     
     .PARAMETER base_uri
-    Provide the Datto DBPool API URL
+    Provide the DBPool API URL
     
     .PARAMETER apiKey
-    Provide your API Key
+    Provide your API Key as a secure string
 
 #>
 
@@ -38,19 +38,23 @@ Param(
 $directory = "Public", "Private"
 
 # Import functions
+$functionsToExport = @()
+
 foreach ($dir in $directory) {
-    $dirPath = Join-Path -Path ($PSScriptRoot) -ChildPath $dir
-    $Functions = @( Get-ChildItem -Path $dirPath -Filter "*.ps1" -Recurse -ErrorAction SilentlyContinue ) 
+    $Functions = @( Get-ChildItem -Path (Join-Path -Path $PSScriptRoot -ChildPath "$dir/*ps1") -Recurse -ErrorAction Stop) 
     foreach ($Import in @($Functions)) {
         try {
             . $Import.fullname
+            $functionsToExport += $Import.BaseName
         } catch {
-            throw "Could not import function $($Import.fullname): $_"
+            throw "Could not import function [$($Import.fullname)]: $_"
         }
     }
 }
 
+Export-ModuleMember -Function $functionsToExport
+
 # Set API parameters
 If ($base_uri -and $apiKey) {
-    Set-DdbpApiParameters -base_uri $base_uri -apiKey $apiKey
+    Set-DBPoolApiParameters -base_uri $base_uri -apiKey $apiKey
 }

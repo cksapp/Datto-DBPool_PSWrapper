@@ -9,7 +9,7 @@
 @{
 
     # Script module or binary module file associated with this manifest.
-    RootModule        = 'Datto-DBPool_API.psm1'
+    RootModule = 'Datto-DBPool_API.psm1'
 
     # Version number of this module.
     # Follows https://semver.org Semantic Versioning 2.0.0
@@ -19,25 +19,25 @@
     # -- PATCH version when you make backwards-compatible bug fixes.
 
     # Version number of this module.
-    ModuleVersion     = '0.01.02'
+    ModuleVersion = '0.01.03'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
 
     # ID used to uniquely identify this module
-    GUID              = '8c050520-2433-464a-9415-2445197aff4e'
+        GUID          = '8c050520-2433-464a-9415-2445197aff4e'
 
     # Author of this module
-    Author            = 'Kent Sapp (@CKSapp)'
+    Author = 'Kent Sapp (@CKSapp)'
 
     # Company or vendor of this module
-    # CompanyName       = ''
+    # CompanyName = ''
 
     # Copyright statement for this module
-    Copyright         = '(c) 2023 Kent Sapp. All rights reserved.'
+    Copyright = '(c) 2023 Kent Sapp. All rights reserved.'
 
     # Description of the functionality provided by this module
-    Description       = 'This module is designed to make it easier to use the internal Datto DBPool API in your PowerShell scripts. As some of the hard work is done, you can develop your scripts faster and be more effecient.
+    Description   = 'This module is designed to make it easier to use the internal Datto DBPool API in your PowerShell scripts. As some of the hard work is done, you can develop your scripts faster and be more effecient.
     There is no need to go through a big learning curve spending lots of time working out how to use the Datto DBPool API.
     Simply load the module, enter your API key and get results within minutes!'
 
@@ -75,19 +75,19 @@
     # FormatsToProcess = @()
 
     # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
-    #NestedModules = @()
+    # NestedModules = @()
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
     FunctionsToExport = '*'
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-    CmdletsToExport   = '*'
+    CmdletsToExport = '*'
 
     # Variables to export from this module
     VariablesToExport = '*'
 
     # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-    AliasesToExport   = '*'
+    AliasesToExport = '*'
 
     # DSC resources to export from this module
     # DscResourcesToExport = @()
@@ -99,24 +99,24 @@
     # FileList = @()
 
     # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
-    PrivateData       = @{
+    PrivateData = @{
 
         PSData = @{
 
             # Tags applied to this module. These help with module discovery in online galleries.
-            Tags         = @('Datto', 'Internal', 'DBPool', 'DattoDBPool', 'Containers', 'Database', 'API')
+            Tags = @('Datto', 'Internal', 'DBPool', 'DattoDBPool', 'Containers', 'Database', 'API')
 
             # A URL to the license for this module.
-            LicenseUri   = 'https://github.com/cksapp/Datto-DBPool_PSWrapper/blob/main/LICENSE'
+            LicenseUri = 'https://github.com/cksapp/Datto-DBPool_PSWrapper/blob/main/LICENSE'
 
             # A URL to the main website for this project.
-            ProjectUri   = 'https://github.com/cksapp/Datto-DBPool_PSWrapper'
+            ProjectUri = 'https://github.com/cksapp/Datto-DBPool_PSWrapper'
 
             # A URL to an icon representing this module.
             # IconUri = ''
 
             # ReleaseNotes of this module
-            #ReleaseNotes = ''
+            # ReleaseNotes = ''
 
             # Prerelease string of this module
             Prerelease = '-BETA'
@@ -126,9 +126,9 @@
     } # End of PrivateData hashtable
 
     # HelpInfo URI of this module
-     HelpInfoURI = 'https://github.com/cksapp/Datto-DBPool_PSWrapper/blob/main/README.md'
+    HelpInfoURI = 'https://github.com/cksapp/Datto-DBPool_PSWrapper/blob/main/README.md'
 
     # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
-    # DefaultCommandPrefix = ''
+    # DefaultCommandPrefix = 'DBPool'
 
 }
