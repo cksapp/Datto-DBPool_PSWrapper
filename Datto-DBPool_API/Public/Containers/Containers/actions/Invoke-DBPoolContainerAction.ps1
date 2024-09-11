@@ -12,9 +12,6 @@ function Invoke-DBPoolContainerAction {
     .PARAMETER Action
         The action to perform on the container. Valid actions are: refresh, schema-merge, start, restart, or stop.
 
-        Start, Stop, and Restart are all considered minor actions and will not require a confirmation prompt.
-        Refresh and Schema-Merge are considered major actions and will require a confirmation prompt.
-
     .EXAMPLE
         Invoke-DBPoolContainerAction -Id '12345' -Action 'restart'
 
@@ -64,21 +61,26 @@ function Invoke-DBPoolContainerAction {
 
         $method = 'POST'
 
-        # Write warning when using deprecated 'schema-merge' action
         if ($Action -eq 'schema-merge') {
             Write-Warning "The action [ schema-merge ] is deprecated! Use the [ refresh ] action as the supported way to update a container."
             $ConfirmPreference = 'Medium'
         }
 
+        $moduleName = $MyInvocation.MyCommand.Module.Name
+        if ([string]::IsNullOrEmpty($moduleName)) {
+            throw "The function is not part of a module or the module name is not available."
+        }
+        $modulePath = (Get-Module -Name $moduleName).Path
+
     }
 
     process {
 
+        $jobs = [System.Collections.ArrayList]::new()
+
         foreach ($n in $Id) {
-            $requestResponse = $null
             $requestPath = "/api/v2/containers/$n/actions/$Action"
 
-            # Try to get the container name to output for the ID when using the Verbose preference
             if ($VerbosePreference -eq 'Continue') {
                 try {
                     $containerName = (Get-DBPoolContainer -Id $n -ErrorAction stop).name
@@ -89,22 +91,64 @@ function Invoke-DBPoolContainerAction {
             }
 
             if ($PSCmdlet.ShouldProcess("Container [ ID: $n ]", "[ $Action ]")) {
-                Write-Verbose "Peforming action [ $Action ] on Container [ ID: $n, Name: $containerName ]"
+                Write-Verbose "Performing action [ $Action ] on Container [ ID: $n, Name: $containerName ]"
 
-                try {
-                    $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath -ErrorAction Stop
-                }
-                catch {
-                    Write-Error $_
-                }
+                $job = Start-Job -ScriptBlock {
+                    param ($method, $requestPath, $modulePath, $baseUri, $apiKey)
+                    
+                    Import-Module $modulePath
+                    Add-DBPoolBaseURI -base_uri $baseUri
+                    Add-DBPoolApiKey -apiKey $apiKey
 
-                if ($requestResponse.StatusCode -eq 204) {
-                        Write-Output "Success: Invoking Action [ $Action ] on Container [ ID: $n ]."
+                    try {
+                        $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath -ErrorAction Stop
+                        return [pscustomobject]@{
+                            Success    = $true
+                            StatusCode = $requestResponse.StatusCode
+                            Content    = $requestResponse.Content
+                        }
+                    } catch {
+                        return [pscustomobject]@{
+                            Success      = $false
+                            ErrorMessage = $_.Exception.Message
+                            ErrorDetails = $_.Exception.ToString()
+                        }
                     }
+                } -ArgumentList $method, $requestPath, $modulePath, $Global:DBPool_Base_URI, $Global:DBPool_ApiKey -Verbose
+
+                # Add job to the ArrayList
+                $jobs.Add([pscustomobject]@{ Job = $job; ContainerId = $n }) | Out-Null
             }
         }
 
+        while ($jobs.Count -gt 0) {
+            foreach ($jobInfo in $jobs.ToArray()) {
+                $job = $jobInfo.Job
+                $containerId = $jobInfo.ContainerId
+
+                if ($job.State -eq 'Completed' -or $job.State -eq 'Failed' -or $job.State -eq 'Stopped') {
+                    $results = Receive-Job -Job $job -Wait
+                    foreach ($result in $results) {
+                        if ($result.Success) {
+                            $statusCode = $result.StatusCode
+                            if ($statusCode -eq 204) {
+                                Write-Output "Success: Invoking Action [ $Action ] on Container [ ID: $containerId ]."
+                            } else {
+                                Write-Error "Failed: Status $statusCode. Response: $($result.Content)"
+                            }
+                        } else {
+                            Write-Error "$($result.ErrorMessage)"
+                        }
+                    }
+                    Remove-Job -Job $job
+                    $jobs.Remove($jobInfo) | Out-Null
+                }
+            }
+            Start-Sleep -Seconds 1
+        }
+
     }
-    
+
     end {}
+
 }
