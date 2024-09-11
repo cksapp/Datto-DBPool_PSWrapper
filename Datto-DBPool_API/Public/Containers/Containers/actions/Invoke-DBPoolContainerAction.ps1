@@ -58,7 +58,6 @@ function Invoke-DBPoolContainerAction {
     )
 
     begin {
-
         $method = 'POST'
 
         if ($Action -eq 'schema-merge') {
@@ -91,6 +90,14 @@ function Invoke-DBPoolContainerAction {
             }
 
             if ($PSCmdlet.ShouldProcess("Container [ ID: $n ]", "[ $Action ]")) {
+                Write-Verbose "Performing action [ $Action ] on Container [ ID: $n, Name: $containerName ]"
+
+                $job = Start-Job -ScriptBlock {
+                    param ($method, $requestPath, $modulePath, $baseUri, $apiKey)
+                    
+                    Import-Module $modulePath
+                    Add-DBPoolBaseURI -base_uri $baseUri
+                    Add-DBPoolApiKey -apiKey $apiKey
                 Write-Verbose "Performing action [ $Action ] on Container [ ID: $n, Name: $containerName ]"
 
                 $job = Start-Job -ScriptBlock {
