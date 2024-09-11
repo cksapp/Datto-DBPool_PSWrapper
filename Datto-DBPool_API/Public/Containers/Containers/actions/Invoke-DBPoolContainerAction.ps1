@@ -54,10 +54,13 @@ function Invoke-DBPoolContainerAction {
 
         [Parameter(Mandatory = $true, Position = 1)]
         [ValidateSet('refresh', 'schema-merge', 'start', 'restart', 'stop', IgnoreCase = $false)]
-        [string]$Action
+        [string]$Action,
+
+        [switch]$Force
     )
 
     begin {
+
         $method = 'POST'
 
         if ($Action -eq 'schema-merge') {
@@ -88,23 +91,7 @@ function Invoke-DBPoolContainerAction {
                 }
             }
 
-            if ($PSCmdlet.ShouldProcess("Container [ ID: $n ]", "[ $Action ]")) {
-                Write-Verbose "Performing action [ $Action ] on Container [ ID: $n, Name: $containerName ]"
-
-                $job = Start-Job -ScriptBlock {
-                    param ($method, $requestPath, $modulePath, $baseUri, $apiKey)
-                    
-                    Import-Module $modulePath
-                    Add-DBPoolBaseURI -base_uri $baseUri
-                    Add-DBPoolApiKey -apiKey $apiKey
-                Write-Verbose "Performing action [ $Action ] on Container [ ID: $n, Name: $containerName ]"
-
-                $job = Start-Job -ScriptBlock {
-                    param ($method, $requestPath, $modulePath, $baseUri, $apiKey)
-                    
-                    Import-Module $modulePath
-                    Add-DBPoolBaseURI -base_uri $baseUri
-                    Add-DBPoolApiKey -apiKey $apiKey
+            if ($Force -or $PSCmdlet.ShouldProcess("Container [ ID: $n ]", "[ $Action ]")) {
                 Write-Verbose "Performing action [ $Action ] on Container [ ID: $n, Name: $containerName ]"
 
                 $job = Start-Job -ScriptBlock {
@@ -128,7 +115,7 @@ function Invoke-DBPoolContainerAction {
                             ErrorDetails = $_.Exception.ToString()
                         }
                     }
-                } -ArgumentList $method, $requestPath, $modulePath, $Global:DBPool_Base_URI, $Global:DBPool_ApiKey -Verbose
+                } -ArgumentList $method, $requestPath, $modulePath, $Global:DBPool_Base_URI, $Global:DBPool_ApiKey
 
                 # Add job to the ArrayList
                 $jobs.Add([pscustomobject]@{ Job = $job; ContainerId = $n }) | Out-Null
@@ -154,13 +141,12 @@ function Invoke-DBPoolContainerAction {
                             Write-Error "$($result.ErrorMessage)"
                         }
                     }
-                    Remove-Job -Job $job
+                    Remove-Job -Job $job -Confirm:$false -Force
                     $jobs.Remove($jobInfo) | Out-Null
                 }
             }
             Start-Sleep -Seconds 1
         }
-    }
 
     }
 
