@@ -64,21 +64,22 @@ function Invoke-DBPoolContainerAction {
         $method = 'POST'
 
         if ($Action -eq 'schema-merge') {
-            Write-Warning "The action [ schema-merge ] is deprecated! Use the [ refresh ] action as the supported way to update a container."
+            Write-Warning 'The action [ schema-merge ] is deprecated! Use the [ refresh ] action as the supported way to update a container.'
             $ConfirmPreference = 'Medium'
         }
 
         $moduleName = $MyInvocation.MyCommand.Module.Name
         if ([string]::IsNullOrEmpty($moduleName)) {
-            throw "The function is not part of a module or the module name is not available."
+            throw 'The function is not part of a module or the module name is not available.'
         }
         $modulePath = (Get-Module -Name $moduleName).Path
 
+        $runspacePool = [runspacefactory]::CreateRunspacePool(1, [Environment]::ProcessorCount - 1)
+        $runspacePool.Open()
+        $runspaces = [System.Collections.ArrayList]::new()
     }
 
     process {
-
-        $jobs = [System.Collections.ArrayList]::new()
         foreach ($n in $Id) {
             $requestPath = "/api/v2/containers/$n/actions/$Action"
 
@@ -94,62 +95,65 @@ function Invoke-DBPoolContainerAction {
             if ($Force -or $PSCmdlet.ShouldProcess("Container [ ID: $n ]", "[ $Action ]")) {
                 Write-Verbose "Performing action [ $Action ] on Container [ ID: $n, Name: $containerName ]"
 
-                $job = Start-Job -ScriptBlock {
-                    param ($method, $requestPath, $modulePath, $baseUri, $apiKey)
-                    
-                    Import-Module $modulePath
-                    Add-DBPoolBaseURI -base_uri $baseUri
-                    Add-DBPoolApiKey -apiKey $apiKey
+                $runspace = [powershell]::Create().AddScript({
+                        param ($method, $requestPath, $modulePath, $baseUri, $apiKey)
 
-                    try {
-                        $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath -ErrorAction Stop
-                        return [pscustomobject]@{
-                            Success    = $true
-                            StatusCode = $requestResponse.StatusCode
-                            Content    = $requestResponse.Content
-                        }
-                    } catch {
-                        return [pscustomobject]@{
-                            Success      = $false
-                            ErrorMessage = $_.Exception.Message
-                            ErrorDetails = $_.Exception.ToString()
-                        }
-                    }
-                } -ArgumentList $method, $requestPath, $modulePath, $Global:DBPool_Base_URI, $Global:DBPool_ApiKey
+                        Import-Module $modulePath
+                        Add-DBPoolBaseURI -base_uri $baseUri
+                        Add-DBPoolApiKey -apiKey $apiKey
 
-                # Add job to the ArrayList
-                $jobs.Add([pscustomobject]@{ Job = $job; ContainerId = $n }) | Out-Null
+                        try {
+                            $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath -ErrorAction Stop
+                            return [pscustomobject]@{
+                                Success    = $true
+                                StatusCode = $requestResponse.StatusCode
+                                Content    = $requestResponse.Content
+                            }
+                        } catch {
+                            return [pscustomobject]@{
+                                Success      = $false
+                                ErrorMessage = $_.Exception.Message
+                                ErrorDetails = $_.Exception.ToString()
+                            }
+                        }
+                    }).AddArgument($method).AddArgument($requestPath).AddArgument($modulePath).AddArgument($Global:DBPool_Base_URI).AddArgument($Global:DBPool_ApiKey)
+
+                $runspace.RunspacePool = $runspacePool
+                $runspaceData = [pscustomobject]@{ Pipe = $runspace; ContainerId = $n; Handle = $runspace.BeginInvoke() }
+                $runspaces.Add($runspaceData) | Out-Null
             }
         }
 
-        while ($jobs.Count -gt 0) {
-            foreach ($jobInfo in $jobs.ToArray()) {
-                $job = $jobInfo.Job
-                $containerId = $jobInfo.ContainerId
-
-                if ($job.State -eq 'Completed' -or $job.State -eq 'Failed' -or $job.State -eq 'Stopped') {
-                    $results = Receive-Job -Job $job -Wait
+        while ($runspaces.Count -gt 0) {
+            foreach ($runspace in $runspaces.ToArray()) {
+                if ($runspace.Handle.IsCompleted) {
+                    $results = $runspace.Pipe.EndInvoke($runspace.Handle)
+                    
                     foreach ($result in $results) {
                         if ($result.Success) {
                             $statusCode = $result.StatusCode
                             if ($statusCode -eq 204) {
-                                Write-Output "Success: Invoking Action [ $Action ] on Container [ ID: $containerId ]."
+                                Write-Output "Success: Invoking Action [ $Action ] on Container [ ID: $($runspace.ContainerId) ]."
                             } else {
                                 Write-Error "Failed: Status $statusCode. Response: $($result.Content)"
                             }
                         } else {
-                            Write-Error "$($result.ErrorMessage)"
+                            Write-Error "Container [ID: $($runspace.ContainerId)]: $($result.ErrorMessage)"
                         }
                     }
-                    Remove-Job -Job $job -Confirm:$false -Force
-                    $jobs.Remove($jobInfo) | Out-Null
+
+                    $runspace.Pipe.Dispose()
+                    $runspaces.Remove($runspace) | Out-Null
                 }
             }
-            Start-Sleep -Seconds 1
-        }
 
+            Start-Sleep -Milliseconds 500
+        }
     }
 
-    end {}
-
+    end {
+        # Ensure the runspace pool is closed and disposed
+        $runspacePool.Close()
+        $runspacePool.Dispose()
+    }
 }
