@@ -94,7 +94,7 @@ function Invoke-DBPoolContainerAction {
         foreach ($n in $Id) {
             $requestPath = "/api/v2/containers/$n/actions/$Action"
 
-             # Try to get the container name to output for the ID when using the Verbose preference
+            # Try to get the container name to output for the ID when using the Verbose preference
             if ($VerbosePreference -eq 'Continue') {
                 try {
                     $containerName = (Get-DBPoolContainer -Id $n -ErrorAction stop).name
@@ -108,32 +108,23 @@ function Invoke-DBPoolContainerAction {
                 Write-Verbose "Performing action [ $Action ] on Container [ ID: $n, Name: $containerName ]"
 
                 $runspace = [powershell]::Create().AddScript({
-                        param ($method, $requestPath, $modulePath, $baseUri, $apiKey)
+                        param ($method, $requestPath, $modulePath, $baseUri, $apiKey, $action, $containerId)
 
                         Import-Module $modulePath
                         Add-DBPoolBaseURI -base_uri $baseUri
                         Add-DBPoolApiKey -apiKey $apiKey
 
-                        $warnings = [System.Collections.ArrayList]::new()
                         $warningPreference = 'Continue'
 
                         try {
                             $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath -WarningVariable warnings -ErrorAction Stop
-                            return [pscustomobject]@{
-                                Success    = $true
-                                StatusCode = $requestResponse.StatusCode
-                                Content    = $requestResponse.Content
-                                Warnings   = $warnings
+                            if ($requestResponse.StatusCode -eq 204) {
+                                Write-Output "Success: Invoking Action [ $action ] on Container [ ID: $containerId ]."
                             }
                         } catch {
-                            return [pscustomobject]@{
-                                Success      = $false
-                                ErrorMessage = $_.Exception.Message
-                                ErrorDetails = $_.Exception.ToString()
-                                Warnings     = $warnings
-                            }
+                            Write-Error "Error: $($_.Exception.Message)"
                         }
-                    }).AddArgument($method).AddArgument($requestPath).AddArgument($modulePath).AddArgument($Global:DBPool_Base_URI).AddArgument($Global:DBPool_ApiKey)
+                    }).AddArgument($method).AddArgument($requestPath).AddArgument($modulePath).AddArgument($Global:DBPool_Base_URI).AddArgument($Global:DBPool_ApiKey).AddArgument($Action).AddArgument($n)
 
                 $runspace.RunspacePool = $runspacePool
                 $runspaceData = [pscustomobject]@{ Pipe = $runspace; ContainerId = $n; Handle = $runspace.BeginInvoke() }
@@ -142,35 +133,18 @@ function Invoke-DBPoolContainerAction {
         }
 
         while ($runspaces.Count -gt 0) {
-            foreach ($runspace in $runspaces.ToArray()) {
-                if ($runspace.Handle.IsCompleted) {
-                    $results = $runspace.Pipe.EndInvoke($runspace.Handle)
-            
-                    foreach ($result in $results) {
-                        switch ($true) {
-                            { $result.Success } {
-                                $statusCode = $result.StatusCode
-                                if ($statusCode -eq 204) {
-                                    Write-Output "Success: Invoking Action [ $Action ] on Container [ ID: $($runspace.ContainerId) ]."
-                                } else {
-                                    Write-Error "Failed: Status $statusCode. Response: $($result.Content)"
-                                }
-                                break
-                            }
-                            { $result.Warnings.Count -gt 0 } {
-                                foreach ($warning in $result.Warnings) {
-                                    Write-Warning "Container [ID: $($runspace.ContainerId)]: $warning"
-                                }
-                            }
-                            { !$result.Success } {
-                                Write-Error "Container [ID: $($runspace.ContainerId)]: $($result.ErrorMessage)"
-                            }
-                        }
-                    }
+            $completedRunspaces = $runspaces | Where-Object { $_.Handle.IsCompleted }
+            foreach ($runspace in $completedRunspaces) {
+                $runspace.Pipe.EndInvoke($runspace.Handle)
 
-                    $runspace.Pipe.Dispose()
-                    $runspaces.Remove($runspace) | Out-Null
+                $runspace.Pipe.Streams | ForEach-Object {
+                    $_.Output | ForEach-Object { Write-Output $_ }
+                    $_.Warning | ForEach-Object { Write-Warning $_.Message }
+                    $_.Error | ForEach-Object { Write-Error $_.Exception.Message }
                 }
+
+                $runspace.Pipe.Dispose()
+                $runspaces.Remove($runspace) | Out-Null
             }
 
             Start-Sleep -Milliseconds 500
