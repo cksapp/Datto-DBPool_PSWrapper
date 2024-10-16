@@ -99,7 +99,9 @@ function Invoke-DBPoolRequest {
 
     )
 
-    begin {}
+    begin {
+        $ConfirmPreference = 'None'
+    }
 
     process {
 

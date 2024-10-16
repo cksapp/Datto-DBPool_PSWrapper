@@ -82,8 +82,7 @@ function Export-DBPoolModuleSettings {
             Write-Verbose "DBPool Module settings exported to [ $DBPoolConfig ]"
         } else {
             Write-Error "Failed to export DBPool Module settings to [ $DBPoolConfig ]"
-            Write-Error $_
-            exit 1
+            Write-Error $_ -ErrorAction Stop
         }
 
     }

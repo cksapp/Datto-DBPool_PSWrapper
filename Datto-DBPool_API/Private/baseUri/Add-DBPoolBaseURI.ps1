@@ -45,6 +45,7 @@ function Add-DBPoolBaseURI {
     [Alias("Set-DBPoolBaseURI")]
     Param (
         [Parameter(Mandatory = $false , ValueFromPipeline = $true)]
+        [ValidateNotNullOrEmpty()]
         [string]$base_uri = 'https://dbpool.datto.net',
 
         [ValidateSet('Datto')]
