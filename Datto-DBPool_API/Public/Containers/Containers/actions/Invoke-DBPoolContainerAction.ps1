@@ -76,7 +76,11 @@ function Invoke-DBPoolContainerAction {
         $method = 'POST'
 
         # Write warning when using deprecated 'schema-merge' action, otherwise set confirmation prompt for 'major' actions
+        # Write warning when using deprecated 'schema-merge' action, otherwise set confirmation prompt for 'major' actions
         if ($Action -eq 'schema-merge') {
+            Write-Warning 'The action [ schema-merge ] is deprecated! Use the [ refresh ] action as the supported way to update a container.'
+            $ConfirmPreference = 'Medium'
+        } elseif ($Action -eq 'refresh' -and -not $Force) {
             Write-Warning 'The action [ schema-merge ] is deprecated! Use the [ refresh ] action as the supported way to update a container.'
             $ConfirmPreference = 'Medium'
         } elseif ($Action -eq 'refresh' -and -not $Force) {
