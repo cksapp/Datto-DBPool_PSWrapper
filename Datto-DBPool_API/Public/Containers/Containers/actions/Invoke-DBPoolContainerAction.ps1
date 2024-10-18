@@ -7,7 +7,7 @@ function Invoke-DBPoolContainerAction {
         The Invoke-DBPoolContainerAction function is used to perform actions on a container such as refresh, schema-merge, start, restart, or stop.
 
     .PARAMETER Id
-        The ID of the container to perform the action on.
+        The ID(s) of the container(s) to perform the action on.
     
     .PARAMETER Action
         The action to perform on the container. Valid actions are: refresh, schema-merge, start, restart, or stop.
@@ -62,7 +62,13 @@ function Invoke-DBPoolContainerAction {
         [ValidateSet('refresh', 'schema-merge', 'start', 'restart', 'stop', IgnoreCase = $false)]
         [string]$Action,
 
-        [switch]$Force
+        [switch]$Force,
+
+        [ValidateRange(0, [int]::MaxValue)]
+        [int]$TimeoutSeconds = 3600,  # Default timeout of 60 minutes (3600 seconds) for longer running actions
+
+        [ValidateRange(1, [int]::MaxValue)]
+        [int]$ThrottleLimit = ([Environment]::ProcessorCount * 2)
     )
 
     begin {
@@ -70,7 +76,11 @@ function Invoke-DBPoolContainerAction {
         $method = 'POST'
 
         # Write warning when using deprecated 'schema-merge' action, otherwise set confirmation prompt for 'major' actions
+        # Write warning when using deprecated 'schema-merge' action, otherwise set confirmation prompt for 'major' actions
         if ($Action -eq 'schema-merge') {
+            Write-Warning 'The action [ schema-merge ] is deprecated! Use the [ refresh ] action as the supported way to update a container.'
+            $ConfirmPreference = 'Medium'
+        } elseif ($Action -eq 'refresh' -and -not $Force) {
             Write-Warning 'The action [ schema-merge ] is deprecated! Use the [ refresh ] action as the supported way to update a container.'
             $ConfirmPreference = 'Medium'
         } elseif ($Action -eq 'refresh' -and -not $Force) {
@@ -79,83 +89,177 @@ function Invoke-DBPoolContainerAction {
 
         $moduleName = $MyInvocation.MyCommand.Module.Name
         if ([string]::IsNullOrEmpty($moduleName)) {
-            Write-Error 'The function is not loaded as part of a module or the module name is not available.' -ErrorAction Stop
+            Write-Error 'This function is not loaded as part of a module or the module name is unavailable.' -ErrorAction Stop
         }
         $modulePath = (Get-Module -Name $moduleName).Path
 
-        $runspacePool = [runspacefactory]::CreateRunspacePool(1, [Environment]::ProcessorCount - 1)
-        $runspacePool.Open()
-        $runspaces = [System.Collections.ArrayList]::new()
+        # Check if the ForEach-Object cmdlet supports the Parallel parameter
+        $supportsParallel = ((Get-Command ForEach-Object).Parameters.keys) -contains 'Parallel'
+
+        # Create shared runspace pool for parallel tasks
+        if (!$supportsParallel) {
+            $runspacePool = [runspacefactory]::CreateRunspacePool(1, $ThrottleLimit)
+            $runspacePool.Open()
+            $runspaceQueue = [System.Collections.Concurrent.ConcurrentQueue[PSCustomObject]]::new()
+        }
 
     }
 
     process {
 
-        foreach ($n in $Id) {
-            $requestPath = "/api/v2/containers/$n/actions/$Action"
+        if ($supportsParallel) {
 
-            # Try to get the container name to output for the ID when using the Verbose preference
-            if ($VerbosePreference -eq 'Continue') {
-                try {
-                    $containerName = (Get-DBPoolContainer -Id $n -ErrorAction stop).name
-                } catch {
-                    Write-Error "Failed to get the container name for ID $n. $_"
-                    $containerName = '## FailedToGetContainerName ##'
+            $IdsToProcess = [System.Collections.ArrayList]::new()
+            foreach ($n in $Id) {
+                if ($Force -or $PSCmdlet.ShouldProcess("Container [ ID: $n ]", "[ $Action ]")) {
+                    $IdsToProcess.Add($n) | Out-Null
                 }
             }
 
-            if ($Force -or $PSCmdlet.ShouldProcess("Container [ ID: $n ]", "[ $Action ]")) {
-                Write-Verbose "Performing action [ $Action ] on Container [ ID: $n, Name: $containerName ]"
+            if ($IdsToProcess.Count -gt 0) {
+                $IdsToProcess | ForEach-Object -Parallel {
+                    $n = $_
 
-                $runspace = [powershell]::Create().AddScript({
-                        param ($method, $requestPath, $modulePath, $baseUri, $apiKey, $action, $containerId)
+                    Import-Module $using:modulePath
+                    Add-DBPoolBaseURI -base_uri $using:DBPool_Base_URI
+                    Add-DBPoolApiKey -apiKey $using:DBPool_ApiKey
 
-                        Import-Module $modulePath
-                        Add-DBPoolBaseURI -base_uri $baseUri
-                        Add-DBPoolApiKey -apiKey $apiKey
+                    $requestPath = "/api/v2/containers/$n/actions/$using:Action"
 
-                        $warningPreference = 'Continue'
-
+                    # Try to get the container name to output for the ID when using the Verbose preference
+                    if ($using:VerbosePreference -eq 'Continue') {
                         try {
-                            $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath -WarningVariable warnings -ErrorAction Stop
-                            if ($requestResponse.StatusCode -eq 204) {
-                                Write-Output "Success: Invoking Action [ $action ] on Container [ ID: $containerId ]."
-                            }
+                            $containerName = (Get-DBPoolContainer -Id $n -ErrorAction Stop).name
                         } catch {
-                            Write-Error "Error: $($_.Exception.Message)"
+                            Write-Error "Failed to get the container name for ID $n. $_"
+                            $containerName = '## FailedToGetContainerName ##'
                         }
-                    }).AddArgument($method).AddArgument($requestPath).AddArgument($modulePath).AddArgument($Global:DBPool_Base_URI).AddArgument($Global:DBPool_ApiKey).AddArgument($Action).AddArgument($n)
+                    }
+                    Write-Verbose "Performing action [ $using:Action ] on Container [ ID: $n, Name: $containerName ]" -Verbose:($using:VerbosePreference -eq 'Continue')
 
-                $runspace.RunspacePool = $runspacePool
-                $runspaceData = [pscustomobject]@{ Pipe = $runspace; ContainerId = $n; Handle = $runspace.BeginInvoke() }
-                $runspaces.Add($runspaceData) | Out-Null
+                    try {
+                        $requestResponse = Invoke-DBPoolRequest -method $using:method -resource_Uri $requestPath -ErrorAction Stop -WarningAction:SilentlyContinue
+                        if ($requestResponse.StatusCode -eq 204) {
+                            Write-Output "Success: Invoking Action [ $using:Action ] on Container [ ID: $n ]."
+                        }
+                    } catch {
+                        Write-Error $_
+                    }
+                } -ThrottleLimit $ThrottleLimit -TimeoutSeconds $TimeoutSeconds
             }
-        }
 
-        while ($runspaces.Count -gt 0) {
-            $completedRunspaces = $runspaces | Where-Object { $_.Handle.IsCompleted }
-            foreach ($runspace in $completedRunspaces) {
-                $runspace.Pipe.EndInvoke($runspace.Handle)
+        } else {
+            # Process each container ID in parallel using runspaces where the ForEach-Object cmdlet does not support the Parallel parameter in Windows PowerShell 5.1 _(or version prior to [PowerShell 7.0](https://devblogs.microsoft.com/powershell/powershell-foreach-object-parallel-feature/))_
+            # This is a manual implementation workaround of parallel processing using runspaces
+            # TODO: Refactor to use [Invoke-Parallel](https://github.com/RamblingCookieMonster/Invoke-Parallel), or [PSParallelPipeline](https://github.com/santisq/PSParallelPipeline) module for parallel processing for better performance optimization as current implementation appears to have high performance overheard
+            foreach ($n in $Id) {
+                $requestPath = "/api/v2/containers/$n/actions/$Action"
 
-                $runspace.Pipe.Streams | ForEach-Object {
-                    $_.Output | ForEach-Object { Write-Output $_ }
-                    $_.Warning | ForEach-Object { Write-Warning $_.Message }
-                    $_.Error | ForEach-Object { Write-Error $_.Exception.Message }
+                if ($Force -or $PSCmdlet.ShouldProcess("Container [ ID: $n ]", "[ $Action ]")) {
+                    # Try to get the container name to output for the ID when using the Verbose preference
+                    if ($VerbosePreference -eq 'Continue') {
+                        try {
+                            $containerName = (Get-DBPoolContainer -Id $n -ErrorAction stop -Verbose:($VerbosePreference -eq 'SilentlyContinue')).name
+                        } catch {
+                            Write-Error "Failed to get the container name for ID $n. $_"
+                            $containerName = '## FailedToGetContainerName ##'
+                        }
+                    }
+                    Write-Verbose "Performing action [ $Action ] on Container [ ID: $n, Name: $containerName ]"
+
+                    $runspace = [powershell]::Create().AddScript({
+                            param ($method, $requestPath, $modulePath, $baseUri, $apiKey, $action, $containerId)
+
+                            Import-Module $modulePath
+                            Add-DBPoolBaseURI -base_uri $baseUri
+                            Add-DBPoolApiKey -apiKey $apiKey
+
+                            $VerbosePreference = $VerbosePreference
+
+                            try {
+                                $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath -ErrorAction Stop
+                                return [pscustomobject]@{
+                                    Success     = $true
+                                    StatusCode  = $requestResponse.StatusCode
+                                    Content     = $requestResponse.Content
+                                    ContainerId = $containerId
+                                }
+                            } catch {
+                                return [pscustomobject]@{
+                                    Success      = $false
+                                    ErrorMessage = $_.Exception.Message
+                                    ErrorDetails = $_.Exception.ToString()
+                                    ContainerId  = $containerId
+                                }
+                            }
+                        }).AddArgument($method).AddArgument($requestPath).AddArgument($modulePath).AddArgument($Global:DBPool_Base_URI).AddArgument($Global:DBPool_ApiKey).AddArgument($Action).AddArgument($n)
+
+                    $runspaceQueue.Enqueue([PSCustomObject]@{ Pipe = $runspace; ContainerId = $n; Status = $runspace.BeginInvoke(); StartTime = [datetime]::Now })
+                }
+            }
+
+            # Initialize sleep control variables
+            $sleepDuration = 1 # Initial sleep duration in seconds
+            $i = 0 # Counter to track iterations
+            $initialThreshold = 10 # Initial threshold to increase sleep duration
+            $maxSleepDuration = 60 # Maximum sleep duration in seconds
+
+            # Process results as they complete or timeout
+            while ($runspaceQueue.Count -gt 0) {
+                $task = $null
+                while ($runspaceQueue.TryDequeue([ref]$task)) {
+                    if ($task.Status.IsCompleted) {
+                        $result = $task.Pipe.EndInvoke($task.Status)
+                        $task.Pipe.Dispose()
+
+                        if ($result.Success) {
+                            $statusCode = $result.StatusCode
+                            if ($statusCode -eq 204) {
+                                Write-Output "Success: Invoking Action [ $Action ] on Container [ ID: $($result.ContainerId) ]."
+                            } else {
+                                Write-Error "Failed: Status $statusCode. Response: $($result.Content)"
+                            }
+                        } else {
+                            Write-Error "$($result.ErrorMessage)"
+                        }
+                    } elseif ($TimeoutSeconds -gt 0 -and $(([datetime]::Now - $task.StartTime).TotalSeconds) -ge $TimeoutSeconds) {
+                        Write-Error "Action [ $Action ] on Container [ ID: $($task.ContainerId) ] exceeded timeout of $TimeoutSeconds seconds."
+                        $task.Pipe.Stop()
+                        $task.Pipe.Dispose()
+                    } else {
+                        # If task has neither completed nor timed out, re-enqueue it
+                        $runspaceQueue.Enqueue($task)
+                    }
                 }
 
-                $runspace.Pipe.Dispose()
-                $runspaces.Remove($runspace) | Out-Null
+                Start-Sleep -Seconds $sleepDuration
+
+                # Increment the counter
+                $i++
+
+                # Check if the counter has reached the dynamic threshold
+                if ($i -ge $threshold) {
+                    # Increase the sleep duration exponentially
+                    $sleepDuration = [math]::Min($sleepDuration * 2, $maxSleepDuration)
+                    # Increase the threshold linearly
+                    $threshold += $initialThreshold
+                    # Reset the counter
+                    $i = 0
+                }
             }
 
-            Start-Sleep -Milliseconds 500
         }
 
     }
 
     end {
 
-        $runspacePool.Close()
-        $runspacePool.Dispose()
+        # Close and dispose of the runspace pool
+        if (!$supportsParallel) {
+            $runspacePool.Close()
+            $runspacePool.Dispose()
+        }
 
     }
+
 }
