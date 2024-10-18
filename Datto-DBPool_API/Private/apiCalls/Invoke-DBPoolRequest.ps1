@@ -168,6 +168,7 @@ function Invoke-DBPoolRequest {
                 Write-Verbose "Making API request to Uri: [ $($parameters['Uri']) ]"
                 $api_Response = Invoke-WebRequest @parameters -ErrorAction Stop
                 $appRequestId = $api_Response.Headers['X-App-Request-Id']
+                Write-Debug "If you need to report an error to the DBE team, include this request ID which can be used to search through the application logs for messages that were logged while processing your request [ X-App-Request-Id: $appRequestId ]"
                 Set-Variable -Name 'DBPool_appRequestId' -Value $appRequestId -Scope Global -Force
             }
 
