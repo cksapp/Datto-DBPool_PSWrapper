@@ -245,7 +245,7 @@ function Get-DBPoolContainer {
             # Output filtered containers
             if (!$FilteredContainers) {
                 Write-Warning "No containers found matching the $filterHeader filter parameter [ $($filterValues -join '; ') ]. Returning all containers."
-                return $Containers
+                return $Container
             }
 
             return $FilteredContainers
