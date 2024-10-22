@@ -206,7 +206,7 @@ function Get-DBPoolContainer {
             }
 
             # Filter containers
-            $FilteredContainers = $Containers | Where-Object {
+            $FilteredContainers = $Container | Where-Object {
                 $matchesName = $true
                 $matchesDB = $true
 
@@ -244,7 +244,7 @@ function Get-DBPoolContainer {
 
             # Output filtered containers
             if (!$FilteredContainers) {
-                Write-Warning "No containers found matching the $filterHeader filter parameter [ $($filterValues -join '; ') ]. Returning all containers."
+                Write-Error "No containers found matching the $filterHeader filter parameter [ $($filterValues -join '; ') ]. Returning all containers."
                 return $Containers
             }
 
