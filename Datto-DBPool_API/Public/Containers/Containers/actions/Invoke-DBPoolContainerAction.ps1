@@ -18,6 +18,19 @@ function Invoke-DBPoolContainerAction {
     .PARAMETER Force
         Skip the confirmation prompt for major actions, such as 'Refresh' and 'Schema-Merge'.
 
+    .PARAMETER TimeoutSeconds
+        The maximum time in seconds to wait for the action to complete. Default is 3600 seconds (60 minutes).
+
+    .PARAMETER ThrottleLimit
+        The maximum number of containers to process in parallel. Default is twice the number of processor cores.
+
+    .INPUTS
+        [int] - The ID of the container to perform the action on.
+        [string] - The action to perform on the container.
+
+    .OUTPUTS
+        N/A
+
     .EXAMPLE
         Invoke-DBPoolContainerAction -Id '12345' -Action 'restart'
 
@@ -52,6 +65,7 @@ function Invoke-DBPoolContainerAction {
 #>
 
     [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Medium')]
+    [OutputType([void])]
     param (
         [Parameter(Mandatory = $true, Position = 0)]
         [ValidateSet('refresh', 'schema-merge', 'start', 'restart', 'stop', IgnoreCase = $false)]
@@ -64,9 +78,11 @@ function Invoke-DBPoolContainerAction {
 
         [switch]$Force,
 
+        [Parameter(DontShow = $true)]
         [ValidateRange(0, [int]::MaxValue)]
         [int]$TimeoutSeconds = 3600,  # Default timeout of 60 minutes (3600 seconds) for longer running actions
 
+        [Parameter(DontShow = $true)]
         [ValidateRange(1, [int]::MaxValue)]
         [int]$ThrottleLimit = ([Environment]::ProcessorCount * 2)
     )
@@ -74,6 +90,13 @@ function Invoke-DBPoolContainerAction {
     begin {
 
         $method = 'POST'
+
+        # Pass the InformationAction parameter if bound, default to 'Continue'
+        if ($PSBoundParameters.ContainsKey('InformationAction')) {
+            $InformationPreference = $PSBoundParameters['InformationAction']
+        } else {
+            $InformationPreference = 'Continue'
+        }
 
         # Write warning when using deprecated 'schema-merge' action, otherwise set confirmation prompt for 'major' actions
         if ($Action -eq 'schema-merge') {
@@ -136,7 +159,7 @@ function Invoke-DBPoolContainerAction {
                     try {
                         $requestResponse = Invoke-DBPoolRequest -method $using:method -resource_Uri $requestPath -ErrorAction Stop -WarningAction:SilentlyContinue
                         if ($requestResponse.StatusCode -eq 204) {
-                            Write-Output "Success: Invoking Action [ $using:Action ] on Container [ ID: $n ]."
+                            Write-Information "Success: Invoking Action [ $using:Action ] on Container [ ID: $n ]."
                         }
                     } catch {
                         Write-Error $_
@@ -211,7 +234,7 @@ function Invoke-DBPoolContainerAction {
                         if ($result.Success) {
                             $statusCode = $result.StatusCode
                             if ($statusCode -eq 204) {
-                                Write-Output "Success: Invoking Action [ $Action ] on Container [ ID: $($result.ContainerId) ]."
+                                Write-Information "Success: Invoking Action [ $Action ] on Container [ ID: $($result.ContainerId) ]."
                             } else {
                                 Write-Error "Failed: Status $statusCode. Response: $($result.Content)"
                             }

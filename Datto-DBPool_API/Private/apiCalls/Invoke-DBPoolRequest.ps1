@@ -44,6 +44,12 @@ function Invoke-DBPoolRequest {
         As of June 2024, DBPool does not support any paging parameters.
         This is only provided to allow forward compatibility
 
+    .INPUTS
+        N/A
+
+    .OUTPUTS
+        [System.Net.HttpWebResponse] - The response from the DBPool API
+
     .EXAMPLE
         Invoke-DBPoolRequest -method GET -resource_Uri '/api/v2/self' -uri_Filter $uri_Filter
 
@@ -76,6 +82,7 @@ function Invoke-DBPoolRequest {
 #>
 
     [CmdletBinding()]
+    [OutputType([System.Net.HttpWebResponse])]
     param (
         [Parameter(Mandatory = $false)]
         [ValidateSet('DEFAULT', 'DELETE', 'GET', 'HEAD', 'PATCH', 'POST', 'PUT')]
@@ -84,7 +91,7 @@ function Invoke-DBPoolRequest {
         [Parameter(Mandatory = $true)]
         [String]$resource_Uri,
 
-        [Parameter(DontShow, Mandatory = $false)]
+        [Parameter(DontShow = $true, Mandatory = $false)]
         [Hashtable]$uri_Filter = $null,
 
         [Parameter(Mandatory = $false)]
@@ -94,7 +101,7 @@ function Invoke-DBPoolRequest {
         #[ValidateRange(0, [int]::MaxValue)]
         [int]$DBPool_JSON_Conversion_Depth = 5,
 
-        [Parameter(DontShow, Mandatory = $false)]
+        [Parameter(DontShow = $true, Mandatory = $false)]
         [Switch]$allPages
 
     )

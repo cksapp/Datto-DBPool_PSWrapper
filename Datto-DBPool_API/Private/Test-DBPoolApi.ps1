@@ -18,6 +18,13 @@ function Test-DBPoolApi {
     .PARAMETER ApiKey
         Optional: Access token for authorization.
 
+    .INPUTS
+        [string] - base_uri
+        [securestring] - apiKey
+
+    .OUTPUTS
+        [System.Boolean] - Returns $true if the API is available, $false if not.
+
     .EXAMPLE
         Test-DBPoolApi -base_uri "https://api.example.com"
 #>

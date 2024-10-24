@@ -13,6 +13,12 @@ function Add-DBPoolApiKey {
     .PARAMETER ApiKey
         Defines your API key for the DBPool.
 
+    .INPUTS
+        [SecureString] - The API key for the DBPool.
+
+    .OUTPUTS
+        N/A
+
     .EXAMPLE
         Add-DBPoolApiKey
 
@@ -33,6 +39,7 @@ function Add-DBPoolApiKey {
 
     [CmdletBinding()]
     [Alias("Set-DBPoolApiKey")]
+    [OutputType([void])]
     param (
         [Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true, HelpMessage = "API Key for authorization to DBPool.")]
         [ValidateNotNullOrEmpty()]

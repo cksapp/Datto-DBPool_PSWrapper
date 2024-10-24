@@ -14,6 +14,12 @@ function Set-DBPoolApiParameters {
 	    Provide Datto DBPool API Key for authorization.
         You can find your user API key at [ /web/self ](https://dbpool.datto.net/web/self).
 
+    .INPUTS
+        N/A
+
+    .OUTPUTS
+        N/A
+
     .EXAMPLE
         Set-DBPoolApiParameters
 
@@ -32,6 +38,7 @@ function Set-DBPoolApiParameters {
 #>
 	
     [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Low')]
+    [OutputType([void])]
 	Param(
         [Parameter(Position = 0, Mandatory = $False, ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $True, HelpMessage = "Provide the base URL of the DBPool API.")]
         [Uri]$base_uri = "https://dbpool.datto.net",

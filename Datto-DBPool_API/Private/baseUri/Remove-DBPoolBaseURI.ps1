@@ -6,6 +6,15 @@ function Remove-DBPoolBaseURI {
     .DESCRIPTION
         The Remove-DBPoolBaseURI cmdlet removes the DBPool base URI global variable.
 
+    .PARAMETER Force
+        Forces the removal of the DBPool base URI global variable without prompting for confirmation.
+
+    .INPUTS
+        N/A
+
+    .OUTPUTS
+        N/A
+
     .EXAMPLE
         Remove-DBPoolBaseURI
 
@@ -19,6 +28,7 @@ function Remove-DBPoolBaseURI {
 #>
 
     [cmdletbinding(SupportsShouldProcess)]
+    [OutputType([void])]
     Param ()
 
     begin {}

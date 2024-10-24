@@ -13,6 +13,12 @@ function Get-DBPoolMetaData {
 
         The default base URI is https://dbpool.datto.net
 
+    .INPUTS
+        [string] - base_uri
+
+    .OUTPUTS
+        [PSCustomObject] - Various API metadata values
+
     .EXAMPLE
         Get-DBPoolMetaData
 
@@ -39,6 +45,7 @@ function Get-DBPoolMetaData {
 #>
 
     [CmdletBinding()]
+    [OutputType([PSCustomObject])]
     Param (
         [parameter(Mandatory = $false, ValueFromPipeline = $true)]
         [string]$base_uri = $DBPool_Base_URI

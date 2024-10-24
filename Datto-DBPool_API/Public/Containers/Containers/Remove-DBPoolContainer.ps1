@@ -12,6 +12,15 @@ function Remove-DBPoolContainer {
         The ID of the container to delete.
         This accepts an array of integers.
 
+    .PARAMETER Force
+        Forces the removal of the container without prompting for confirmation.
+
+    .INPUTS
+        [int] - The ID of the container to delete.
+
+    .OUTPUTS
+        N/A
+
     .EXAMPLE
         Remove-DBPoolContainer -Id '12345'
 
@@ -40,7 +49,16 @@ function Remove-DBPoolContainer {
     )
     
     begin {
+
         $method = 'DELETE'
+
+        # Pass the InformationAction parameter if bound, default to 'Continue'
+        if ($PSBoundParameters.ContainsKey('InformationAction')) {
+            $InformationPreference = $PSBoundParameters['InformationAction']
+        } else {
+            $InformationPreference = 'Continue'
+        }
+
     }
     
     process {
@@ -70,7 +88,7 @@ function Remove-DBPoolContainer {
                 }
 
                 if ($response.StatusCode -eq 204) {
-                    Write-Output "Success: Container [ ID: $n ] destroyed."
+                    Write-Information "Success: Container [ ID: $n ] destroyed."
                 }
             }
         }

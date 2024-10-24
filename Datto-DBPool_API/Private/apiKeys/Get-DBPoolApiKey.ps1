@@ -9,6 +9,12 @@ function Get-DBPoolApiKey {
     .PARAMETER AsPlainText
         Decrypt and return the API key in plain text.
 
+    .INPUTS
+        N/A
+
+    .OUTPUTS
+        [PSCustomObject] - The DBPool API key global variable.
+
     .EXAMPLE
         Get-DBPoolApiKey
 
@@ -28,6 +34,7 @@ function Get-DBPoolApiKey {
 #>
 
     [cmdletbinding()]
+    [OutputType([PSCustomObject])]
     Param (
         [Parameter( Mandatory = $false )]
         [Switch]$AsPlainText
