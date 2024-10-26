@@ -25,7 +25,7 @@ function Remove-DBPoolModuleSettings {
         N/A
 
     .OUTPUTS
-        N/A
+        [void] - No output is returned.
 
     .EXAMPLE
         Remove-DBPoolModuleSettings

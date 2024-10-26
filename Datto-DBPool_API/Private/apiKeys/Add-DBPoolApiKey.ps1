@@ -17,7 +17,7 @@ function Add-DBPoolApiKey {
         [SecureString] - The API key for the DBPool.
 
     .OUTPUTS
-        N/A
+        [void] - No output is returned.
 
     .EXAMPLE
         Add-DBPoolApiKey

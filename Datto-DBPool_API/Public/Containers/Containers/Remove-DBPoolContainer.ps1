@@ -19,7 +19,7 @@ function Remove-DBPoolContainer {
         [int] - The ID of the container to delete.
 
     .OUTPUTS
-        N/A
+        [void] - No output is returned.
 
     .EXAMPLE
         Remove-DBPoolContainer -Id '12345'
@@ -39,6 +39,7 @@ function Remove-DBPoolContainer {
 #>
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
+    [OutputType([void])]
     param (
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateRange(1, [int]::MaxValue)]

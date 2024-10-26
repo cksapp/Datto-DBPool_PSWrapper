@@ -30,7 +30,7 @@ function ConvertTo-DBPoolQueryString {
         Defines the short resource uri (url) to use when creating the API call
 
     .INPUTS
-        N/A
+        [hashtable] - uri_Filter
 
     .OUTPUTS
         [System.UriBuilder] - uri_Request

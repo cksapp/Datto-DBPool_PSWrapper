@@ -29,6 +29,7 @@ function Invoke-DBPoolContainerAccess {
 
     .OUTPUTS
         [PSCustomObject] - The response from the DBPool API.
+        [void] - No output is returned.
 
     .EXAMPLE
         Invoke-DBPoolContainerAccess -Id '12345' -Username 'John.Doe'
@@ -54,7 +55,7 @@ function Invoke-DBPoolContainerAccess {
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'GetAccess', SupportsShouldProcess = $true, ConfirmImpact = 'Medium')]
-    [OutputType([PSCustomObject], ParameterSetName = 'GetAccess', 'AddAccess')]
+    [OutputType([PSCustomObject], ParameterSetName = { 'GetAccess', 'AddAccess' })]
     [OutputType([void], ParameterSetName = 'RemoveAccess')]
     param (
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]

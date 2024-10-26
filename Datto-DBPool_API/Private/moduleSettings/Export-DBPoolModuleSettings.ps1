@@ -26,7 +26,7 @@ function Export-DBPoolModuleSettings {
         N/A
 
     .OUTPUTS
-        N/A
+        [void] - No output is returned.
 
     .EXAMPLE
         Export-DBPoolModuleSettings

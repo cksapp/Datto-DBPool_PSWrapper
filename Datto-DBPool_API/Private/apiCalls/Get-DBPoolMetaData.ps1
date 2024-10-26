@@ -13,6 +13,11 @@ function Get-DBPoolMetaData {
 
         The default base URI is https://dbpool.datto.net
 
+    .PARAMETER resource_uri
+        Define the resource URI for the DBPool API connection.
+
+        The default resource URI is /api/v2/self
+
     .INPUTS
         [string] - base_uri
 
@@ -48,13 +53,14 @@ function Get-DBPoolMetaData {
     [OutputType([PSCustomObject])]
     Param (
         [parameter(Mandatory = $false, ValueFromPipeline = $true)]
-        [string]$base_uri = $DBPool_Base_URI
+        [string]$base_uri = $DBPool_Base_URI,
+
+        [string]$resource_uri = '/api/v2/self'
     )
 
     begin {
 
         $method       = 'GET'
-        $resource_uri = "/api/v2/self"
 
     }
 
@@ -62,7 +68,7 @@ function Get-DBPoolMetaData {
 
         try {
 
-            $api_Key = $(Get-DBPoolAPIKey -AsPlainText).'API_Key'
+            $api_Key = $(Get-DBPoolAPIKey -AsPlainText).'ApiKey'
 
             $DBPool_Headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
             $DBPool_Headers.Add("Content-Type", 'application/json')

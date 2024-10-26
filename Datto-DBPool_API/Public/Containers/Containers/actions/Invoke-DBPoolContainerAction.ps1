@@ -29,7 +29,7 @@ function Invoke-DBPoolContainerAction {
         [string] - The action to perform on the container.
 
     .OUTPUTS
-        N/A
+        [void] - No output is returned.
 
     .EXAMPLE
         Invoke-DBPoolContainerAction -Id '12345' -Action 'restart'

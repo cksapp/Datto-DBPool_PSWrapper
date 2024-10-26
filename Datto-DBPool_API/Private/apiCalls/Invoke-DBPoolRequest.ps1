@@ -48,7 +48,7 @@ function Invoke-DBPoolRequest {
         N/A
 
     .OUTPUTS
-        [System.Net.HttpWebResponse] - The response from the DBPool API
+        [Microsoft.PowerShell.Commands.BasicHtmlWebResponseObject] - The response from the DBPool API
 
     .EXAMPLE
         Invoke-DBPoolRequest -method GET -resource_Uri '/api/v2/self' -uri_Filter $uri_Filter
@@ -82,7 +82,7 @@ function Invoke-DBPoolRequest {
 #>
 
     [CmdletBinding()]
-    [OutputType([System.Net.HttpWebResponse])]
+    [OutputType([Microsoft.PowerShell.Commands.BasicHtmlWebResponseObject])]
     param (
         [Parameter(Mandatory = $false)]
         [ValidateSet('DEFAULT', 'DELETE', 'GET', 'HEAD', 'PATCH', 'POST', 'PUT')]

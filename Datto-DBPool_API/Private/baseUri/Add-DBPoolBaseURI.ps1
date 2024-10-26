@@ -23,7 +23,7 @@ function Add-DBPoolBaseURI {
         [string] - The base URI for the DBPool API connection.
 
     .OUTPUTS
-        N/A
+        [void] - No output is returned.
 
     .EXAMPLE
         Add-DBPoolBaseURI

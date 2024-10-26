@@ -29,7 +29,7 @@ function Get-DBPoolModuleSettings {
         N/A
 
     .OUTPUTS
-        N/A
+        [void] - No output is returned.
 
     .EXAMPLE
         Get-DBPoolModuleSettings
