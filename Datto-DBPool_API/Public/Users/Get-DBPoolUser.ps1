@@ -11,6 +11,12 @@ function Get-DBPoolUser {
         The username of the user to get details for.
         This accepts an array of strings.
 
+    .INPUTS
+        [string] - The username of the user to get details for.
+
+    .OUTPUTS
+        [PSCustomObject] - The user details from DBPool.
+
     .EXAMPLE
         Get-DBPoolUser
 
@@ -31,6 +37,7 @@ function Get-DBPoolUser {
 
 
     [CmdletBinding(DefaultParameterSetName = 'Self')]
+    [OutputType([PSCustomObject])]
     param (
         [Parameter(ParameterSetName = 'User', Mandatory = $false, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [string[]]$Username

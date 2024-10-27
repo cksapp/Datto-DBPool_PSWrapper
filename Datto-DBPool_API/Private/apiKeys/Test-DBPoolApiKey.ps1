@@ -11,6 +11,12 @@ function Test-DBPoolApiKey {
 
         The default base URI is https://dbpool.datto.net/api
 
+    .INPUTS
+        [string] - base_uri
+
+    .OUTPUTS
+        [PSCustomObject] - Various API metadata values
+
     .EXAMPLE
         Test-DBPoolApiKey
 
@@ -35,6 +41,7 @@ function Test-DBPoolApiKey {
 #>
 
     [cmdletbinding()]
+    [OutputType([PSCustomObject])]
     Param (
         [parameter( Position = 0, Mandatory = $false, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true, HelpMessage = "Define the base URI for the DBPool connection. Default is Datto's DBPool URI or set a custom URI." )]
         [string]$base_uri = $DBPool_Base_URI

@@ -23,6 +23,14 @@ function Invoke-DBPoolContainerAccess {
     .PARAMETER RemoveAccess
         Removes access to a container by ID for the given username.
 
+    .INPUTS
+        [int] - The ID of the container to access.
+        [string] - The username to access the container.
+
+    .OUTPUTS
+        [PSCustomObject] - The response from the DBPool API.
+        [void] - No output is returned.
+
     .EXAMPLE
         Invoke-DBPoolContainerAccess -Id '12345' -Username 'John.Doe'
         Invoke-DBPoolContainerAccess -Id '12345' -Username 'John.Doe' -GetAccess
@@ -47,6 +55,8 @@ function Invoke-DBPoolContainerAccess {
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'GetAccess', SupportsShouldProcess = $true, ConfirmImpact = 'Medium')]
+    [OutputType([PSCustomObject], ParameterSetName = { 'GetAccess', 'AddAccess' })]
+    [OutputType([void], ParameterSetName = 'RemoveAccess')]
     param (
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         #[ValidateRange(1, [int]::MaxValue)]

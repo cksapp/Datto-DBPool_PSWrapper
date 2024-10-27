@@ -19,6 +19,15 @@ function New-DBPoolContainer {
     .PARAMETER ParentDefaultDatabase
         The default database of the parent container to clone.
 
+    .INPUTS
+        [string] - The name for the new container.
+        [int] - The ID of the parent container to clone.
+        [string] - The name of the parent container to clone.
+        [string] - The default database of the parent container to clone.
+
+    .OUTPUTS
+        [PSCustomObject] - The response from the DBPool API.
+
     .EXAMPLE
         New-DBPoolContainer -ContainerName 'MyNewContainer' -ParentId 12345
 
@@ -37,6 +46,7 @@ function New-DBPoolContainer {
 #>
 
     [CmdletBinding()]
+    [OutputType([PSCustomObject])]
     param (
         [Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [string]$ContainerName,

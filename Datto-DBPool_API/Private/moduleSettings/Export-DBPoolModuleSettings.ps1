@@ -22,6 +22,12 @@ function Export-DBPoolModuleSettings {
         By default the configuration file is named:
             config.psd1
 
+    .INPUTS
+        N/A
+
+    .OUTPUTS
+        [void] - No output is returned.
+
     .EXAMPLE
         Export-DBPoolModuleSettings
 
@@ -44,6 +50,7 @@ function Export-DBPoolModuleSettings {
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'set')]
+    [OutputType([void])]
     Param (
         [Parameter(ParameterSetName = 'set')]
         [string]$DBPoolConfPath = $(Join-Path -Path $home -ChildPath $(if ($IsWindows -or $PSEdition -eq 'Desktop'){"DBPoolAPI"}else{".DBPoolAPI"}) ),

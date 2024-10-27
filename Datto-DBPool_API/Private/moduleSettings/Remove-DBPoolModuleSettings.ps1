@@ -21,6 +21,12 @@ function Remove-DBPoolModuleSettings {
 
         By default the variables are not removed.
 
+    .INPUTS
+        N/A
+
+    .OUTPUTS
+        [void] - No output is returned.
+
     .EXAMPLE
         Remove-DBPoolModuleSettings
 
@@ -46,6 +52,7 @@ function Remove-DBPoolModuleSettings {
 #>
 
     [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName = 'set')]
+    [OutputType([void])]
     Param (
         [Parameter(ParameterSetName = 'set')]
         [string]$DBPoolConfPath = $(Join-Path -Path $home -ChildPath $(if ($IsWindows -or $PSEdition -eq 'Desktop'){"DBPoolAPI"}else{".DBPoolAPI"}) ),

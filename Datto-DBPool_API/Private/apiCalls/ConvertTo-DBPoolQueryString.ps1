@@ -29,6 +29,12 @@ function ConvertTo-DBPoolQueryString {
     .PARAMETER resource_Uri
         Defines the short resource uri (url) to use when creating the API call
 
+    .INPUTS
+        [hashtable] - uri_Filter
+
+    .OUTPUTS
+        [System.UriBuilder] - uri_Request
+
     .EXAMPLE
         ConvertTo-DBPoolQueryString -uri_Filter $uri_Filter -resource_Uri '/api/v2/containers'
 
@@ -52,6 +58,7 @@ function ConvertTo-DBPoolQueryString {
 #>
 
     [CmdletBinding()]
+    [OutputType([System.UriBuilder])]
     param(
         [Parameter(Mandatory = $false, ValueFromPipeline = $true)]
         [hashtable]$uri_Filter,

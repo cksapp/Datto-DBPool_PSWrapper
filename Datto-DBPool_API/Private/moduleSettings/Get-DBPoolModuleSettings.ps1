@@ -25,6 +25,12 @@ function Get-DBPoolModuleSettings {
     .PARAMETER openConfFile
         Opens the DBPool configuration file
 
+    .INPUTS
+        N/A
+
+    .OUTPUTS
+        [void] - No output is returned.
+
     .EXAMPLE
         Get-DBPoolModuleSettings
 
@@ -50,6 +56,7 @@ function Get-DBPoolModuleSettings {
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'index')]
+    [OutputType([void])]
     Param (
         [Parameter(Mandatory = $false, ParameterSetName = 'index')]
         [string]$DBPoolConfPath = $(Join-Path -Path $home -ChildPath $(if ($IsWindows -or $PSEdition -eq 'Desktop'){"DBPoolAPI"}else{".DBPoolAPI"}) ),
