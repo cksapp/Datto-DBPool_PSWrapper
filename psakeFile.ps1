@@ -53,3 +53,9 @@ task RemoveNestedModules -depends StageFiles {
     Write-Host "Module manifest updated successfully"
 }
 #>
+
+task PublishDocs -depends Build {
+    exec {
+        docker run -v "$($psake.build_script_dir)`:/docs" -e 'CI=true' --entrypoint 'sh' squidfunk/mkdocs-material:9 -c 'pip install -r requirements.txt && mkdocs gh-deploy --force'
+    }
+}
