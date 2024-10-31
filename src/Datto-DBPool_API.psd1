@@ -19,7 +19,7 @@
     # -- PATCH version when you make backwards-compatible bug fixes.
 
     # Version number of this module.
-    ModuleVersion = '0.01.03'
+    ModuleVersion = '0.01.04'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -75,7 +75,7 @@
     # FormatsToProcess = @()
 
     # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
-    NestedModules = @(
+    <#NestedModules = @(
         'Private/Set-DBPoolApiParameters.ps1',
         'Private/Test-DBPoolApi.ps1',
 
@@ -112,7 +112,7 @@
         'Public/OpenAPI/Get-DBPoolOpenAPI.ps1',
 
         'Public/Users/Get-DBPoolUser.ps1'
-    )
+    )#>
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
     FunctionsToExport = '*'
@@ -166,6 +166,6 @@
     HelpInfoURI = 'https://github.com/cksapp/Datto-DBPool_PSWrapper/blob/main/README.md'
 
     # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
-    # DefaultCommandPrefix = 'DBPool'
+    # DefaultCommandPrefix = 'Datto' # As of 2024-08 the 'Import-Module' cmdlet does not support $null -Prefix parameter
 
 }
