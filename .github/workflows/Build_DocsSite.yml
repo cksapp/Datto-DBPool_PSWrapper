@@ -8,7 +8,7 @@ on:
     paths:
       - docs/**
       - mkdocs.yml
-      - .github/workflows/Docs.yml
+      - .github/workflows/Build_DocsSite.yml
 
 jobs:
 
