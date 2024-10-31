@@ -18,6 +18,13 @@ function Test-DBPoolApi {
     .PARAMETER ApiKey
         Optional: Access token for authorization.
 
+    .INPUTS
+        [string] - The base URI for the DBPool API connection.
+        [SecureString] - The API key for the DBPool.
+
+    .OUTPUTS
+        [System.Boolean] - Returns $true if the API is available, $false if not.
+
     .EXAMPLE
         Test-DBPoolApi -base_uri "https://api.example.com"
 #>
@@ -46,8 +53,10 @@ function Test-DBPoolApi {
         }
 
         # Sets the variable for the document URI to check, filtered to replace ending with /v2 with openapi docs
-        $base_uri = $base_uri.TrimEnd('/')
-        $apiUri = $base_uri + $resource_Uri
+        #$base_uri = $base_uri.TrimEnd('/')
+        # Use 'Add-DBPoolBaseURI' to remove superfluous trailing slashes
+        Add-DBPoolBaseURI -base_uri $base_uri
+        #$apiUri = $base_uri + $resource_Uri
 
     }
 
@@ -55,7 +64,7 @@ function Test-DBPoolApi {
 
         Write-Verbose -Message "Checking API availability for URL $apiUri"
         try {
-            Invoke-WebRequest -Method 'HEAD' -Uri $apiUri | Out-Null
+            Invoke-DBPoolRequest -Method 'HEAD' -resource_Uri $resource_Uri -ErrorAction Stop | Out-Null
             $true
         } catch {
             if ($_.Exception.Response.StatusCode -ne 200) {

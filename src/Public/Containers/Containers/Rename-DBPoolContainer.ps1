@@ -13,6 +13,13 @@ function Rename-DBPoolContainer {
     .PARAMETER Name
         The new name for the container.
     
+    .INPUTS
+        [int] - The ID of the container to update.
+        [string] - The new name for the container.
+
+    .OUTPUTS
+        [PSCustomObject] - The response from the DBPool API.
+
     .EXAMPLE
         Rename-DBPoolContainer -Id 12345 -Name 'NewContainerName'
 
@@ -31,6 +38,7 @@ function Rename-DBPoolContainer {
 #>
 
     [CmdletBinding()]
+    [OutputType([PSCustomObject])]
     param (
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateRange(1, [int]::MaxValue)]
@@ -85,8 +93,8 @@ function Rename-DBPoolContainer {
             }
 
             if ($null -ne $requestResponse) {
-                    $requestResponse | ConvertFrom-Json
-                }
+                $requestResponse | ConvertFrom-Json
+            }
 
         }
 

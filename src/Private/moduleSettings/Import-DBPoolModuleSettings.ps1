@@ -22,6 +22,12 @@ function Import-DBPoolModuleSettings {
         By default the configuration file is named:
             config.psd1
 
+    .INPUTS
+        N/A
+
+    .OUTPUTS
+        N/A
+
     .EXAMPLE
         Import-DBPoolModuleSettings
 

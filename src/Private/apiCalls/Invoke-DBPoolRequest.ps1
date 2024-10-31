@@ -44,6 +44,12 @@ function Invoke-DBPoolRequest {
         As of June 2024, DBPool does not support any paging parameters.
         This is only provided to allow forward compatibility
 
+    .INPUTS
+        N/A
+
+    .OUTPUTS
+        [Microsoft.PowerShell.Commands.BasicHtmlWebResponseObject] - The response from the DBPool API
+
     .EXAMPLE
         Invoke-DBPoolRequest -method GET -resource_Uri '/api/v2/self' -uri_Filter $uri_Filter
 
@@ -76,6 +82,7 @@ function Invoke-DBPoolRequest {
 #>
 
     [CmdletBinding()]
+    [OutputType([Microsoft.PowerShell.Commands.BasicHtmlWebResponseObject])]
     param (
         [Parameter(Mandatory = $false)]
         [ValidateSet('DEFAULT', 'DELETE', 'GET', 'HEAD', 'PATCH', 'POST', 'PUT')]
@@ -84,7 +91,7 @@ function Invoke-DBPoolRequest {
         [Parameter(Mandatory = $true)]
         [String]$resource_Uri,
 
-        [Parameter(DontShow, Mandatory = $false)]
+        [Parameter(DontShow = $true, Mandatory = $false)]
         [Hashtable]$uri_Filter = $null,
 
         [Parameter(Mandatory = $false)]
@@ -94,22 +101,24 @@ function Invoke-DBPoolRequest {
         #[ValidateRange(0, [int]::MaxValue)]
         [int]$DBPool_JSON_Conversion_Depth = 5,
 
-        [Parameter(DontShow, Mandatory = $false)]
+        [Parameter(DontShow = $true, Mandatory = $false)]
         [Switch]$allPages
 
     )
 
-    begin {}
+    begin {
+        $ConfirmPreference = 'None'
+    }
 
     process {
 
         # Load Web assembly when needed as PowerShell Core has the assembly preloaded
-        if ( !("System.Web.HttpUtility" -as [Type]) ) {
+        if ( !('System.Web.HttpUtility' -as [Type]) ) {
             Add-Type -Assembly System.Web
         }
 
         if (!($DBPool_base_URI)) {
-            Write-Warning "The DBPool base URI is not set. Run Add-DBPoolBaseURI to set the base URI."
+            Write-Warning 'The DBPool base URI is not set. Run Add-DBPoolBaseURI to set the base URI.'
         }
 
         $query_String = ConvertTo-DBPoolQueryString -resource_Uri $resource_Uri -uri_Filter $uri_Filter
@@ -126,19 +135,19 @@ function Invoke-DBPoolRequest {
             $api_Key = $(Get-DBPoolAPIKey -AsPlainText).'ApiKey'
 
             $parameters = [ordered] @{
-                "Method"    = $method
-                "Uri"       = $query_String.Uri
-                "Headers" = @{ 'X-App-Apikey' = "$api_Key" }
-                "Body"      = $request_Body
+                'Method'  = $method
+                'Uri'     = $query_String.Uri
+                'Headers' = @{ 'X-App-Apikey' = "$api_Key" }
+                'Body'    = $request_Body
             }
 
-                if ( $method -ne 'GET' ) {
-                    $parameters['ContentType'] = 'application/json; charset=utf-8'
-                }
+            if ( $method -ne 'GET' ) {
+                $parameters['ContentType'] = 'application/json; charset=utf-8'
+            }
 
             Set-Variable -Name 'DBPool_invokeParameters' -Value $parameters -Scope Global -Force
 
-            if ($allPages){
+            if ($allPages) {
 
                 Write-Verbose "Gathering all items from [  $( $DBPool_Base_URI + $resource_Uri ) ] "
 
@@ -147,32 +156,41 @@ function Invoke-DBPoolRequest {
 
                 do {
 
-                    $parameters['Uri'] = $query_String.Uri -replace '_page=\d+',"_page=$page_Number"
+                    $parameters['Uri'] = $query_String.Uri -replace '_page=\d+', "_page=$page_Number"
 
                     Write-Verbose "Making API request to Uri: [ $($parameters['Uri']) ]"
                     $current_Page = Invoke-WebRequest @parameters -ErrorAction Stop
 
                     Write-Verbose "[ $page_Number ] of [ $($current_Page.pagination.totalPages) ] pages"
 
-                        foreach ($item in $current_Page.items){
-                            $all_responseData.add($item)
-                        }
+                    foreach ($item in $current_Page.items) {
+                        $all_responseData.add($item)
+                    }
 
                     $page_Number++
 
                 } while ($current_Page.pagination.totalPages -ne $page_Number - 1 -and $current_Page.pagination.totalPages -ne 0)
 
-            }
-            else{
+            } else {
                 Write-Verbose "Making API request to Uri: [ $($parameters['Uri']) ]"
                 $api_Response = Invoke-WebRequest @parameters -ErrorAction Stop
+                $appRequestId = $api_Response.Headers['X-App-Request-Id']
+                Write-Debug "If you need to report an error to the DBE team, include this request ID which can be used to search through the application logs for messages that were logged while processing your request [ X-App-Request-Id: $appRequestId ]"
+                Set-Variable -Name 'DBPool_appRequestId' -Value $appRequestId -Scope Global -Force
             }
 
-        }
-        catch {
-
+        } catch {
+            
             $exceptionError = $_
-            Write-Warning 'The [ DBPool_invokeParameters, DBPool_queryString, & DBPool_CmdletNameParameters ] variables can provide extra details'
+            Write-Warning 'The [ DBPool_invokeParameters, DBPool_queryString, DBPool_appRequestId, & DBPool_CmdletNameParameters ] variables can provide extra details'
+
+            # Extract the 'X-App-Request-Id' header if needed for reporting to DBE team
+            $appRequestId = $null
+            if ($_.Exception.Response -and $_.Exception.Response.Headers) {
+                $appRequestId = $_.Exception.Response.Headers.GetValues('X-App-Request-Id')
+                Set-Variable -Name 'DBPool_appRequestId' -Value $appRequestId -Scope Global -Force
+                Write-Debug "If you need to report an error to the DBE team, include this request ID which can be used to search through the application logs for messages that were logged while processing your request [ X-App-Request-Id: $appRequestId ]"
+            }
 
             switch -Wildcard ( $($exceptionError.Exception.Message) ) {
                 '*401*' { Write-Error 'Status 401 : Unauthorized. Invalid API key' }
@@ -181,16 +199,14 @@ function Invoke-DBPoolRequest {
                 '*500*' {
                     $e = $($exceptionError.ErrorDetails.Message)
                     if ($null -ne $e) {
-                        [string]$e = $( $e | ConvertFrom-Json ).error.message
+                        [string]$e = $( $e | ConvertFrom-Json -ErrorAction SilentlyContinue ).error.message
                     }
                     Write-Error "Status 500 : Internal Server Error. $e"
                 }
                 '*504*' { Write-Error "Status 504 : Gateway Timeout" }
                 default { Write-Error $_ }
             }
-
-        }
-        finally {
+        } finally {
 
             $Auth = $DBPool_invokeParameters['headers']['X-App-Apikey']
             $DBPool_invokeParameters['headers']['X-App-Apikey'] = $Auth.Substring( 0, [Math]::Min($Auth.Length, 9) ) + '*******'
@@ -219,6 +235,16 @@ function Invoke-DBPoolRequest {
 
     }
 
-    end {}
+    end {
+        # Variables to remove
+        $var = @(
+            'api_Key',
+            'parameters',
+            'Auth'
+        )
+        foreach ($v in $var) {
+            Remove-Variable -Name $v -ErrorAction SilentlyContinue -Force
+        }
+    }
 
 }

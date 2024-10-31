@@ -11,6 +11,12 @@ function Invoke-DBPoolDebug {
         The HTTP method to use when making the request to the DBPool API.
         Default is 'GET'.
 
+    .INPUTS
+        N/A
+    
+    .OUTPUTS
+        [System.Management.Automation.ErrorRecord] - Returns an example exception response from the DBPool API.
+
     .EXAMPLE
         Invoke-DBPoolDebug -method GET
         Sends a 'GET' request to the DBPool API and returns a '418' exception response error.
@@ -24,6 +30,7 @@ function Invoke-DBPoolDebug {
 #>
 
     [CmdletBinding()]
+    [OutputType([System.Management.Automation.ErrorRecord])]
     param (
         [Parameter(Mandatory = $false)]
         [ValidateSet('DELETE', 'GET', 'PATCH', 'POST')]

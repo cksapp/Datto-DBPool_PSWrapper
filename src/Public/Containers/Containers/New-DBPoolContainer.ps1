@@ -4,23 +4,30 @@ function New-DBPoolContainer {
         The New-DBPoolContainer function is used to create a new container from the DBPool API.
 
     .DESCRIPTION
-        The New-DBPoolContainer function is used to create a new container in the DBPool based on the provided container name and parent container information.
-
-        This requires a container name and at least one at least one of the parent* fields must be specified.
-        If multiple parent fields are specified, both conditions will have to match a parent for it to be selected.
-
-    .PARAMETER ContainerName
-        The name for the container to create.
+        This function creates a new container in the DBPool based on the provided container name and parent container information.
+        The ContainerName parameter is mandatory, and at least one of the parent parameters (ParentId, ParentName, or ParentDefaultDatabase) must be specified.
     
+    .PARAMETER ContainerName
+        The name for the new container.
+
     .PARAMETER ParentId
         The ID of the parent container to clone.
-    
+
     .PARAMETER ParentName
         The name of the parent container to clone.
-    
+
     .PARAMETER ParentDefaultDatabase
         The default database of the parent container to clone.
-    
+
+    .INPUTS
+        [string] - The name for the new container.
+        [int] - The ID of the parent container to clone.
+        [string] - The name of the parent container to clone.
+        [string] - The default database of the parent container to clone.
+
+    .OUTPUTS
+        [PSCustomObject] - The response from the DBPool API.
+
     .EXAMPLE
         New-DBPoolContainer -ContainerName 'MyNewContainer' -ParentId 12345
 
@@ -39,6 +46,7 @@ function New-DBPoolContainer {
 #>
 
     [CmdletBinding()]
+    [OutputType([PSCustomObject])]
     param (
         [Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [string]$ContainerName,
@@ -69,9 +77,11 @@ function New-DBPoolContainer {
 
         $body['name'] = $ContainerName
 
-        # Check if at least one parent parameter is provided
+        # Check that at least one parent parameter is provided
+        # This is done rather than using parameter sets or mandatory parameters to allow for multiple parent parameters to be provided as API accepts multiple parent parameter inputs
+        # If multiple fields are specified, both conditions will have to match a parent for it to be selected.
         if (-not ($PSBoundParameters.ContainsKey('ParentId') -or $PSBoundParameters.ContainsKey('ParentName') -or $PSBoundParameters.ContainsKey('ParentDefaultDatabase'))) {
-            throw "At least one parent parameter must be provided."
+            Write-Error "At least one parent parameter (ParentId, ParentName, or ParentDefaultDatabase) must be provided." -ErrorAction Stop
         }
 
         # Insert specified parent parameters into the request body

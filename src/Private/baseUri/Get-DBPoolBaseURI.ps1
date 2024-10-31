@@ -6,6 +6,12 @@ function Get-DBPoolBaseURI {
     .DESCRIPTION
         The Get-DBPoolBaseURI cmdlet shows the DBPool base URI global variable value.
 
+    .INPUTS
+        N/A
+
+    .OUTPUTS
+        [void] - No output is returned.
+
     .EXAMPLE
         Get-DBPoolBaseURI
 
@@ -19,6 +25,7 @@ function Get-DBPoolBaseURI {
 #>
 
     [cmdletbinding()]
+    [OutputType([void])]
     Param ()
 
     begin {}

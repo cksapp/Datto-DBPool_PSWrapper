@@ -19,10 +19,16 @@ function Add-DBPoolBaseURI {
 
         Placeholder for other data centers.
 
+    .INPUTS
+        [string] - The base URI for the DBPool API connection.
+
+    .OUTPUTS
+        [void] - No output is returned.
+
     .EXAMPLE
         Add-DBPoolBaseURI
 
-        The base URI will use https://dbpool.datto.net which is DBPool's default URI.
+        The base URI will use https://dbpool.datto.net which is Datto's default DBPool URI.
 
     .EXAMPLE
         Add-DBPoolBaseURI -instance Datto
@@ -42,9 +48,11 @@ function Add-DBPoolBaseURI {
 #>
 
     [cmdletbinding()]
+    [OutputType([void])]
     [Alias("Set-DBPoolBaseURI")]
     Param (
         [Parameter(Mandatory = $false , ValueFromPipeline = $true)]
+        [ValidateNotNullOrEmpty()]
         [string]$base_uri = 'https://dbpool.datto.net',
 
         [ValidateSet('Datto')]
@@ -62,7 +70,7 @@ function Add-DBPoolBaseURI {
             'Datto' { $base_uri = 'https://dbpool.datto.net' }
         }
 
-        Set-Variable -Name "DBPool_Base_URI" -Value $base_uri -Option ReadOnly -Scope global -Force
+        Set-Variable -Name "DBPool_Base_URI" -Value $base_uri -Option ReadOnly -Scope Global -Force
         Write-Verbose "DBPool Base URI set to `'$base_uri`'."
 
     }

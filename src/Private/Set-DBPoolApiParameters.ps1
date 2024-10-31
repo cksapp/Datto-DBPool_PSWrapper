@@ -14,6 +14,13 @@ function Set-DBPoolApiParameters {
 	    Provide Datto DBPool API Key for authorization.
         You can find your user API key at [ /web/self ](https://dbpool.datto.net/web/self).
 
+    .INPUTS
+        [Uri] - The base URL of the DBPool API.
+        [SecureString] - The API key for the DBPool.
+
+    .OUTPUTS
+        [void] - No output is returned.
+
     .EXAMPLE
         Set-DBPoolApiParameters
 
@@ -31,21 +38,31 @@ function Set-DBPoolApiParameters {
         N/A
 #>
 	
-    [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Low')]
+    [CmdletBinding()]
+    [OutputType([void])]
 	Param(
         [Parameter(Position = 0, Mandatory = $False, ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $True, HelpMessage = "Provide the base URL of the DBPool API.")]
         [Uri]$base_uri = "https://dbpool.datto.net",
 
         [Parameter(Position = 1, Mandatory = $True, ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $True, HelpMessage = "Provide Datto DBPool API Key for authorization.")]
-        [securestring]$apiKey
+        [securestring]$apiKey,
+
+        [Parameter(Position = 2, Mandatory = $False, HelpMessage = "Force the operation without confirmation.")]
+        [switch]$Force
     )
  
     Begin {
 
+        # Cast URI Variable to string type
+        [String]$base_uri = $base_uri.AbsoluteUri
+
+        # Check for trailing slash and remove if present
+        $base_uri = $base_uri.TrimEnd('/')
+
         # Check to replace existing variables
         if ((Get-Variable -Name DBPool_Base_URI -ErrorAction SilentlyContinue) -and (Get-Variable -Name DBPool_ApiKey -ErrorAction SilentlyContinue)) {
-            if (-not $PSCmdlet.ShouldContinue("Variables 'DBPool_Base_URI' and '$DBPool_ApiKey' already exist. Do you want to replace them?", "Confirm overwrite")) {
-                Write-Output "Existing variables were not replaced."
+            if (-not ($Force -or $PSCmdlet.ShouldContinue("Variables 'DBPool_Base_URI' and '$DBPool_ApiKey' already exist. Do you want to replace them?", "Confirm overwrite"))) {
+                Write-Warning "Existing variables were not replaced."
                 break
             }
         }
@@ -54,19 +71,13 @@ function Set-DBPoolApiParameters {
 
     Process {
 
-        # Cast URI Variable to string type
-        [String]$base_uri = $base_uri.AbsoluteUri
-
-        # Check for trailing slash and remove if present
-        $base_uri = $base_uri.TrimEnd('/')
-
         # Set or replace the parameters
-        if ($PSCmdlet.ShouldProcess('$base_uri', "Set to $base_uri")) {
-            Add-DBPoolBaseURI -base_uri $base_uri
+        try {
+            Add-DBPoolBaseURI -base_uri $base_uri -Verbose:$PSBoundParameters.ContainsKey('Verbose') -ErrorAction Stop
+            Add-DBPoolAPIKey -apiKey $apiKey -Verbose:$PSBoundParameters.ContainsKey('Verbose') -ErrorAction Stop
         }
-
-        if ($PSCmdlet.ShouldProcess('$DBPool_APIKey', "Add")) {
-            Add-DBPoolAPIKey -apiKey $apiKey
+        catch {
+            Write-Error $_
         }
 
     }
