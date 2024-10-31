@@ -1,18 +1,21 @@
-function Set-DBPoolApiParameters {
+function Set-DBPoolApiParameter {
 <#
     .SYNOPSIS
-        The Set-DBPoolApiParameters function is used to set parameters for the Datto DBPool API.
+        The Set-DBPoolApiParameter function is used to set parameters for the Datto DBPool API.
 
     .DESCRIPTION
-        The Set-DBPoolApiParameters function is used to set the API URL and API Key for the Datto DBPool API.
+        The Set-DBPoolApiParameter function is used to set the API URL and API Key for the Datto DBPool API.
 
     .PARAMETER base_uri
         Provide the URL of the Datto DBPool API.
         The default value is https://dbpool.datto.net.
 
-	.PARAMETER apiKey
-	    Provide Datto DBPool API Key for authorization.
+    .PARAMETER apiKey
+        Provide Datto DBPool API Key for authorization.
         You can find your user API key at [ /web/self ](https://dbpool.datto.net/web/self).
+
+    .PARAMETER Force
+        Force the operation without confirmation.
 
     .INPUTS
         [Uri] - The base URL of the DBPool API.
@@ -22,12 +25,12 @@ function Set-DBPoolApiParameters {
         [void] - No output is returned.
 
     .EXAMPLE
-        Set-DBPoolApiParameters
+        Set-DBPoolApiParameter
 
         Sets the default base URI and prompts for the API Key.
 
     .EXAMPLE
-        Set-DBPoolApiParameters -base_uri "https://dbpool.example.com" -apiKey $secureString
+        Set-DBPoolApiParameter -base_uri "https://dbpool.example.com" -apiKey $secureString
 
         Sets the base URI to https://dbpool.example.com and sets the API Key.
 
@@ -37,10 +40,10 @@ function Set-DBPoolApiParameters {
     .LINK
         N/A
 #>
-	
-    [CmdletBinding()]
+
+    [CmdletBinding(SupportsShouldProcess = $True, ConfirmImpact = 'Low')]
     [OutputType([void])]
-	Param(
+    Param(
         [Parameter(Position = 0, Mandatory = $False, ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $True, HelpMessage = "Provide the base URL of the DBPool API.")]
         [Uri]$base_uri = "https://dbpool.datto.net",
 
@@ -50,7 +53,7 @@ function Set-DBPoolApiParameters {
         [Parameter(Position = 2, Mandatory = $False, HelpMessage = "Force the operation without confirmation.")]
         [switch]$Force
     )
- 
+
     Begin {
 
         # Cast URI Variable to string type
@@ -81,6 +84,6 @@ function Set-DBPoolApiParameters {
         }
 
     }
-    
+
     End {}
 }

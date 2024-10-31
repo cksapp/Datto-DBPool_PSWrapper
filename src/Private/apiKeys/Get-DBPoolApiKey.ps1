@@ -76,7 +76,7 @@ function Get-DBPoolApiKey {
                 }
 
             } else {
-                Write-Warning "The DBPool API [ secret ] key is not set. Run Add-DBPoolApiKey to set the API key." 
+                Write-Warning "The DBPool API [ secret ] key is not set. Run Add-DBPoolApiKey to set the API key."
             }
 
         } catch {

@@ -9,7 +9,7 @@ function Get-DBPoolOpenAPI {
     .PARAMETER OpenAPI_Path
         The path to the OpenAPI json spec.
         This defaults to '/api/docs/openapi.json'
-    
+
     .INPUTS
         N/A
 
@@ -36,11 +36,11 @@ function Get-DBPoolOpenAPI {
         [Parameter(Mandatory = $false)]
         [string]$OpenAPI_Path = '/api/docs/openapi.json'
     )
-    
+
     begin {
         $requestPath = $OpenAPI_Path
     }
-    
+
     process {
 
         try {
@@ -58,6 +58,6 @@ function Get-DBPoolOpenAPI {
         $response
 
     }
-    
+
     end {}
 }

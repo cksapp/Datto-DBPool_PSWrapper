@@ -1,10 +1,10 @@
-function Import-DBPoolModuleSettings {
+function Import-DBPoolModuleSetting {
 <#
     .SYNOPSIS
         Imports the DBPool BaseURI, API Key, & JSON configuration information to the current session.
 
     .DESCRIPTION
-        The Import-DBPoolModuleSettings cmdlet imports the DBPool BaseURI, API Key, & JSON configuration
+        The Import-DBPoolModuleSetting cmdlet imports the DBPool BaseURI, API Key, & JSON configuration
         information stored in the DBPool configuration file to the users current session.
 
         By default the configuration file is stored in the following location:
@@ -29,18 +29,18 @@ function Import-DBPoolModuleSettings {
         N/A
 
     .EXAMPLE
-        Import-DBPoolModuleSettings
+        Import-DBPoolModuleSetting
 
-        Validates that the configuration file created with the Export-DBPoolModuleSettings cmdlet exists
+        Validates that the configuration file created with the Export-DBPoolModuleSetting cmdlet exists
         then imports the stored data into the current users session.
 
         The default location of the DBPool configuration file is:
             $env:USERPROFILE\DBPoolAPI\config.psd1
 
     .EXAMPLE
-        Import-DBPoolModuleSettings -DBPoolConfPath C:\DBPoolAPI -DBPoolConfFile MyConfig.psd1
+        Import-DBPoolModuleSetting -DBPoolConfPath C:\DBPoolAPI -DBPoolConfFile MyConfig.psd1
 
-        Validates that the configuration file created with the Export-DBPoolModuleSettings cmdlet exists
+        Validates that the configuration file created with the Export-DBPoolModuleSetting cmdlet exists
         then imports the stored data into the current users session.
 
         The location of the DBPool configuration file in this example is:

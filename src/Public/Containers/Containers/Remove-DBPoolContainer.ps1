@@ -48,7 +48,7 @@ function Remove-DBPoolContainer {
 
         [switch]$Force
     )
-    
+
     begin {
 
         $method = 'DELETE'
@@ -61,7 +61,7 @@ function Remove-DBPoolContainer {
         }
 
     }
-    
+
     process {
 
         foreach ($n in $Id) {
@@ -80,7 +80,7 @@ function Remove-DBPoolContainer {
 
             if ($Force -or $PSCmdlet.ShouldProcess("Container [ ID: $n ]", 'Destroy')) {
                 Write-Verbose "Destroying Container [ ID: $n, Name: $containerName ]"
-                
+
                 try {
                     $response = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath -ErrorAction Stop
                 }
@@ -93,8 +93,8 @@ function Remove-DBPoolContainer {
                 }
             }
         }
-        
+
     }
-    
+
     end {}
 }

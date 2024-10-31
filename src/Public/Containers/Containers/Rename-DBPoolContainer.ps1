@@ -9,10 +9,10 @@ function Rename-DBPoolContainer {
     .PARAMETER Id
         The ID of the container to update.
         This accepts an array of integers.
-    
+
     .PARAMETER Name
         The new name for the container.
-    
+
     .INPUTS
         [int] - The ID of the container to update.
         [string] - The new name for the container.
@@ -48,7 +48,7 @@ function Rename-DBPoolContainer {
         [Parameter(Mandatory = $true, Position = 1, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [string]$Name
     )
-    
+
     begin {
 
         $method = 'PATCH'
@@ -64,7 +64,7 @@ function Rename-DBPoolContainer {
         }
 
     }
-    
+
     process {
 
         $response = foreach ($n in $Id) {
@@ -102,6 +102,6 @@ function Rename-DBPoolContainer {
         $response
 
     }
-    
+
     end {}
 }

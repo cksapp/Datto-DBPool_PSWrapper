@@ -80,7 +80,7 @@ function ConvertTo-DBPoolQueryString {
         if ($uri_Filter) {
             ForEach ( $Key in $uri_Filter.GetEnumerator() ) {
 
-                if ( $excludedParameters -contains $Key.Key ){$null} 
+                if ( $excludedParameters -contains $Key.Key ){$null}
                 elseif ( $Key.Value.GetType().IsArray ) {
                     Write-Verbose "[ $($Key.Key) ] is an array parameter"
                     foreach ($Value in $Key.Value) {

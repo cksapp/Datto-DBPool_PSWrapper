@@ -42,11 +42,11 @@ function Get-DBPoolUser {
         [Parameter(ParameterSetName = 'User', Mandatory = $false, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [string[]]$Username
     )
-    
+
     begin {
         $method = 'GET'
     }
-    
+
     process {
 
         if ($null -eq $Username -or $Username.Count -eq 0) {
@@ -85,6 +85,6 @@ function Get-DBPoolUser {
         $response
 
     }
-    
+
     end {}
 }

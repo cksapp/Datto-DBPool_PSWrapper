@@ -45,15 +45,15 @@ function Add-DBPoolApiKey {
         [ValidateNotNullOrEmpty()]
         [securestring]$apiKey
     )
-    
+
     begin {}
-    
+
     process {
-    
+
         Write-Verbose "Setting the DBPool API Key."
         Set-Variable -Name "DBPool_ApiKey" -Value $apiKey -Option ReadOnly -Scope global -Force
 
     }
-    
+
     end {}
 }

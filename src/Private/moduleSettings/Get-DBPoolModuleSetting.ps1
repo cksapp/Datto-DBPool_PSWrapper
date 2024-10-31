@@ -1,10 +1,10 @@
-function Get-DBPoolModuleSettings {
+function Get-DBPoolModuleSetting {
 <#
     .SYNOPSIS
         Gets the saved DBPool configuration settings
 
     .DESCRIPTION
-        The Get-DBPoolModuleSettings cmdlet gets the saved DBPool configuration settings
+        The Get-DBPoolModuleSetting cmdlet gets the saved DBPool configuration settings
         from the local system.
 
         By default the configuration file is stored in the following location:
@@ -32,16 +32,16 @@ function Get-DBPoolModuleSettings {
         [void] - No output is returned.
 
     .EXAMPLE
-        Get-DBPoolModuleSettings
+        Get-DBPoolModuleSetting
 
         Gets the contents of the configuration file that was created with the
-        Export-DBPoolModuleSettings
+        Export-DBPoolModuleSetting
 
         The default location of the DBPool configuration file is:
             $env:USERPROFILE\DBPoolAPI\config.psd1
 
     .EXAMPLE
-        Get-DBPoolModuleSettings -DBPoolConfPath C:\DBPoolAPI -DBPoolConfFile MyConfig.psd1 -openConfFile
+        Get-DBPoolModuleSetting -DBPoolConfPath C:\DBPoolAPI -DBPoolConfFile MyConfig.psd1 -openConfFile
 
         Opens the configuration file from the defined location in the default editor
 

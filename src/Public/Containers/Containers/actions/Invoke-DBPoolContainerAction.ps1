@@ -8,7 +8,7 @@ function Invoke-DBPoolContainerAction {
 
     .PARAMETER Id
         The ID(s) of the container(s) to perform the action on.
-    
+
     .PARAMETER Action
         The action to perform on the container. Valid actions are: refresh, schema-merge, start, restart, or stop.
 
@@ -187,7 +187,7 @@ function Invoke-DBPoolContainerAction {
                     Write-Verbose "Performing action [ $Action ] on Container [ ID: $n, Name: $containerName ]"
 
                     $runspace = [powershell]::Create().AddScript({
-                            param ($method, $requestPath, $modulePath, $baseUri, $apiKey, $action, $containerId)
+                            param ($method, $requestPath, $modulePath, $baseUri, $apiKey, $containerId)
 
                             Import-Module $modulePath
                             Add-DBPoolBaseURI -base_uri $baseUri
@@ -211,7 +211,7 @@ function Invoke-DBPoolContainerAction {
                                     ContainerId  = $containerId
                                 }
                             }
-                        }).AddArgument($method).AddArgument($requestPath).AddArgument($modulePath).AddArgument($Global:DBPool_Base_URI).AddArgument($Global:DBPool_ApiKey).AddArgument($Action).AddArgument($n)
+                        }).AddArgument($method).AddArgument($requestPath).AddArgument($modulePath).AddArgument($DBPool_Base_URI).AddArgument($DBPool_ApiKey).AddArgument($n)
 
                     $runspaceQueue.Enqueue([PSCustomObject]@{ Pipe = $runspace; ContainerId = $n; Status = $runspace.BeginInvoke(); StartTime = [datetime]::Now })
                 }

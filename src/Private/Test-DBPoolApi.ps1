@@ -27,19 +27,21 @@ function Test-DBPoolApi {
 
     .EXAMPLE
         Test-DBPoolApi -base_uri "https://api.example.com"
+
+        Checks the availability of the API at https://api.example.com
 #>
 
     [CmdletBinding()]
     [OutputType([System.Boolean], ParameterSetName = "API_Available")]
     param (
         [Parameter(Position = 0, ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $True, HelpMessage = "The URL of the API to be checked.")]
-        [string]$base_uri = $Global:DBPool_Base_URI,
+        [string]$base_uri = $DBPool_Base_URI,
 
         [Parameter(Position = 1, Mandatory = $false)]
         [string]$resource_Uri = '/api/docs/openapi.json',
 
         [Parameter(Position = 2, Mandatory = $false, ValueFromPipeline = $True, ValueFromPipelineByPropertyName = $True, HelpMessage = "API Key for authorization.")]
-        [securestring]$apiKey = $Global:DBPool_ApiKey
+        [securestring]$apiKey = $DBPool_ApiKey
     )
 
     begin {

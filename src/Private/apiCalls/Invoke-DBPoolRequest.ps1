@@ -180,7 +180,7 @@ function Invoke-DBPoolRequest {
             }
 
         } catch {
-            
+
             $exceptionError = $_
             Write-Warning 'The [ DBPool_invokeParameters, DBPool_queryString, DBPool_appRequestId, & DBPool_CmdletNameParameters ] variables can provide extra details'
 

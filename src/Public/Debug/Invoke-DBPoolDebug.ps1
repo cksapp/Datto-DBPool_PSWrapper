@@ -13,12 +13,13 @@ function Invoke-DBPoolDebug {
 
     .INPUTS
         N/A
-    
+
     .OUTPUTS
         [System.Management.Automation.ErrorRecord] - Returns an example exception response from the DBPool API.
 
     .EXAMPLE
         Invoke-DBPoolDebug -method GET
+
         Sends a 'GET' request to the DBPool API and returns a '418' exception response error.
 
     .NOTES
@@ -36,11 +37,11 @@ function Invoke-DBPoolDebug {
         [ValidateSet('DELETE', 'GET', 'PATCH', 'POST')]
         [string]$method = 'GET'
     )
-    
+
     begin {
         $requestPath = '/api/docs/error'
     }
-    
+
     process {
 
         Write-Debug "Invoking DBPool Debug Exception API with method [ $method ]"
@@ -59,6 +60,6 @@ function Invoke-DBPoolDebug {
         $response
 
     }
-    
+
     end {}
 }

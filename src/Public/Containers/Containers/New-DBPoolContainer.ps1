@@ -6,7 +6,7 @@ function New-DBPoolContainer {
     .DESCRIPTION
         This function creates a new container in the DBPool based on the provided container name and parent container information.
         The ContainerName parameter is mandatory, and at least one of the parent parameters (ParentId, ParentName, or ParentDefaultDatabase) must be specified.
-    
+
     .PARAMETER ContainerName
         The name for the new container.
 
@@ -18,6 +18,9 @@ function New-DBPoolContainer {
 
     .PARAMETER ParentDefaultDatabase
         The default database of the parent container to clone.
+
+    .PARAMETER Force
+        Force the operation without confirmation.
 
     .INPUTS
         [string] - The name for the new container.
@@ -45,7 +48,7 @@ function New-DBPoolContainer {
         N/A
 #>
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Low')]
     [OutputType([PSCustomObject])]
     param (
         [Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
@@ -62,7 +65,10 @@ function New-DBPoolContainer {
 
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [Alias("DefaultDatabase")]
-        [string]$ParentDefaultDatabase
+        [string]$ParentDefaultDatabase,
+
+        [Parameter(Mandatory = $false, DontShow = $true)]
+        [Switch]$Force
     )
 
     begin {
@@ -96,21 +102,23 @@ function New-DBPoolContainer {
         }
 
         try {
-            $response = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath -data $body -ErrorAction Stop
+            if ($Force -or $PSCmdlet.ShouldProcess("Container Name: $ContainerName", "Create new Container")) {
+                $response = Invoke-DBPoolRequest -Method $method -resource_Uri $requestPath -data $body -ErrorAction Stop
+            }
+
+            if ($null -ne $response) {
+                $response = $response | ConvertFrom-Json
+            }
         }
         catch {
             Write-Error $_
-        }
-
-        if ($null -ne $response) {
-            $response = $response | ConvertFrom-Json
         }
 
         # Return the response
         $response
 
     }
-    
+
     end {}
 
 }

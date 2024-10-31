@@ -55,7 +55,7 @@ function Test-DBPoolApiKey {
 
             $api_key = $(Get-DBPoolAPIKey -AsPlainText).'API_Key'
             $DBPool_Headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
-            
+
             $DBPool_Headers.Add("Content-Type", 'application/json')
             $DBPool_Headers.Add('X-App-Apikey', $api_key)
 

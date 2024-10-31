@@ -16,10 +16,10 @@ function Invoke-DBPoolContainerAccess {
 
     .PARAMETER GetAccess
         Gets the current access to a container by ID for the given username.
-    
+
     .PARAMETER AddAccess
         Adds access to a container by ID for the given username.
-    
+
     .PARAMETER RemoveAccess
         Removes access to a container by ID for the given username.
 
@@ -115,7 +115,7 @@ function Invoke-DBPoolContainerAccess {
                 }
 
                 if ($method) {
-                    
+
                     try {
                         $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath -ErrorAction Stop
                     }
@@ -155,7 +155,7 @@ function Invoke-DBPoolContainerAccess {
         $response
 
     }
-    
+
     end {}
 
 }

@@ -109,7 +109,7 @@ function Get-DBPoolContainer {
     .NOTES
         The -Name, and -DefaultDatabase parameters are not native endpoints of the DBPool API.
         This is a custom function which uses 'Where-Object', along with the optional -NotLike parameter to return the response using the provided filter.
-        
+
         If no match is found an error is output, and the original response is returned.
 
     .LINK
@@ -170,7 +170,7 @@ function Get-DBPoolContainer {
         }
 
         # Internal Function to filter the response by Container Name or DefaultDatabase if provided
-        function Select-DBPoolContainers {
+        function Select-DBPoolContainer {
             param(
                 [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
                 [PSObject[]]$Container,
@@ -185,79 +185,81 @@ function Get-DBPoolContainer {
                 [switch]$NotLike
             )
 
-            # Verbose filter output
-            $Filter = @()
-            $filterParameter = @()
+            process {
+                # Verbose filter output
+                $Filter = @()
+                $filterParameter = @()
 
-            if ($Name) {
-                $Filter += 'Name'
-                $filterParameter += ($Name -join ', ')
-            }
-            if ($DefaultDatabase) {
-                $Filter += 'DefaultDatabase'
-                $filterParameter += ($DefaultDatabase -join ', ')
-            }
-
-            $filterHeader = $Filter -join '; '
-            $filterValues = @()
-
-            if ($Name) {
-                $filterValues += ($Name -join ', ')
-            }
-            if ($DefaultDatabase) {
-                $filterValues += ($DefaultDatabase -join ', ')
-            }
-
-            if ($NotLike) {
-                Write-Verbose "Excluding response by containers matching $filterHeader [ $($filterValues -join '; ') ]"
-            } else {
-                Write-Verbose "Filtering response by containers matching $filterHeader [ $($filterValues -join '; ') ]"
-            }
-
-            # Filter containers
-            $FilteredContainers = $Container | Where-Object {
-                $matchesName = $true
-                $matchesDB = $true
-
-                # Handle Name filtering
                 if ($Name) {
-                    $matchesName = $false
-                    foreach ($n in $Name) {
-                        if ($_.name -like $n) {
-                            $matchesName = $true
-                            break
-                        }
-                    }
-                    if ($NotLike) {
-                        $matchesName = -not $matchesName
-                    }
+                    $Filter += 'Name'
+                    $filterParameter += ($Name -join ', ')
                 }
-
-                # Handle DefaultDatabase filtering
                 if ($DefaultDatabase) {
-                    $matchesDB = $false
-                    foreach ($db in $DefaultDatabase) {
-                        if ($_.defaultDatabase -like $db) {
-                            $matchesDB = $true
-                            break
-                        }
-                    }
-                    if ($NotLike) {
-                        $matchesDB = -not $matchesDB
-                    }
+                    $Filter += 'DefaultDatabase'
+                    $filterParameter += ($DefaultDatabase -join ', ')
                 }
 
-                # Return true if both conditions match
-                $matchesName -and $matchesDB
-            }
+                $filterHeader = $Filter -join '; '
+                $filterValues = @()
 
-            # Output filtered containers
-            if (!$FilteredContainers) {
-                Write-Warning "No containers found matching the $filterHeader filter parameter [ $($filterValues -join '; ') ]. Returning all containers."
-                return $Container
-            }
+                if ($Name) {
+                    $filterValues += ($Name -join ', ')
+                }
+                if ($DefaultDatabase) {
+                    $filterValues += ($DefaultDatabase -join ', ')
+                }
 
-            return $FilteredContainers
+                if ($NotLike) {
+                    Write-Verbose "Excluding response by containers matching $filterHeader [ $($filterValues -join '; ') ]"
+                } else {
+                    Write-Verbose "Filtering response by containers matching $filterHeader [ $($filterValues -join '; ') ]"
+                }
+
+                # Filter containers
+                $FilteredContainers = $Container | Where-Object {
+                    $matchesName = $true
+                    $matchesDB = $true
+
+                    # Handle Name filtering
+                    if ($Name) {
+                        $matchesName = $false
+                        foreach ($n in $Name) {
+                            if ($_.name -like $n) {
+                                $matchesName = $true
+                                break
+                            }
+                        }
+                        if ($NotLike) {
+                            $matchesName = -not $matchesName
+                        }
+                    }
+
+                    # Handle DefaultDatabase filtering
+                    if ($DefaultDatabase) {
+                        $matchesDB = $false
+                        foreach ($db in $DefaultDatabase) {
+                            if ($_.defaultDatabase -like $db) {
+                                $matchesDB = $true
+                                break
+                            }
+                        }
+                        if ($NotLike) {
+                            $matchesDB = -not $matchesDB
+                        }
+                    }
+
+                    # Return true if both conditions match
+                    $matchesName -and $matchesDB
+                }
+
+                # Output filtered containers
+                if (!$FilteredContainers) {
+                    Write-Warning "No containers found matching the $filterHeader filter parameter [ $($filterValues -join '; ') ]. Returning all containers."
+                    return $Container
+                }
+
+                return $FilteredContainers
+            }
         }
 
     }
@@ -313,7 +315,7 @@ function Get-DBPoolContainer {
         # Filter the response by Name or DefaultDatabase if provided using internal helper function
         if ($PSBoundParameters.ContainsKey('Name') -or $PSBoundParameters.ContainsKey('DefaultDatabase')) {
             try {
-                $response = Select-DBPoolContainers -Container $response -Name $Name -DefaultDatabase $DefaultDatabase -NotLike:$NotLike -ErrorAction Stop
+                $response = Select-DBPoolContainer -Container $response -Name $Name -DefaultDatabase $DefaultDatabase -NotLike:$NotLike -ErrorAction Stop
             } catch {
                 Write-Error $_
             }

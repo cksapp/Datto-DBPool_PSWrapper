@@ -1,10 +1,10 @@
-function Remove-DBPoolModuleSettings {
+function Remove-DBPoolModuleSetting {
 <#
     .SYNOPSIS
         Removes the stored DBPool configuration folder.
 
     .DESCRIPTION
-        The Remove-DBPoolModuleSettings cmdlet removes the DBPool folder and its files.
+        The Remove-DBPoolModuleSetting cmdlet removes the DBPool folder and its files.
         This cmdlet also has the option to remove sensitive DBPool variables as well.
 
         By default configuration files are stored in the following location and will be removed:
@@ -28,7 +28,7 @@ function Remove-DBPoolModuleSettings {
         [void] - No output is returned.
 
     .EXAMPLE
-        Remove-DBPoolModuleSettings
+        Remove-DBPoolModuleSetting
 
         Checks to see if the default configuration folder exists and removes it if it does.
 
@@ -36,7 +36,7 @@ function Remove-DBPoolModuleSettings {
             $env:USERPROFILE\DBPoolAPI
 
     .EXAMPLE
-        Remove-DBPoolModuleSettings -DBPoolConfPath C:\DBPoolAPI -andVariables
+        Remove-DBPoolModuleSetting -DBPoolConfPath C:\DBPoolAPI -andVariables
 
         Checks to see if the defined configuration folder exists and removes it if it does.
         If sensitive DBPool variables exist then they are removed as well.
