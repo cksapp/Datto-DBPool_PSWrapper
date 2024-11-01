@@ -6,6 +6,8 @@ properties {
     $PSBPreference.Build.CompileModule = $true
     $PSBPreference.Build.CompileScriptHeader = [System.Environment]::NewLine + '#Region'
     $PSBPreference.Build.CompileScriptFooter = "#EndRegion"
+    # May need to exclude some files from the build and then concatenate them at end of build for MacOS
+#    $PSBPreference.Build.Exclude = @('Initialize-DBPoolModuleSettings.ps1')
     $PSBPreference.Help.DefaultLocale = 'en-US'
     $PSBPreference.Test.OutputFile = 'out/testResults.xml'
     $PSBPreference.Test.ImportModule = $true
@@ -35,6 +37,8 @@ Task UpdateFunctionsToExport -depends StageFiles {
         Write-Host 'Module manifest updated successfully'
     }
 }
+
+# Task AddModuleData {}
 
 Task Build -FromModule PowerShellBuild -depends @('StageFiles', 'UpdateFunctionsToExport', 'BuildHelp')
 
