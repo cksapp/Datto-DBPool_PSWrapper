@@ -75,44 +75,7 @@
     # FormatsToProcess = @()
 
     # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
-    <#NestedModules = @(
-        'Private/Set-DBPoolApiParameters.ps1',
-        'Private/Test-DBPoolApi.ps1',
-
-        'Private/apiCalls/ConvertTo-DBPoolQueryString.ps1',
-        'Private/apiCalls/Get-DBPoolMetaData.ps1',
-        'Private/apiCalls/Invoke-DBPoolRequest.ps1',
-
-        'Private/apiKeys/Add-DBPoolApiKey.ps1',
-        'Private/apiKeys/Get-DBPoolApiKey.ps1',
-        'Private/apiKeys/Remove-DBPoolApiKey.ps1',
-        'Private/apiKeys/Test-DBPoolApiKey.ps1',
-
-        'Private/baseUri/Add-DBPoolBaseUri.ps1',
-        'Private/baseUri/Get-DBPoolBaseUri.ps1',
-        'Private/baseUri/Remove-DBPoolBaseUri.ps1',
-
-        'Private/moduleSettings/Export-DBPoolModuleSettings.ps1',
-        'Private/moduleSettings/Get-DBPoolModuleSettings.ps1',
-        'Private/moduleSettings/Import-DBPoolModuleSettings.ps1',
-        'Private/moduleSettings/Initialize-DBPoolModuleSettings.ps1',
-        'Private/moduleSettings/Remove-DBPoolModuleSettings.ps1',
-
-        'Public/Containers/Containers/Get-DBPoolContainer.ps1',
-        'Public/Containers/Containers/New-DBPoolContainer.ps1',
-        'Public/Containers/Containers/Remove-DBPoolContainer.ps1',
-        'Public/Containers/Containers/Rename-DBPoolContainer.ps1',
-
-        'Public/Containers/Containers/access/Invoke-DBPoolContainerAccess.ps1',
-
-        'Public/Containers/Containers/actions/Invoke-DBPoolContainerAction.ps1',
-
-        'Public/Debug/Invoke-DBPoolDebug.ps1',
-
-        'Public/OpenAPI/Get-DBPoolOpenAPI.ps1',
-
-        'Public/Users/Get-DBPoolUser.ps1'
-    )#>
+    # NestedModules = @()
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
     FunctionsToExport = @('Invoke-DBPoolContainerAccess','Invoke-DBPoolContainerAction','Get-DBPoolContainer','New-DBPoolContainer','Remove-DBPoolContainer','Rename-DBPoolContainer','Invoke-DBPoolDebug','Get-DBPoolOpenAPI','Get-DBPoolUser','ConvertTo-DBPoolQueryString','Get-DBPoolMetaData','Invoke-DBPoolRequest','Add-DBPoolApiKey','Get-DBPoolApiKey','Remove-DBPoolApiKey','Test-DBPoolApiKey','Add-DBPoolBaseURI','Get-DBPoolBaseURI','Remove-DBPoolBaseURI','Export-DBPoolModuleSetting','Get-DBPoolModuleSetting','Import-DBPoolModuleSetting','Initialize-DBPoolModuleSetting','Remove-DBPoolModuleSetting','Set-DBPoolApiParameter','Test-DBPoolApi')

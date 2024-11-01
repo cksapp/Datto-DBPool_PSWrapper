@@ -128,7 +128,6 @@ There are some endpoints which are not added yet in the PowerShell module, namel
 https://github.com/cksapp/Datto-DBPool_PSWrapper
 
 # KEYWORDS
-{{List alternate names or titles for this topic that readers might use.}}
 
 - Datto_DBPool
 - Datto_DBPool_API
