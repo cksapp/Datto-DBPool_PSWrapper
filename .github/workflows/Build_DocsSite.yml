@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - PsStucco
+      - main
     paths:
       - docs/**
       - mkdocs.yml
@@ -32,6 +32,6 @@ jobs:
           path: .cache
 
       - name: MkDocs GH-Deploy
-        if: github.ref == 'refs/heads/PsStucco'
+        if: github.ref == 'refs/heads/main'
         shell: pwsh
         run: .\build.ps1 -Bootstrap -Task PublishDocs
