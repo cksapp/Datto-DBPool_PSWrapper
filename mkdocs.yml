@@ -1,0 +1,4 @@
+site_name: Datto-DBPool_API
+site_dir: site
+repo_url: https://github.com/cksapp/Datto-DBPool_PSWrapper
+theme: material

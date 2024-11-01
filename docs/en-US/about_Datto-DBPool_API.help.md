@@ -1,30 +1,22 @@
-# Datto-DBPool_API PowerShell Module
+# Datto-DBPool_API
+
+## about_Datto-DBPool_API
+
+# SHORT DESCRIPTION
 
 This PowerShell Module acts as a wrapper for the internal Datto DBPool API.
+
+# LONG DESCRIPTION
+
+This Powershell module acts as a wrapper for the Datto DBPool API, and is designed to make it easier to use the internal DBPool API in your PowerShell scripts. As much of the hard work is done, you can develop your scripts faster and be more effecient.
 
 There is no need to go through a big learning curve spending lots of time working out how to use the Datto DBPool API.
 
 Simply load the module, enter your API key and get results within minutes!
 
-## Overview
+# EXAMPLES
 
-This Powershell module acts as a wrapper for the Datto DBPool API, and is designed to make it easier to use the internal DBPool API in your PowerShell scripts. As much of the hard work is done, you can develop your scripts faster and be more effecient.
-
-## Installation
-
-Install using PowerShellGet
-```PowerShell
-Install-Module -Name 'Datto-DBPool_API'
-```
-
-Install using [PowerShellGet v3.0](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.psresourceget/about/about_psresourceget?view=powershellget-3.x) aka '[PSResourceGet](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.psresourceget/about/about_psresourceget?view=powershellget-3.x)'
-```Powershell
-Install-PSResource -Name 'Datto-DBPool_API'
-```
-
-## Examples
-
-### Add your API key
+Add your API key
 
 ```PowerShell
 Add-DBPoolApiKey
@@ -35,7 +27,7 @@ Supply values for the following parameters:
 apiKey: ************************************
 ```
 
-### Get list of containers
+Get list of containers
 
 ```PowerShell
 Get-DBPoolContainer
@@ -110,7 +102,8 @@ node            : @{id=11; name=use1-dbpoolstorage-10; ip=10.40.144.25; fqdn=use
 parent          : @{id=14; image=harbor.datto.net/dbeng/percona-server-dbpool:5.7.39; name=legoDB; defaultDatabase=legoCloud; node=; useNewSync=True; sync=False}
 users           : {@{id=2111; username=first.last; displayName=John Doe; email=username@datto.com}}
 ```
-### Refresh all containers
+
+Refresh all containers
 
 ```PowerShell
 Invoke-DBPoolContainerAction -Action refresh -Id (Get-DBPoolContainer).Id -Force
@@ -122,3 +115,22 @@ Success: Invoking Action [ restart ] on Container [ ID: 987654 ].
 Success: Invoking Action [ restart ] on Container [ ID: 135790 ].
 Success: Invoking Action [ restart ] on Container [ ID: 102030 ].
 ```
+
+# NOTE
+
+N/A
+
+# TROUBLESHOOTING NOTE
+
+There are some endpoints which are not added yet in the PowerShell module, namely those that are not user accessible.
+
+# SEE ALSO
+https://github.com/cksapp/Datto-DBPool_PSWrapper
+
+# KEYWORDS
+{{List alternate names or titles for this topic that readers might use.}}
+
+- Datto_DBPool
+- Datto_DBPool_API
+- Datto-Internal
+- DBPool
