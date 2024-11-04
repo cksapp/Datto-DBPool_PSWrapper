@@ -21,3 +21,5 @@ theme:
         name: Light mode
       primary: blue
       accent: deep orange
+  features:
+    - content.code.copy

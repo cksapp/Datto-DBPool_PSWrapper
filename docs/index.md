@@ -12,11 +12,15 @@ This Powershell module acts as a wrapper for the Datto DBPool API, and is design
 
 ## Prerequisites
 
-First get your personal API key from the DBPool web Url [https://dbpool.datto.net/web/self](https://dbpool.datto.net/web/self)
+First get your personal API key from the DBPool web Url
+
+- [https://dbpool.datto.net/web/self](https://dbpool.datto.net/web/self)
 
 You will want to store this somewhere in a safe location, such as a password manager or other secret store.
 
 ## Installation
+
+> Default
 
 Install using PowerShellGet
 
@@ -24,7 +28,12 @@ Install using PowerShellGet
 Install-Module -Name 'Datto-DBPool_API'
 ```
 
+---
+
+> Newer
+
 Install using [PowerShellGet v3.0](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.psresourceget/about/about_psresourceget?view=powershellget-3.x) aka '[PSResourceGet](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.psresourceget/about/about_psresourceget?view=powershellget-3.x)'
+
 
 ```Powershell
 Install-PSResource -Name 'Datto-DBPool_API'
@@ -36,7 +45,9 @@ Install-PSResource -Name 'Datto-DBPool_API'
 
 ```PowerShell
 Add-DBPoolApiKey
+```
 
+```PowerShell
 cmdlet Add-DBPoolApiKey at command pipeline position 1
 Supply values for the following parameters:
 (Type !? for Help.)
