@@ -31,7 +31,12 @@ jobs:
           key: ${{ runner.os }}-mkdocs
           path: .cache
 
+      - name: Setup PowerShell
+        uses: bjompen/UpdatePWSHAction@v1.0.0
+        with:
+          FixedVersion: '7.3.12'
+
       - name: MkDocs GH-Deploy
         if: github.ref == 'refs/heads/main'
         shell: pwsh
-        run: .\build.ps1 -Bootstrap -Task PublishDocs
+        run: ./build.ps1 -Bootstrap -Task PublishDocs

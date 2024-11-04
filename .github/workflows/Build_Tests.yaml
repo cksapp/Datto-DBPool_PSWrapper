@@ -1,6 +1,9 @@
 name: Build_Tests
+
 on: [push, pull_request]
+
 jobs:
+
   test:
     name: Run Tests
     runs-on: ${{ matrix.os }}
@@ -8,13 +11,15 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
+
     steps:
     - uses: actions/checkout@v4
+
     - name: Setup PowerShell
       uses: bjompen/UpdatePWSHAction@v1.0.0
       with:
         FixedVersion: '7.3.12'
+
     - name: Test
       shell: pwsh
       run: ./build.ps1 -Task Test -Bootstrap
-
