@@ -1,6 +1,7 @@
 site_name: Datto-DBPool_API
 site_url: https://cksapp.github.io/Datto-DBPool_PSWrapper/
 site_description: PowerShell module for internal Datto DBPool API
+site_dir: site
 theme:
   name: material
   palette:
