@@ -10,6 +10,12 @@ Simply load the module, enter your API key and get results within minutes!
 
 This Powershell module acts as a wrapper for the Datto DBPool API, and is designed to make it easier to use the internal DBPool API in your PowerShell scripts. As much of the hard work is done, you can develop your scripts faster and be more effecient.
 
+## Prerequisites
+
+First get your personal API key from the DBPool web Url [https://dbpool.datto.net/web/self](https://dbpool.datto.net/web/self)
+
+You will want to store this somewhere in a safe location, such as a password manager or other secret store.
+
 ## Installation
 
 Install using PowerShellGet
