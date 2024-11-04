@@ -2,11 +2,11 @@
 
 ## about_Datto-DBPool_API
 
-# SHORT DESCRIPTION
+### SHORT DESCRIPTION
 
 This PowerShell Module acts as a wrapper for the internal Datto DBPool API.
 
-# LONG DESCRIPTION
+### LONG DESCRIPTION
 
 This Powershell module acts as a wrapper for the Datto DBPool API, and is designed to make it easier to use the internal DBPool API in your PowerShell scripts. As much of the hard work is done, you can develop your scripts faster and be more effecient.
 
@@ -14,7 +14,7 @@ There is no need to go through a big learning curve spending lots of time workin
 
 Simply load the module, enter your API key and get results within minutes!
 
-# EXAMPLES
+### EXAMPLES
 
 Add your API key
 
@@ -116,18 +116,19 @@ Success: Invoking Action [ restart ] on Container [ ID: 135790 ].
 Success: Invoking Action [ restart ] on Container [ ID: 102030 ].
 ```
 
-# NOTE
+### NOTE
 
 N/A
 
-# TROUBLESHOOTING NOTE
+### TROUBLESHOOTING NOTE
 
 There are some endpoints which are not added yet in the PowerShell module, namely those that are not user accessible.
 
-# SEE ALSO
-https://github.com/cksapp/Datto-DBPool_PSWrapper
+### SEE ALSO
 
-# KEYWORDS
+[https://github.com/cksapp/Datto-DBPool_PSWrapper](https://github.com/cksapp/Datto-DBPool_PSWrapper)
+
+### KEYWORDS
 
 - Datto_DBPool
 - Datto_DBPool_API

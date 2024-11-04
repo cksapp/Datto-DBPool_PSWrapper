@@ -1,4 +1,22 @@
 site_name: Datto-DBPool_API
-site_dir: site
+site_url: https://cksapp.github.io/Datto-DBPool_PSWrapper/
+site_description: PowerShell module for internal Datto DBPool API
+theme:
+  name: material
+  palette:
+    # Dark Mode
+    - scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Dark mode
+      primary: indigo
+      accent: deep purple
+
+    # Light Mode
+    - scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Light mode
+      primary: blue
+      accent: deep orange
 repo_url: https://github.com/cksapp/Datto-DBPool_PSWrapper
-theme: material
