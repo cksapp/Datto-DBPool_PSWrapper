@@ -1495,15 +1495,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#-progressaction" class="md-nav__link">
-    <span class="md-ellipsis">
-      -ProgressAction
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#commonparameters" class="md-nav__link">
     <span class="md-ellipsis">
       CommonParameters
@@ -2278,15 +2269,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#-progressaction" class="md-nav__link">
-    <span class="md-ellipsis">
-      -ProgressAction
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#commonparameters" class="md-nav__link">
     <span class="md-ellipsis">
       CommonParameters
@@ -2408,17 +2390,17 @@
 <h2 id="syntax">SYNTAX</h2>
 <h3 id="listcontainer-default">ListContainer (Default)</h3>
 <pre><code>Get-DBPoolContainer [-ListContainer] [[-Id] &lt;Int32[]&gt;] [-Name &lt;String[]&gt;] [-DefaultDatabase &lt;String[]&gt;]
- [-NotLike] [-ProgressAction &lt;ActionPreference&gt;] [&lt;CommonParameters&gt;]
+ [-NotLike] [&lt;CommonParameters&gt;]
 </code></pre>
 <h3 id="parentcontainer">ParentContainer</h3>
 <pre><code>Get-DBPoolContainer [-ParentContainer] [[-Id] &lt;Int32[]&gt;] [-Name &lt;String[]&gt;] [-DefaultDatabase &lt;String[]&gt;]
- [-NotLike] [-ProgressAction &lt;ActionPreference&gt;] [&lt;CommonParameters&gt;]
+ [-NotLike] [&lt;CommonParameters&gt;]
 </code></pre>
 <h3 id="childcontainer">ChildContainer</h3>
-<pre><code>Get-DBPoolContainer [-ChildContainer] [-ProgressAction &lt;ActionPreference&gt;] [&lt;CommonParameters&gt;]
+<pre><code>Get-DBPoolContainer [-ChildContainer] [&lt;CommonParameters&gt;]
 </code></pre>
 <h3 id="containerstatus">ContainerStatus</h3>
-<pre><code>Get-DBPoolContainer [-Id] &lt;Int32[]&gt; [-Status] [-ProgressAction &lt;ActionPreference&gt;] [&lt;CommonParameters&gt;]
+<pre><code>Get-DBPoolContainer [-Id] &lt;Int32[]&gt; [-Status] [&lt;CommonParameters&gt;]
 </code></pre>
 <h2 id="description">DESCRIPTION</h2>
 <p>This function retrieves container details from the DBPool API.</p>
@@ -2584,18 +2566,6 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-</code></pre>
-<h3 id="-progressaction">-ProgressAction</h3>
-<p>{{ Fill ProgressAction Description }}</p>
-<pre><code class="language-yaml">Type: ActionPreference
-Parameter Sets: (All)
-Aliases: proga
-
-Required: False
-Position: Named
-Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 </code></pre>
