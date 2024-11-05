@@ -42,7 +42,9 @@ function Get-DBPoolContainer {
 
     .INPUTS
         [int] - The ID of the container to get details for.
+
         [string] - The name of the container to get details for.
+
         [string] - The database of the container to get details for.
 
     .OUTPUTS
