@@ -2,206 +2,106 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/</loc>
-         <lastmod>2024-11-04</lastmod>
+         <lastmod>2024-11-05</lastmod>
     </url>
     <url>
          <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/Containers/Get-DBPoolContainer/</loc>
-         <lastmod>2024-11-04</lastmod>
+         <lastmod>2024-11-05</lastmod>
     </url>
     <url>
          <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/Containers/Invoke-DBPoolContainerAccess/</loc>
-         <lastmod>2024-11-04</lastmod>
+         <lastmod>2024-11-05</lastmod>
     </url>
     <url>
          <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/Containers/Invoke-DBPoolContainerAction/</loc>
-         <lastmod>2024-11-04</lastmod>
+         <lastmod>2024-11-05</lastmod>
     </url>
     <url>
          <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/Containers/New-DBPoolContainer/</loc>
-         <lastmod>2024-11-04</lastmod>
+         <lastmod>2024-11-05</lastmod>
     </url>
     <url>
          <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/Containers/Remove-DBPoolContainer/</loc>
-         <lastmod>2024-11-04</lastmod>
+         <lastmod>2024-11-05</lastmod>
     </url>
     <url>
          <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/Containers/Rename-DBPoolContainer/</loc>
-         <lastmod>2024-11-04</lastmod>
+         <lastmod>2024-11-05</lastmod>
     </url>
     <url>
          <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/Debug/Invoke-DBPoolDebug/</loc>
-         <lastmod>2024-11-04</lastmod>
+         <lastmod>2024-11-05</lastmod>
     </url>
     <url>
          <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/Internal/Add-DBPoolApiKey/</loc>
-         <lastmod>2024-11-04</lastmod>
+         <lastmod>2024-11-05</lastmod>
     </url>
     <url>
          <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/Internal/Add-DBPoolBaseURI/</loc>
-         <lastmod>2024-11-04</lastmod>
+         <lastmod>2024-11-05</lastmod>
     </url>
     <url>
          <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/Internal/ConvertTo-DBPoolQueryString/</loc>
-         <lastmod>2024-11-04</lastmod>
+         <lastmod>2024-11-05</lastmod>
     </url>
     <url>
          <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/Internal/Export-DBPoolModuleSetting/</loc>
-         <lastmod>2024-11-04</lastmod>
+         <lastmod>2024-11-05</lastmod>
     </url>
     <url>
          <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/Internal/Get-DBPoolApiKey/</loc>
-         <lastmod>2024-11-04</lastmod>
+         <lastmod>2024-11-05</lastmod>
     </url>
     <url>
          <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/Internal/Get-DBPoolBaseURI/</loc>
-         <lastmod>2024-11-04</lastmod>
+         <lastmod>2024-11-05</lastmod>
     </url>
     <url>
          <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/Internal/Get-DBPoolMetaData/</loc>
-         <lastmod>2024-11-04</lastmod>
+         <lastmod>2024-11-05</lastmod>
     </url>
     <url>
          <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/Internal/Get-DBPoolModuleSetting/</loc>
-         <lastmod>2024-11-04</lastmod>
+         <lastmod>2024-11-05</lastmod>
     </url>
     <url>
          <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/Internal/Import-DBPoolModuleSetting/</loc>
-         <lastmod>2024-11-04</lastmod>
+         <lastmod>2024-11-05</lastmod>
     </url>
     <url>
          <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/Internal/Invoke-DBPoolRequest/</loc>
-         <lastmod>2024-11-04</lastmod>
+         <lastmod>2024-11-05</lastmod>
     </url>
     <url>
          <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/Internal/Remove-DBPoolApiKey/</loc>
-         <lastmod>2024-11-04</lastmod>
+         <lastmod>2024-11-05</lastmod>
     </url>
     <url>
          <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/Internal/Remove-DBPoolBaseURI/</loc>
-         <lastmod>2024-11-04</lastmod>
+         <lastmod>2024-11-05</lastmod>
     </url>
     <url>
          <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/Internal/Remove-DBPoolModuleSetting/</loc>
-         <lastmod>2024-11-04</lastmod>
+         <lastmod>2024-11-05</lastmod>
     </url>
     <url>
          <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/Internal/Set-DBPoolApiParameter/</loc>
-         <lastmod>2024-11-04</lastmod>
+         <lastmod>2024-11-05</lastmod>
     </url>
     <url>
          <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/Internal/Test-DBPoolApi/</loc>
-         <lastmod>2024-11-04</lastmod>
+         <lastmod>2024-11-05</lastmod>
     </url>
     <url>
          <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/Internal/Test-DBPoolApiKey/</loc>
-         <lastmod>2024-11-04</lastmod>
+         <lastmod>2024-11-05</lastmod>
     </url>
     <url>
          <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/OpenAPI/Get-DBPoolOpenAPI/</loc>
-         <lastmod>2024-11-04</lastmod>
+         <lastmod>2024-11-05</lastmod>
     </url>
     <url>
          <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/Users/Get-DBPoolUser/</loc>
-         <lastmod>2024-11-04</lastmod>
-    </url>
-    <url>
-         <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/en-US/Add-DBPoolApiKey/</loc>
-         <lastmod>2024-11-04</lastmod>
-    </url>
-    <url>
-         <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/en-US/Add-DBPoolBaseURI/</loc>
-         <lastmod>2024-11-04</lastmod>
-    </url>
-    <url>
-         <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/en-US/ConvertTo-DBPoolQueryString/</loc>
-         <lastmod>2024-11-04</lastmod>
-    </url>
-    <url>
-         <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/en-US/Export-DBPoolModuleSetting/</loc>
-         <lastmod>2024-11-04</lastmod>
-    </url>
-    <url>
-         <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/en-US/Get-DBPoolApiKey/</loc>
-         <lastmod>2024-11-04</lastmod>
-    </url>
-    <url>
-         <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/en-US/Get-DBPoolBaseURI/</loc>
-         <lastmod>2024-11-04</lastmod>
-    </url>
-    <url>
-         <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/en-US/Get-DBPoolContainer/</loc>
-         <lastmod>2024-11-04</lastmod>
-    </url>
-    <url>
-         <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/en-US/Get-DBPoolMetaData/</loc>
-         <lastmod>2024-11-04</lastmod>
-    </url>
-    <url>
-         <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/en-US/Get-DBPoolModuleSetting/</loc>
-         <lastmod>2024-11-04</lastmod>
-    </url>
-    <url>
-         <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/en-US/Get-DBPoolOpenAPI/</loc>
-         <lastmod>2024-11-04</lastmod>
-    </url>
-    <url>
-         <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/en-US/Get-DBPoolUser/</loc>
-         <lastmod>2024-11-04</lastmod>
-    </url>
-    <url>
-         <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/en-US/Import-DBPoolModuleSetting/</loc>
-         <lastmod>2024-11-04</lastmod>
-    </url>
-    <url>
-         <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/en-US/Invoke-DBPoolContainerAccess/</loc>
-         <lastmod>2024-11-04</lastmod>
-    </url>
-    <url>
-         <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/en-US/Invoke-DBPoolContainerAction/</loc>
-         <lastmod>2024-11-04</lastmod>
-    </url>
-    <url>
-         <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/en-US/Invoke-DBPoolDebug/</loc>
-         <lastmod>2024-11-04</lastmod>
-    </url>
-    <url>
-         <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/en-US/Invoke-DBPoolRequest/</loc>
-         <lastmod>2024-11-04</lastmod>
-    </url>
-    <url>
-         <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/en-US/New-DBPoolContainer/</loc>
-         <lastmod>2024-11-04</lastmod>
-    </url>
-    <url>
-         <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/en-US/Remove-DBPoolApiKey/</loc>
-         <lastmod>2024-11-04</lastmod>
-    </url>
-    <url>
-         <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/en-US/Remove-DBPoolBaseURI/</loc>
-         <lastmod>2024-11-04</lastmod>
-    </url>
-    <url>
-         <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/en-US/Remove-DBPoolContainer/</loc>
-         <lastmod>2024-11-04</lastmod>
-    </url>
-    <url>
-         <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/en-US/Remove-DBPoolModuleSetting/</loc>
-         <lastmod>2024-11-04</lastmod>
-    </url>
-    <url>
-         <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/en-US/Rename-DBPoolContainer/</loc>
-         <lastmod>2024-11-04</lastmod>
-    </url>
-    <url>
-         <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/en-US/Set-DBPoolApiParameter/</loc>
-         <lastmod>2024-11-04</lastmod>
-    </url>
-    <url>
-         <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/en-US/Test-DBPoolApi/</loc>
-         <lastmod>2024-11-04</lastmod>
-    </url>
-    <url>
-         <loc>https://cksapp.github.io/Datto-DBPool_PSWrapper/en-US/Test-DBPoolApiKey/</loc>
-         <lastmod>2024-11-04</lastmod>
+         <lastmod>2024-11-05</lastmod>
     </url>
 </urlset>
