@@ -13,7 +13,7 @@ The Invoke-DBPoolContainerAction function is used to interact with various conta
 
 ## SYNTAX
 
-```PowerShell
+```
 Invoke-DBPoolContainerAction [-Action] <String> [-Id] <Int32[]> [-Force] [-TimeoutSeconds <Int32>]
  [-ThrottleLimit <Int32>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
@@ -171,7 +171,6 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS

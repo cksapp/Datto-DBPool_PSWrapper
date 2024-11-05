@@ -2435,14 +2435,19 @@ function Invoke-DBPoolContainerAction {
         [void] - No output is returned.
 
     .EXAMPLE
-        Invoke-DBPoolContainerAction -Id '12345' -Action 'restart'
+        Invoke-DBPoolContainerAction -Action 'restart' -Id '12345'
 
         This will restart the container with ID 12345
 
     .EXAMPLE
-        Invoke-DBPoolContainerAction -Id @( '12345', '56789' ) -Action 'refresh'
+        Invoke-DBPoolContainerAction refresh 12345,56789
 
         This will refresh the containers with ID 12345, and 56789
+
+    .EXAMPLE
+        Invoke-DBPoolContainerAction -Action refresh -Id (Get-DBPoolContainer).Id -Force
+
+        This will refresh all containers without prompting for confirmation.
 
     .NOTES
         Actions:
