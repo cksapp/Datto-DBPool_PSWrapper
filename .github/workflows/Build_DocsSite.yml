@@ -15,6 +15,8 @@ jobs:
   DeployDocs:
     name: Build and deploy docs
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/powershell:lts-7.2-ubuntu-22.04
     # Grant the minimum permissions necessary for this job to publish to GitHub Pages
     permissions:
       contents: write
@@ -30,11 +32,6 @@ jobs:
         with:
           key: ${{ runner.os }}-mkdocs
           path: .cache
-
-      - name: Setup PowerShell
-        uses: bjompen/UpdatePWSHAction@v1.0.0
-        with:
-          FixedVersion: '7.3.12'
 
       - name: MkDocs GH-Deploy
         if: github.ref == 'refs/heads/main'
