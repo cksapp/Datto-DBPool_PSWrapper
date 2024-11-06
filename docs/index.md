@@ -12,6 +12,11 @@ This Powershell module acts as a wrapper for the Datto DBPool API, and is design
 
 ## Prerequisites
 
+!!! info "[Install PowerShell 7](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows)"
+    While not strictly nessicary, installing the latest version of PowerShell 7 _(or greater depending on latest version)_ is _**highly**_ reccomended.
+
+    This module _should_**™** function with the default Windows PowerShell 5.1 though it is encouraged to install the latest version where possible as this has been built and tested against the latest stable release.
+
 First get your personal API key from the DBPool web Url
 
 - [https://dbpool.datto.net/web/self](https://dbpool.datto.net/web/self)
@@ -26,23 +31,25 @@ You will want to store this in a secure location, such as a password manager or 
 
 ## Installation
 
-> Default
+!!! Default
+    This may require to [upgrade](https://learn.microsoft.com/en-us/powershell/gallery/powershellget/update-powershell-51) the default version of PowerShellGet for Windows PowerShell 5.1
 
 Install using PowerShellGet
 
 ```PowerShell
-Install-Module -Name 'Datto-DBPool_API'
+Install-Module -Name 'Datto-DBPool_API' -Scope CurrentUser -AllowPrerelease
 ```
 
 ---
 
-> Newer
+!!! Newer
 
-Install using [PowerShellGet v3.0](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.psresourceget/about/about_psresourceget?view=powershellget-3.x) aka '[PSResourceGet](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.psresourceget/about/about_psresourceget?view=powershellget-3.x)'
+Install using [PowerShellGet v3.0](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.psresourceget/about/about_psresourceget?view=powershellget-3.x)
+> aka '[PSResourceGet](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.psresourceget/about/about_psresourceget?view=powershellget-3.x)'
 
 
 ```Powershell
-Install-PSResource -Name 'Datto-DBPool_API'
+Install-PSResource -Name Datto-DBPool_API -Scope CurrentUser -Prerelease
 ```
 
 ## Examples

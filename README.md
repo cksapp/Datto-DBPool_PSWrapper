@@ -10,16 +10,48 @@ Simply load the module, enter your API key and get results within minutes!
 
 This Powershell module acts as a wrapper for the Datto DBPool API, and is designed to make it easier to use the internal DBPool API in your PowerShell scripts. As much of the hard work is done, you can develop your scripts faster and be more effecient.
 
+## Prerequisites
+
+> [!TIP]
+> [Install PowerShell 7](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows)
+>
+> While not strictly nessicary, installing the latest version of PowerShell 7 _(or greater depending on latest version)_ is _**highly**_ reccomended.
+>
+> This module _should_**™** function with the default Windows PowerShell 5.1 though it is encouraged to install the latest version where possible as this has been built and tested against the latest stable release.
+
+First get your personal API key from the DBPool web Url
+
+- [https://dbpool.datto.net/web/self](https://dbpool.datto.net/web/self)
+
+![profile_Settings](./docs/assets/APIKey/profile_Settings.png)
+
+You will want to store this in a secure location, such as a password manager or other secret store.
+
+![personal_ApiKey](./docs/assets/APIKey/personal_ApiKey.png)
+
 ## Installation
 
+Default
+> [!NOTE]
+>
+> This may require to [upgrade](https://learn.microsoft.com/en-us/powershell/gallery/powershellget/update-powershell-51) the default version of PowerShellGet for Windows PowerShell 5.1
+
 Install using PowerShellGet
+
 ```PowerShell
-Install-Module -Name 'Datto-DBPool_API'
+Install-Module -Name 'Datto-DBPool_API' -Scope CurrentUser -AllowPrerelease
 ```
 
-Install using [PowerShellGet v3.0](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.psresourceget/about/about_psresourceget?view=powershellget-3.x) aka '[PSResourceGet](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.psresourceget/about/about_psresourceget?view=powershellget-3.x)'
+---
+
+Newer
+> [!NOTE]
+> Install using [PowerShellGet v3.0](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.psresourceget/about/about_psresourceget?view=powershellget-3.x)
+> > aka '[PSResourceGet](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.psresourceget/about/about_psresourceget?view=powershellget-3.x)'
+
+
 ```Powershell
-Install-PSResource -Name 'Datto-DBPool_API'
+Install-PSResource -Name Datto-DBPool_API -Scope CurrentUser -Prerelease
 ```
 
 ## Examples
@@ -28,7 +60,9 @@ Install-PSResource -Name 'Datto-DBPool_API'
 
 ```PowerShell
 Add-DBPoolApiKey
+```
 
+```PowerShell
 cmdlet Add-DBPoolApiKey at command pipeline position 1
 Supply values for the following parameters:
 (Type !? for Help.)
@@ -110,6 +144,7 @@ node            : @{id=11; name=use1-dbpoolstorage-10; ip=10.40.144.25; fqdn=use
 parent          : @{id=14; image=harbor.datto.net/dbeng/percona-server-dbpool:5.7.39; name=legoDB; defaultDatabase=legoCloud; node=; useNewSync=True; sync=False}
 users           : {@{id=2111; username=first.last; displayName=John Doe; email=username@datto.com}}
 ```
+
 ### Refresh all containers
 
 ```PowerShell

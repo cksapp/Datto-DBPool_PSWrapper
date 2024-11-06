@@ -29,3 +29,22 @@ theme:
     - navigation.instant.progress
     - navigation.tabs
     #- navigation.tabs.sticky
+    - header.autohide
+    #- navigation.footer
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/cksapp
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/kentsapp
+copyright: Copyright &copy; 2023 - 2024 Kent Sapp
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - attr_list
+plugins:
+  - privacy
+  - search
+  #- social
+  - open-in-new-tab
