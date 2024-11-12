@@ -15,8 +15,6 @@ jobs:
   DeployDocs:
     name: Build and deploy docs
     runs-on: ubuntu-latest
-    container:
-      image: mcr.microsoft.com/powershell:lts-7.2-ubuntu-22.04
     # Grant the minimum permissions necessary for this job to publish to GitHub Pages
     permissions:
       contents: write
