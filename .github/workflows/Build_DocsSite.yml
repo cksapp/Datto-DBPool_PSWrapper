@@ -32,7 +32,7 @@ jobs:
           path: .cache
 
       - name: Setup PowerShell
-        uses: bjompen/UpdatePWSHAction@v1.0.0
+        uses: bjompen/UpdatePWSHAction@v1.0.1
         with:
           FixedVersion: '7.3.12'
 
