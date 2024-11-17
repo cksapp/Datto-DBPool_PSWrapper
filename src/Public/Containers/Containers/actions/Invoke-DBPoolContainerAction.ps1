@@ -117,21 +117,50 @@ function Invoke-DBPoolContainerAction {
         }
         $modulePath = (Get-Module -Name $moduleName).Path
 
-        # Check if the ForEach-Object cmdlet supports the Parallel parameter
-        $supportsParallel = ((Get-Command ForEach-Object).Parameters.keys) -contains 'Parallel'
+        if ($Id.Count -gt 1) {
+            # Check if the ForEach-Object cmdlet supports the Parallel parameter
+            $supportsParallel = ((Get-Command ForEach-Object).Parameters.keys) -contains 'Parallel'
 
-        # Create shared runspace pool for parallel tasks
-        if (!$supportsParallel) {
-            $runspacePool = [runspacefactory]::CreateRunspacePool(1, $ThrottleLimit)
-            $runspacePool.Open()
-            $runspaceQueue = [System.Collections.Concurrent.ConcurrentQueue[PSCustomObject]]::new()
+            # Create shared runspace pool for parallel tasks
+            if (!$supportsParallel) {
+                $runspacePool = [runspacefactory]::CreateRunspacePool(1, $ThrottleLimit)
+                $runspacePool.Open()
+                $runspaceQueue = [System.Collections.Concurrent.ConcurrentQueue[PSCustomObject]]::new()
+            }
         }
 
     }
 
     process {
 
-        if ($supportsParallel) {
+        if ($Id.Count -eq 1) {
+            # Process a single container ID without parallel processing
+            $n = $Id[0]
+            $requestPath = "/api/v2/containers/$n/actions/$Action"
+
+            if ($Force -or $PSCmdlet.ShouldProcess("Container [ ID: $n ]", "[ $Action ]")) {
+                # Try to get the container name to output for the ID when using the Verbose preference
+                if ($VerbosePreference -eq 'Continue') {
+                    try {
+                        $containerName = (Get-DBPoolContainer -Id $n -ErrorAction stop -Verbose:($VerbosePreference -eq 'SilentlyContinue')).name
+                    } catch {
+                        Write-Error "Failed to get the container name for ID $n. $_"
+                        $containerName = '## FailedToGetContainerName ##'
+                    }
+                }
+                Write-Verbose "Performing action [ $Action ] on Container [ ID: $n, Name: $containerName ]"
+
+                try {
+                    $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath -ErrorAction Stop
+                    if ($requestResponse.StatusCode -eq 204) {
+                        Write-Information "Success: Invoking Action [ $Action ] on Container [ ID: $n ]."
+                    }
+                } catch {
+                    Write-Error $_
+                }
+            }
+
+        } elseif ($supportsParallel) {
 
             $IdsToProcess = [System.Collections.ArrayList]::new()
             foreach ($n in $Id) {
@@ -279,7 +308,7 @@ function Invoke-DBPoolContainerAction {
     end {
 
         # Close and dispose of the runspace pool
-        if (!$supportsParallel) {
+        if ($Id.Count -gt 1 -and !$supportsParallel) {
             $runspacePool.Close()
             $runspacePool.Dispose()
         }
