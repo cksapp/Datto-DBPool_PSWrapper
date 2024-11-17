@@ -10,7 +10,7 @@
       
       
       
-        <link rel="canonical" href="https://cksapp.github.io/Datto-DBPool_PSWrapper/">
+        <link rel="canonical" href="https://datto-dbpool-api.kentsapp.com/">
       
       
       
@@ -22,7 +22,7 @@
     
     
       
-        <title>Datto-DBPool_API</title>
+        <title>Datto.DBPool.API</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#datto-dbpool_api-powershell-module" class="md-skip">
+        <a href="#dattodbpoolapi-powershell-module" class="md-skip">
           Skip to content
         </a>
       
@@ -88,7 +88,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="." title="Datto-DBPool_API" class="md-header__button md-logo" aria-label="Datto-DBPool_API" data-md-component="logo">
+    <a href="." title="Datto.DBPool.API" class="md-header__button md-logo" aria-label="Datto.DBPool.API" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -102,13 +102,13 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            Datto-DBPool_API
+            Datto.DBPool.API
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Datto-DBPool_API PowerShell Module
+              Datto.DBPool.API PowerShell Module
             
           </span>
         </div>
@@ -222,7 +222,7 @@
   
     
   
-  Datto-DBPool_API PowerShell Module
+  Datto.DBPool.API PowerShell Module
 
       </a>
     </li>
@@ -341,13 +341,13 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="Datto-DBPool_API" class="md-nav__button md-logo" aria-label="Datto-DBPool_API" data-md-component="logo">
+    <a href="." title="Datto.DBPool.API" class="md-nav__button md-logo" aria-label="Datto.DBPool.API" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
-    Datto-DBPool_API
+    Datto.DBPool.API
   </label>
   
     <div class="md-nav__source">
@@ -384,7 +384,7 @@
           
   
   <span class="md-ellipsis">
-    Datto-DBPool_API PowerShell Module
+    Datto.DBPool.API PowerShell Module
   </span>
   
 
@@ -395,7 +395,7 @@
         
   
   <span class="md-ellipsis">
-    Datto-DBPool_API PowerShell Module
+    Datto.DBPool.API PowerShell Module
   </span>
   
 
@@ -1632,7 +1632,7 @@
   
 
 
-<h1 id="datto-dbpool_api-powershell-module">Datto-DBPool_API PowerShell Module</h1>
+<h1 id="dattodbpoolapi-powershell-module">Datto.DBPool.API PowerShell Module</h1>
 <p>This PowerShell Module acts as a wrapper for the internal Datto DBPool API.</p>
 <p>There is no need to go through a big learning curve spending lots of time working out how to use the Datto DBPool API.</p>
 <p>Simply load the module, enter your API key and get results within minutes!</p>
@@ -1657,7 +1657,7 @@
 <p>This may require to <a href="https://learn.microsoft.com/en-us/powershell/gallery/powershellget/update-powershell-51">upgrade</a> the default version of PowerShellGet for Windows PowerShell 5.1</p>
 </div>
 <p>Install using PowerShellGet</p>
-<div class="highlight"><pre><span></span><code><span class="nb">Install-Module</span> <span class="n">-Name</span> <span class="s1">&#39;Datto-DBPool_API&#39;</span> <span class="n">-Scope</span> <span class="n">CurrentUser</span> <span class="n">-AllowPrerelease</span>
+<div class="highlight"><pre><span></span><code><span class="nb">Install-Module</span> <span class="n">-Name</span> <span class="s1">&#39;Datto.DBPool.API&#39;</span> <span class="n">-Scope</span> <span class="n">CurrentUser</span> <span class="n">-AllowPrerelease</span>
 </code></pre></div>
 <hr />
 <div class="admonition newer">
@@ -1667,7 +1667,7 @@
 <blockquote>
 <p>aka '<a href="https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.psresourceget/about/about_psresourceget?view=powershellget-3.x">PSResourceGet</a>'</p>
 </blockquote>
-<div class="highlight"><pre><span></span><code><span class="nb">Install-PSResource</span> <span class="n">-Name</span> <span class="n">Datto-DBPool_API</span> <span class="n">-Scope</span> <span class="n">CurrentUser</span> <span class="n">-Prerelease</span>
+<div class="highlight"><pre><span></span><code><span class="nb">Install-PSResource</span> <span class="n">-Name</span> <span class="n">Datto</span><span class="p">.</span><span class="n">DBPool</span><span class="p">.</span><span class="n">API</span> <span class="n">-Scope</span> <span class="n">CurrentUser</span> <span class="n">-Prerelease</span>
 </code></pre></div>
 <h2 id="examples">Examples</h2>
 <h3 id="add-your-api-key">Add your API key</h3>
