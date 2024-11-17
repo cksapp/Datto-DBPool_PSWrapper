@@ -1,6 +1,6 @@
 # How to contribute
 
-Contributions to Datto-DBPool_API are highly encouraged and desired.
+Contributions to Datto.DBPool.API are highly encouraged and desired.
 Below are some guidelines that will help make the process as smooth as possible.
 
 ## Getting Started
@@ -13,7 +13,7 @@ Below are some guidelines that will help make the process as smooth as possible.
 
 ## Suggesting Enhancements
 
-I want to know what you think is missing from Datto-DBPool_API and how it can be made better.
+I want to know what you think is missing from Datto.DBPool.API and how it can be made better.
 
 - When submitting an issue for an enhancement, please be as clear as possible about why you think the enhancement is needed and what the benefit of it would be.
 

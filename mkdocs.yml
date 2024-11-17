@@ -1,5 +1,5 @@
-site_name: Datto-DBPool_API
-site_url: https://cksapp.github.io/Datto-DBPool_PSWrapper
+site_name: Datto.DBPool.API
+site_url: https://datto-dbpool-api.kentsapp.com
 site_description: PowerShell module for internal Datto DBPool API
 site_dir: site
 exclude_docs: |

@@ -1,5 +1,5 @@
 ﻿TOPIC
-    about_datto-dbpool_api
+    about_Datto.DBPool.API
 
 SHORT DESCRIPTION
     This PowerShell Module acts as a wrapper for the internal Datto DBPool API.

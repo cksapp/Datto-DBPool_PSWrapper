@@ -1,4 +1,4 @@
-# Datto-DBPool_API PowerShell Module
+# Datto.DBPool.API PowerShell Module
 
 This PowerShell Module acts as a wrapper for the internal Datto DBPool API.
 
@@ -37,7 +37,7 @@ You will want to store this in a secure location, such as a password manager or 
 Install using PowerShellGet
 
 ```PowerShell
-Install-Module -Name 'Datto-DBPool_API' -Scope CurrentUser -AllowPrerelease
+Install-Module -Name 'Datto.DBPool.API' -Scope CurrentUser -AllowPrerelease
 ```
 
 ---
@@ -49,7 +49,7 @@ Install using [PowerShellGet v3.0](https://learn.microsoft.com/en-us/powershell/
 
 
 ```Powershell
-Install-PSResource -Name Datto-DBPool_API -Scope CurrentUser -Prerelease
+Install-PSResource -Name Datto.DBPool.API -Scope CurrentUser -Prerelease
 ```
 
 ## Examples

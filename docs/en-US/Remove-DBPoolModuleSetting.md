@@ -1,6 +1,6 @@
 ---
-external help file: Datto-DBPool_API-help.xml
-Module Name: Datto-DBPool_API
+external help file: Datto.DBPool.API-help.xml
+Module Name: Datto.DBPool.API
 online version:
 schema: 2.0.0
 ---

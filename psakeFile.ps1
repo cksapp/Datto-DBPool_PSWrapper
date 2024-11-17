@@ -1,6 +1,6 @@
 properties {
     $PSBPreference.General.SrcRootDir = 'src'
-    $PSBPreference.General.ModuleName = 'Datto-DBPool_API'
+    $PSBPreference.General.ModuleName = 'Datto.DBPool.API'
     $PSBPreference.Build.OutDir = $projectRoot
     # Set this to $true to create a module with a monolithic PSM1
     $PSBPreference.Build.CompileModule = $true
