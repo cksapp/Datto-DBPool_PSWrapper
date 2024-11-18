@@ -1,6 +1,14 @@
 name: Build_Tests
 
-on: [push, pull_request]
+on:
+  push:
+    paths:
+      - /src
+      - /src/**
+      - /Datto.DBPool.API/**
+      - .github/workflows/Build_Tests.yaml
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
 

@@ -12,6 +12,11 @@ name: PSScriptAnalyzer
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - /src
+      - /src/**
+      - /Datto.DBPool.API/**
+      - .github/workflows/PSScriptAnalyzer.yml
   pull_request:
     branches: [ "main" ]
   schedule:
