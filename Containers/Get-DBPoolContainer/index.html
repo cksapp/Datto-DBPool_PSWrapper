@@ -805,27 +805,27 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#int-the-id-of-the-container-to-get-details-for" class="md-nav__link">
+  <a href="#int-id" class="md-nav__link">
     <span class="md-ellipsis">
-      [int] - The ID of the container to get details for.
+      [int] -Id
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#string-the-name-of-the-container-to-get-details-for" class="md-nav__link">
+  <a href="#string-name" class="md-nav__link">
     <span class="md-ellipsis">
-      [string] - The name of the container to get details for.
+      [string] - Name
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#string-the-database-of-the-container-to-get-details-for" class="md-nav__link">
+  <a href="#string-defaultdatabase" class="md-nav__link">
     <span class="md-ellipsis">
-      [string] - The database of the container to get details for.
+      [string] - DefaultDatabase
     </span>
   </a>
   
@@ -847,9 +847,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#pscustomobject-the-response-from-the-dbpool-api" class="md-nav__link">
+  <a href="#pscustomobject" class="md-nav__link">
     <span class="md-ellipsis">
-      [PSCustomObject] - The response from the DBPool API.
+      [PSCustomObject]
     </span>
   </a>
   
@@ -2161,27 +2161,27 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#int-the-id-of-the-container-to-get-details-for" class="md-nav__link">
+  <a href="#int-id" class="md-nav__link">
     <span class="md-ellipsis">
-      [int] - The ID of the container to get details for.
+      [int] -Id
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#string-the-name-of-the-container-to-get-details-for" class="md-nav__link">
+  <a href="#string-name" class="md-nav__link">
     <span class="md-ellipsis">
-      [string] - The name of the container to get details for.
+      [string] - Name
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#string-the-database-of-the-container-to-get-details-for" class="md-nav__link">
+  <a href="#string-defaultdatabase" class="md-nav__link">
     <span class="md-ellipsis">
-      [string] - The database of the container to get details for.
+      [string] - DefaultDatabase
     </span>
   </a>
   
@@ -2203,9 +2203,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#pscustomobject-the-response-from-the-dbpool-api" class="md-nav__link">
+  <a href="#pscustomobject" class="md-nav__link">
     <span class="md-ellipsis">
-      [PSCustomObject] - The response from the DBPool API.
+      [PSCustomObject]
     </span>
   </a>
   
@@ -2276,50 +2276,50 @@
 This also can filter or exclude by container name or database.</p>
 <h2 id="examples">EXAMPLES</h2>
 <h3 id="example-1">EXAMPLE 1</h3>
-<div class="highlight"><pre><span></span><code>Get-DBPoolContainer
+<div class="highlight"><pre><span></span><code><span class="nb">Get-DBPoolContainer</span>
 </code></pre></div>
 <p>Get a list of all containers from the DBPool API</p>
 <h3 id="example-2">EXAMPLE 2</h3>
-<div class="highlight"><pre><span></span><code>Get-DBPoolContainer -Id 12345
+<div class="highlight"><pre><span></span><code><span class="nb">Get-DBPoolContainer</span> <span class="n">-Id</span> <span class="n">12345</span>
 </code></pre></div>
 <p>Get a list of containers from the DBPool API by ID</p>
 <h3 id="example-3">EXAMPLE 3</h3>
-<div class="highlight"><pre><span></span><code>Get-DBPoolContainer -Status -Id @( 12345, 67890 )
+<div class="highlight"><pre><span></span><code><span class="nb">Get-DBPoolContainer</span> <span class="n">-Status</span> <span class="n">-Id</span> <span class="p">@(</span> <span class="n">12345</span><span class="p">,</span> <span class="n">67890</span> <span class="p">)</span>
 </code></pre></div>
 <p>Get the status of an array of containers by IDs</p>
 <h3 id="example-4">EXAMPLE 4</h3>
-<div class="highlight"><pre><span></span><code>Get-DBPoolContainer -ParentContainer
+<div class="highlight"><pre><span></span><code><span class="nb">Get-DBPoolContainer</span> <span class="n">-ParentContainer</span>
 </code></pre></div>
 <p>Get a list of parent containers from the DBPool API</p>
 <h3 id="example-5">EXAMPLE 5</h3>
-<div class="highlight"><pre><span></span><code>Get-DBPoolContainer -ParentContainer -Id 12345
+<div class="highlight"><pre><span></span><code><span class="nb">Get-DBPoolContainer</span> <span class="n">-ParentContainer</span> <span class="n">-Id</span> <span class="n">12345</span>
 </code></pre></div>
 <p>Get a list of parent containers from the DBPool API by ID</p>
 <h3 id="example-6">EXAMPLE 6</h3>
-<div class="highlight"><pre><span></span><code>Get-DBPoolContainer -ChildContainer
+<div class="highlight"><pre><span></span><code><span class="nb">Get-DBPoolContainer</span> <span class="n">-ChildContainer</span>
 </code></pre></div>
 <p>Get a list of child containers from the DBPool API</p>
 <h3 id="example-7">EXAMPLE 7</h3>
-<div class="highlight"><pre><span></span><code>Get-DBPoolContainer -Name &#39;MyContainer&#39;
-Get-DBPoolContainer -ParentContainer -Name &#39;ParentContainer*&#39;
+<div class="highlight"><pre><span></span><code><span class="nb">Get-DBPoolContainer</span> <span class="n">-Name</span> <span class="s1">&#39;MyContainer&#39;</span>
+<span class="nb">Get-DBPoolContainer</span> <span class="n">-ParentContainer</span> <span class="n">-Name</span> <span class="s1">&#39;ParentContainer*&#39;</span>
 </code></pre></div>
 <p>Uses 'Where-Object' to get a list of containers from the DBPool API, or parent containers by name
 Accepts wildcard input</p>
 <h3 id="example-8">EXAMPLE 8</h3>
-<div class="highlight"><pre><span></span><code>Get-DBPoolContainer -Name &#39;MyContainer&#39; -NotLike
-Get-DBPoolContainer -ParentContainer -Name &#39;ParentContainer*&#39; -NotLike
+<div class="highlight"><pre><span></span><code><span class="nb">Get-DBPoolContainer</span> <span class="n">-Name</span> <span class="s1">&#39;MyContainer&#39;</span> <span class="o">-NotLike</span>
+<span class="nb">Get-DBPoolContainer</span> <span class="n">-ParentContainer</span> <span class="n">-Name</span> <span class="s1">&#39;ParentContainer*&#39;</span> <span class="o">-NotLike</span>
 </code></pre></div>
 <p>Uses 'Where-Object' to get a list of containers from the DBPool API, or parent containers where the name does not match the filter
 Accepts wildcard input</p>
 <h3 id="example-9">EXAMPLE 9</h3>
-<div class="highlight"><pre><span></span><code>Get-DBPoolContainer -DefaultDatabase &#39;Database&#39;
-Get-DBPoolContainer -ParentContainer -DefaultDatabase &#39;Database*&#39;
+<div class="highlight"><pre><span></span><code><span class="nb">Get-DBPoolContainer</span> <span class="n">-DefaultDatabase</span> <span class="s1">&#39;Database&#39;</span>
+<span class="nb">Get-DBPoolContainer</span> <span class="n">-ParentContainer</span> <span class="n">-DefaultDatabase</span> <span class="s1">&#39;Database*&#39;</span>
 </code></pre></div>
 <p>Get a list of containers from the DBPool API, or parent containers by database
 Accepts wildcard input</p>
 <h3 id="example-10">EXAMPLE 10</h3>
-<div class="highlight"><pre><span></span><code>Get-DBPoolContainer -DefaultDatabase &#39;Database&#39; -NotLike
-Get-DBPoolContainer -ParentContainer -DefaultDatabase &#39;Database*&#39; -NotLike
+<div class="highlight"><pre><span></span><code><span class="nb">Get-DBPoolContainer</span> <span class="n">-DefaultDatabase</span> <span class="s1">&#39;Database&#39;</span> <span class="o">-NotLike</span>
+<span class="nb">Get-DBPoolContainer</span> <span class="n">-ParentContainer</span> <span class="n">-DefaultDatabase</span> <span class="s1">&#39;Database*&#39;</span> <span class="o">-NotLike</span>
 </code></pre></div>
 <p>Get a list of containers from the DBPool API, or parent containers where the database does not match the filter
 Accepts wildcard input</p>
@@ -2440,17 +2440,21 @@ Requires the -Name or -DefaultDatabase parameter to be specified.</p>
 <h3 id="commonparameters">CommonParameters</h3>
 <p>This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see <a href="http://go.microsoft.com/fwlink/?LinkID=113216">about_CommonParameters</a>.</p>
 <h2 id="inputs">INPUTS</h2>
-<h3 id="int-the-id-of-the-container-to-get-details-for">[int] - The ID of the container to get details for.</h3>
-<h3 id="string-the-name-of-the-container-to-get-details-for">[string] - The name of the container to get details for.</h3>
-<h3 id="string-the-database-of-the-container-to-get-details-for">[string] - The database of the container to get details for.</h3>
+<h3 id="int-id">[int] -Id</h3>
+<p>The ID of the container to get details for.</p>
+<h3 id="string-name">[string] - Name</h3>
+<p>The name of the container to get details for.</p>
+<h3 id="string-defaultdatabase">[string] - DefaultDatabase</h3>
+<p>The database of the container to get details for.</p>
 <h2 id="outputs">OUTPUTS</h2>
-<h3 id="pscustomobject-the-response-from-the-dbpool-api">[PSCustomObject] - The response from the DBPool API.</h3>
+<h3 id="pscustomobject">[PSCustomObject]</h3>
+<p>The response from the DBPool API.</p>
 <h2 id="notes">NOTES</h2>
 <p>The -Name, and -DefaultDatabase parameters are not native endpoints of the DBPool API.
 This is a custom function which uses 'Where-Object', along with the optional -NotLike parameter to return the response using the provided filter.</p>
 <p>If no match is found an error is output, and the original response is returned.</p>
 <h2 id="related-links">RELATED LINKS</h2>
-<p><a href="">N/A</a></p>
+<p><a href="https://datto-dbpool-api.kentsapp.com/Containers/Get-DBPoolContainer/">https://datto-dbpool-api.kentsapp.com/Containers/Get-DBPoolContainer/</a></p>
 
 
 
