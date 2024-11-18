@@ -887,7 +887,7 @@ Read-Host "Enter your DBPool API Key" -AsSecureString | Add-DBPoolApiKey</dev:co
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>[int]</maml:name>
+          <maml:name>[int] - Id</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -903,7 +903,7 @@ Read-Host "Enter your DBPool API Key" -AsSecureString | Add-DBPoolApiKey</dev:co
       </command:inputType>
       <command:inputType>
         <dev:type>
-          <maml:name>[string]</maml:name>
+          <maml:name>[string] Name</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -919,7 +919,7 @@ Read-Host "Enter your DBPool API Key" -AsSecureString | Add-DBPoolApiKey</dev:co
       </command:inputType>
       <command:inputType>
         <dev:type>
-          <maml:name>[string]</maml:name>
+          <maml:name>[string] - DefaultDatabase</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -2706,7 +2706,7 @@ Body</dev:code>
     <command:inputTypes>
       <command:inputType>
         <dev:type>
-          <maml:name>[string] - The name for the new container.</maml:name>
+          <maml:name>[string] - ContainerName</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -2714,7 +2714,7 @@ Body</dev:code>
       </command:inputType>
       <command:inputType>
         <dev:type>
-          <maml:name>[int] - The ID of the parent container to clone.</maml:name>
+          <maml:name>The name for the new container.</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -2722,7 +2722,7 @@ Body</dev:code>
       </command:inputType>
       <command:inputType>
         <dev:type>
-          <maml:name>[string] - The name of the parent container to clone.</maml:name>
+          <maml:name>[int] - ParentId</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -2730,7 +2730,39 @@ Body</dev:code>
       </command:inputType>
       <command:inputType>
         <dev:type>
-          <maml:name>[string] - The default database of the parent container to clone.</maml:name>
+          <maml:name>The ID of the parent container to clone.</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <maml:name>[string] - ParentName</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <maml:name>The name of the parent container to clone.</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <maml:name>[string] - ParentDefaultDatabase</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <maml:name>The default database of the parent container to clone.</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>

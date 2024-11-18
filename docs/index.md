@@ -12,7 +12,7 @@ This Powershell module acts as a wrapper for the Datto DBPool API, and is design
 
 ## Prerequisites
 
-!!! info "[Install PowerShell 7](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows)"
+???+ info "[Install PowerShell 7](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows)"
     While not <u>strictly</u> nessicary, installing the latest version of PowerShell 7 _(or greater depending on latest version)_ is _**highly**_ reccomended.
 
     This module _should_**™** function with the default Windows PowerShell 5.1 though it is encouraged to install the latest version where possible as this has been built and tested against the latest stable release.
@@ -24,7 +24,7 @@ First get your personal API key from the DBPool web Url
 [![profile_Settings]][profile_Settings]
 [profile_Settings]: ./assets/APIKey/profile_Settings.png
 
-You will want to store this in a secure location, such as a password manager or other secret store.
+You may want to store this in a secure location, such as a password manager or other secret store.
 
 [![personal_ApiKey]][personal_ApiKey]
 [personal_ApiKey]: ./assets/APIKey/personal_ApiKey.png
