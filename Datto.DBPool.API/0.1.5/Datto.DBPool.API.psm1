@@ -1606,11 +1606,14 @@ function Get-DBPoolContainer {
         Returns containers where the Name or DefaultDatabase does not match the provided filter.
 
     .INPUTS
-        [int] - The ID of the container to get details for.
+        [int] - Id
+        The ID of the container to get details for.
 
-        [string] - The name of the container to get details for.
+        [string] Name
+        The name of the container to get details for.
 
-        [string] - The database of the container to get details for.
+        [string] - DefaultDatabase
+        The database of the container to get details for.
 
     .OUTPUTS
         [PSCustomObject] - The response from the DBPool API.
@@ -1924,10 +1927,17 @@ function New-DBPoolContainer {
         Force the operation without confirmation.
 
     .INPUTS
-        [string] - The name for the new container.
-        [int] - The ID of the parent container to clone.
-        [string] - The name of the parent container to clone.
-        [string] - The default database of the parent container to clone.
+        [string] - ContainerName
+        The name for the new container.
+
+        [int] - ParentId
+        The ID of the parent container to clone.
+
+        [string] - ParentName
+        The name of the parent container to clone.
+
+        [string] - ParentDefaultDatabase
+        The default database of the parent container to clone.
 
     .OUTPUTS
         [PSCustomObject] - The response from the DBPool API.

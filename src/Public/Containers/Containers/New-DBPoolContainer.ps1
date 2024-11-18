@@ -23,10 +23,17 @@ function New-DBPoolContainer {
         Force the operation without confirmation.
 
     .INPUTS
-        [string] - The name for the new container.
-        [int] - The ID of the parent container to clone.
-        [string] - The name of the parent container to clone.
-        [string] - The default database of the parent container to clone.
+        [string] - ContainerName
+        The name for the new container.
+
+        [int] - ParentId
+        The ID of the parent container to clone.
+
+        [string] - ParentName
+        The name of the parent container to clone.
+
+        [string] - ParentDefaultDatabase
+        The default database of the parent container to clone.
 
     .OUTPUTS
         [PSCustomObject] - The response from the DBPool API.

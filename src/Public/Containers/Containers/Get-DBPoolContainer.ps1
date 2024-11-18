@@ -41,11 +41,14 @@ function Get-DBPoolContainer {
         Returns containers where the Name or DefaultDatabase does not match the provided filter.
 
     .INPUTS
-        [int] - The ID of the container to get details for.
+        [int] - Id
+        The ID of the container to get details for.
 
-        [string] - The name of the container to get details for.
+        [string] Name
+        The name of the container to get details for.
 
-        [string] - The database of the container to get details for.
+        [string] - DefaultDatabase
+        The database of the container to get details for.
 
     .OUTPUTS
         [PSCustomObject] - The response from the DBPool API.
