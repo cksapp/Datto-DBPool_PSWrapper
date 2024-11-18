@@ -267,11 +267,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### [int]
+### [int] - Id
 ### The ID of the container to get details for.
-### [string]
+### [string] Name
 ### The name of the container to get details for.
-### [string]
+### [string] - DefaultDatabase
 ### The database of the container to get details for.
 ## OUTPUTS
 
