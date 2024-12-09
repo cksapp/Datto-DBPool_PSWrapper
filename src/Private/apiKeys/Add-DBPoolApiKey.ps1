@@ -13,6 +13,9 @@ function Add-DBPoolApiKey {
     .PARAMETER ApiKey
         Defines your API key for the DBPool.
 
+    .PARAMETER Force
+        Forces the setting of the DBPool API key.
+
     .INPUTS
         [SecureString] - The API key for the DBPool.
 
@@ -37,21 +40,25 @@ function Add-DBPoolApiKey {
         N/A
 #>
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Low')]
     [Alias("Set-DBPoolApiKey")]
     [OutputType([void])]
     param (
         [Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true, HelpMessage = "API Key for authorization to DBPool.")]
         [ValidateNotNullOrEmpty()]
-        [securestring]$apiKey
+        [securestring]$apiKey,
+
+        [switch]$Force
     )
 
     begin {}
 
     process {
 
-        Write-Verbose "Setting the DBPool API Key."
-        Set-Variable -Name "DBPool_ApiKey" -Value $apiKey -Option ReadOnly -Scope global -Force
+        if ($Force -or $PSCmdlet.ShouldProcess("Name: DBPool_ApiKey Value: $apiKey", 'Set variable')) {
+            Write-Verbose 'Setting the DBPool API Key.'
+            Set-Variable -Name 'DBPool_ApiKey' -Value $apiKey -Option ReadOnly -Scope Global -Force -Confirm:$false
+        }
 
     }
 
