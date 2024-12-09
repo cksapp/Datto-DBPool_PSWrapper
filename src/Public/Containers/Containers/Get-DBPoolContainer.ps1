@@ -135,7 +135,7 @@ function Get-DBPoolContainer {
 
         [Parameter(ParameterSetName = 'ParentContainer', Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [Parameter(ParameterSetName = 'ListContainer', Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-        [Parameter(ParameterSetName = 'ContainerStatus', Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [Parameter(ParameterSetName = 'ContainerStatus', Mandatory = $false, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
         #[ValidateRange(0, [int]::MaxValue)]
         [int[]]$Id,
@@ -285,14 +285,14 @@ function Get-DBPoolContainer {
 
                 try {
                     $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri $uri -ErrorAction Stop
+                    if ($null -ne $requestResponse) {
+                        $requestResponse | ConvertFrom-Json
+                    }
                 } catch {
                     Write-Error $_
                     continue
                 }
 
-                if ($null -ne $requestResponse) {
-                    $requestResponse | ConvertFrom-Json
-                }
             }
         # Get list of containers based on the parameter set, returns all listed containers
         } else {
@@ -300,25 +300,43 @@ function Get-DBPoolContainer {
 
             try {
                 $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath -ErrorAction Stop
+                # Convert the response to JSON, return the response based on the parameter set
+                if ($null -ne $requestResponse) {
+                    $response = $requestResponse | ConvertFrom-Json
+
+                    if ($PSCmdlet.ParameterSetName -eq 'ParentContainer') {
+                        $response = $response.parents
+                    } elseif ($PSCmdlet.ParameterSetName -eq 'ListContainer') {
+                        $response = $response.containers
+                    } elseif ($PSCmdlet.ParameterSetName -eq 'ContainerStatus') {
+                        $response = foreach ($n in $($response.containers.id)) {
+                            $requestResponse = $null
+                            Write-Verbose "Running the [ $($PSCmdlet.ParameterSetName) ] parameter set for ID $n"
+
+                            $uri = "$requestPath/$n/status"
+
+                            try {
+                                $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri $uri -ErrorAction Stop -Verbose:$false
+                                if ($null -ne $requestResponse) {
+                                    $requestResponse | ConvertFrom-Json
+                                }
+                            } catch {
+                                Write-Error $_
+                                continue
+                            }
+
+                        }
+                    }
+                }
             } catch {
                 Write-Error $_
             }
 
-            # Convert the response to JSON, return the response based on the parameter set
-            if ($null -ne $requestResponse) {
-                $response = $requestResponse | ConvertFrom-Json
-
-                if ($PSCmdlet.ParameterSetName -eq 'ParentContainer') {
-                    $response = $response.parents
-                } elseif ($PSCmdlet.ParameterSetName -eq 'ListContainer') {
-                    $response = $response.containers
-                }
-            }
         }
 
 
         # Filter the response by Name or DefaultDatabase if provided using internal helper function
-        if ($PSBoundParameters.ContainsKey('Name') -or $PSBoundParameters.ContainsKey('DefaultDatabase')) {
+        if ($null -ne $response -and ($PSBoundParameters.ContainsKey('Name') -or $PSBoundParameters.ContainsKey('DefaultDatabase'))) {
             try {
                 $response = Select-DBPoolContainer -Container $response -Name $Name -DefaultDatabase $DefaultDatabase -NotLike:$NotLike -ErrorAction Stop
             } catch {
