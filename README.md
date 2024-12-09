@@ -31,6 +31,8 @@ You will want to store this in a secure location, such as a password manager or 
 
 ## Installation
 
+Installation from [PowerShell Gallery](https://www.powershellgallery.com/packages/Datto.DBPool.API)
+
 Default
 > [!NOTE]
 >

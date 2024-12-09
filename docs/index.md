@@ -31,6 +31,8 @@ You may want to store this in a secure location, such as a password manager or o
 
 ## Installation
 
+### Installation from [PowerShell Gallery](https://www.powershellgallery.com/packages/Datto.DBPool.API)
+
 !!! Default
     This may require to [upgrade](https://learn.microsoft.com/en-us/powershell/gallery/powershellget/update-powershell-51) the default version of PowerShellGet for Windows PowerShell 5.1
 
@@ -51,6 +53,10 @@ Install using [PowerShellGet v3.0](https://learn.microsoft.com/en-us/powershell/
 ```Powershell
 Install-PSResource -Name Datto.DBPool.API -Scope CurrentUser -Prerelease
 ```
+
+### Manual Install
+
+Download the package file from the latest release, unzip and place module contents into `$env:PSModulePath`
 
 ## Examples
 
