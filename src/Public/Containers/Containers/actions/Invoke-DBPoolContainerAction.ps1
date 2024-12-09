@@ -162,43 +162,47 @@ function Invoke-DBPoolContainerAction {
 
         } elseif ($supportsParallel) {
 
-            $IdsToProcess = [System.Collections.ArrayList]::new()
+            $IdsToAction = [System.Collections.ArrayList]::new()
             foreach ($n in $Id) {
                 if ($Force -or $PSCmdlet.ShouldProcess("Container [ ID: $n ]", "[ $Action ]")) {
-                    $IdsToProcess.Add($n) | Out-Null
+                    $IdsToAction.Add($n) | Out-Null
                 }
             }
 
-            if ($IdsToProcess.Count -gt 0) {
-                $IdsToProcess | ForEach-Object -Parallel {
-                    $n = $_
+            if ($IdsToAction.Count -gt 0) {
+                try {
+                    $IdsToAction | ForEach-Object -Parallel {
+                        $n = $_
 
-                    Import-Module $using:modulePath
-                    Add-DBPoolBaseURI -base_uri $using:DBPool_Base_URI
-                    Add-DBPoolApiKey -apiKey $using:DBPool_ApiKey
+                        Import-Module $using:modulePath
+                        Add-DBPoolBaseURI -base_uri $using:DBPool_Base_URI
+                        Add-DBPoolApiKey -apiKey $using:DBPool_ApiKey
 
-                    $requestPath = "/api/v2/containers/$n/actions/$using:Action"
+                        $requestPath = "/api/v2/containers/$n/actions/$using:Action"
 
-                    # Try to get the container name to output for the ID when using the Verbose preference
-                    if ($using:VerbosePreference -eq 'Continue') {
+                        # Try to get the container name to output for the ID when using the Verbose preference
+                        if ($using:VerbosePreference -eq 'Continue') {
+                            try {
+                                $containerName = (Get-DBPoolContainer -Id $n -ErrorAction Stop).name
+                            } catch {
+                                Write-Error "Failed to get the container name for ID $n. $_"
+                                $containerName = '## FailedToGetContainerName ##'
+                            }
+                        }
+                        Write-Verbose "Performing action [ $using:Action ] on Container [ ID: $n, Name: $containerName ]" -Verbose:($using:VerbosePreference -eq 'Continue')
+
                         try {
-                            $containerName = (Get-DBPoolContainer -Id $n -ErrorAction Stop).name
+                            $requestResponse = Invoke-DBPoolRequest -method $using:method -resource_Uri $requestPath -ErrorAction Stop -WarningAction:SilentlyContinue
+                            if ($requestResponse.StatusCode -eq 204) {
+                                Write-Information "Success: Invoking Action [ $using:Action ] on Container [ ID: $n ]."
+                            }
                         } catch {
-                            Write-Error "Failed to get the container name for ID $n. $_"
-                            $containerName = '## FailedToGetContainerName ##'
+                            Write-Error $_
                         }
-                    }
-                    Write-Verbose "Performing action [ $using:Action ] on Container [ ID: $n, Name: $containerName ]" -Verbose:($using:VerbosePreference -eq 'Continue')
-
-                    try {
-                        $requestResponse = Invoke-DBPoolRequest -method $using:method -resource_Uri $requestPath -ErrorAction Stop -WarningAction:SilentlyContinue
-                        if ($requestResponse.StatusCode -eq 204) {
-                            Write-Information "Success: Invoking Action [ $using:Action ] on Container [ ID: $n ]."
-                        }
-                    } catch {
-                        Write-Error $_
-                    }
-                } -ThrottleLimit $ThrottleLimit -TimeoutSeconds $TimeoutSeconds
+                    } -ThrottleLimit $ThrottleLimit -TimeoutSeconds $TimeoutSeconds
+                } catch {
+                    Write-Error $_
+                }
             }
 
         } else {
