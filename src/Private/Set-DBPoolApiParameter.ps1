@@ -64,7 +64,7 @@ function Set-DBPoolApiParameter {
 
         # Check to replace existing variables
         if ((Get-Variable -Name DBPool_Base_URI -ErrorAction SilentlyContinue) -and (Get-Variable -Name DBPool_ApiKey -ErrorAction SilentlyContinue)) {
-            if (-not ($Force -or $PSCmdlet.ShouldContinue("Variables 'DBPool_Base_URI' and '$DBPool_ApiKey' already exist. Do you want to replace them?", "Confirm overwrite"))) {
+            if (-not ($Force -or $PSCmdlet.ShouldContinue("Variables 'DBPool_Base_URI' and 'DBPool_ApiKey' already exist. Do you want to replace them?", "Confirm overwrite"))) {
                 Write-Warning "Existing variables were not replaced."
                 break
             }
@@ -75,12 +75,13 @@ function Set-DBPoolApiParameter {
     Process {
 
         # Set or replace the parameters
-        try {
-            Add-DBPoolBaseURI -base_uri $base_uri -Verbose:$PSBoundParameters.ContainsKey('Verbose') -ErrorAction Stop
-            Add-DBPoolAPIKey -apiKey $apiKey -Verbose:$PSBoundParameters.ContainsKey('Verbose') -ErrorAction Stop
-        }
-        catch {
-            Write-Error $_
+        if ($Force -or $PSCmdlet.ShouldProcess('Setting DBPool API parameters')) {
+            try {
+                Add-DBPoolBaseURI -base_uri $base_uri -Verbose:$VerbosePreference -ErrorAction Stop
+                Add-DBPoolApiKey -apiKey $apiKey -Verbose:$PSBoundParameters.ContainsKey('Verbose') -Force -ErrorAction Stop
+            } catch {
+                Write-Error $_
+            }
         }
 
     }

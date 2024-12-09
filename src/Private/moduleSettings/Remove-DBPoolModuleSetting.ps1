@@ -75,7 +75,7 @@ function Remove-DBPoolModuleSetting {
             }
 
             if (!(Test-Path $DBPoolConfPath)) {
-                Write-Output "The DBPoolAPI configuration folder has been removed successfully from [ $DBPoolConfPath ]"
+                Write-Verbose "The DBPoolAPI configuration folder has been removed successfully from [ $DBPoolConfPath ]"
             }
             else {
                 Write-Error "The DBPoolAPI configuration folder could not be removed from [ $DBPoolConfPath ]"

@@ -86,7 +86,7 @@ function Import-DBPoolModuleSetting {
             Remove-Variable "tmp_config"
         }
         else {
-            Write-Verbose "No configuration file found at [ $DBPoolConfig ] run Add-DBPoolAPIKey to get started."
+            Write-Verbose "No configuration file found at [ $DBPoolConfig ] run 'Add-DBPoolAPIKey' to get started."
 
             Add-DBPoolBaseURI
 
