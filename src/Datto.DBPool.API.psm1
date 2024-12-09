@@ -5,18 +5,32 @@ if (Test-Path -Path $(Join-Path -Path $PSScriptRoot -ChildPath 'Public')) {
 
     # Import functions
     $functionsToExport = @()
+    $aliasesToExport = @()
 
     foreach ($dir in $directory) {
-        $Functions = @( Get-ChildItem -Path (Join-Path -Path $PSScriptRoot -ChildPath "$dir/*ps1") -Recurse -ErrorAction SilentlyContinue)
+        $Functions = @( Get-ChildItem -Path (Join-Path -Path $PSScriptRoot -ChildPath "$dir") -Filter '*.ps1' -Recurse -ErrorAction SilentlyContinue)
         foreach ($Import in @($Functions)) {
             try {
                 . $Import.fullname
                 $functionsToExport += $Import.BaseName
             } catch {
                 throw "Could not import function [$($Import.fullname)]: $_"
+                continue
             }
         }
     }
 
-    Export-ModuleMember -Function $functionsToExport
+    foreach ($alias in Get-Alias) {
+        if ($functionsToExport -contains $alias.Definition) {
+            $aliasesToExport += $alias.Name
+        }
+    }
+
+    if ($functionsToExport.Count -gt 0) {
+        Export-ModuleMember -Function $functionsToExport
+    }
+    if ($aliasesToExport.Count -gt 0) {
+        Export-ModuleMember -Alias $aliasesToExport
+    }
+
 }

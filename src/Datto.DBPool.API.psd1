@@ -19,7 +19,7 @@
     # -- PATCH version when you make backwards-compatible bug fixes.
 
     # Version number of this module.
-    ModuleVersion = '0.1.5'
+    ModuleVersion = '0.1.6'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -76,7 +76,7 @@
 
     # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
     <#NestedModules = @(
-        'Private/Set-DBPoolApiParameters.ps1',
+        'Private/Set-DBPoolApiParameter.ps1',
         'Private/Test-DBPoolApi.ps1',
 
         'Private/apiCalls/ConvertTo-DBPoolQueryString.ps1',
@@ -92,11 +92,11 @@
         'Private/baseUri/Get-DBPoolBaseUri.ps1',
         'Private/baseUri/Remove-DBPoolBaseUri.ps1',
 
-        'Private/moduleSettings/Export-DBPoolModuleSettings.ps1',
-        'Private/moduleSettings/Get-DBPoolModuleSettings.ps1',
-        'Private/moduleSettings/Import-DBPoolModuleSettings.ps1',
-        'Private/moduleSettings/Initialize-DBPoolModuleSettings.ps1',
-        'Private/moduleSettings/Remove-DBPoolModuleSettings.ps1',
+        'Private/moduleSettings/Export-DBPoolModuleSetting.ps1',
+        'Private/moduleSettings/Get-DBPoolModuleSetting.ps1',
+        'Private/moduleSettings/Import-DBPoolModuleSetting.ps1',
+        'Private/moduleSettings/Initialize-DBPoolModuleSetting.ps1',
+        'Private/moduleSettings/Remove-DBPoolModuleSetting.ps1',
 
         'Public/Containers/Containers/Get-DBPoolContainer.ps1',
         'Public/Containers/Containers/New-DBPoolContainer.ps1',
