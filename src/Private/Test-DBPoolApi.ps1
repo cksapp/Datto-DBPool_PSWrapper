@@ -51,22 +51,18 @@ function Test-DBPoolApi {
         Write-Debug -Message "Api Key is $DBPool_ApiKey"
         if (!($base_uri -and $apiKey)) {
             Write-Warning "API parameters are missing. Please run Set-DBPoolApiParameters first!"
-            #break
         }
 
-        # Sets the variable for the document URI to check, filtered to replace ending with /v2 with openapi docs
-        #$base_uri = $base_uri.TrimEnd('/')
         # Use 'Add-DBPoolBaseURI' to remove superfluous trailing slashes
-        Add-DBPoolBaseURI -base_uri $base_uri
-        #$apiUri = $base_uri + $resource_Uri
+        Add-DBPoolBaseURI -base_uri $base_uri -Verbose:$false
 
     }
 
     process {
 
-        Write-Verbose -Message "Checking API availability for URL $apiUri"
+        Write-Verbose -Message "Checking Uri: [ $($base_uri + $resource_Uri) ]"
         try {
-            Invoke-DBPoolRequest -Method 'HEAD' -resource_Uri $resource_Uri -ErrorAction Stop | Out-Null
+            Invoke-DBPoolRequest -Method 'HEAD' -resource_Uri $resource_Uri -ErrorAction Stop -Verbose:$false | Out-Null
             $true
         } catch {
             if ($_.Exception.Response.StatusCode -ne 200) {
@@ -78,6 +74,5 @@ function Test-DBPoolApi {
     }
 
     end {}
-
 
 }
