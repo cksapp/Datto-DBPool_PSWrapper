@@ -31,7 +31,7 @@ Get-DBPoolContainer [-ChildContainer] [<CommonParameters>]
 
 ### ContainerStatus
 ```
-Get-DBPoolContainer [-Id] <Int32[]> [-Status] [<CommonParameters>]
+Get-DBPoolContainer [[-Id] <Int32[]>] [-Status] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -174,22 +174,10 @@ This parameter is required when using the 'ContainerStatus' parameter set.
 
 ```yaml
 Type: Int32[]
-Parameter Sets: ListContainer, ParentContainer
+Parameter Sets: ListContainer, ParentContainer, ContainerStatus
 Aliases:
 
 Required: False
-Position: 1
-Default value: None
-Accept pipeline input: True (ByPropertyName, ByValue)
-Accept wildcard characters: False
-```
-
-```yaml
-Type: Int32[]
-Parameter Sets: ContainerStatus
-Aliases:
-
-Required: True
 Position: 1
 Default value: None
 Accept pipeline input: True (ByPropertyName, ByValue)

@@ -11,7 +11,6 @@ function Get-DBPoolContainer {
 
     .PARAMETER Id
         The ID of the container details to get from the DBPool.
-        This parameter is required when using the 'ContainerStatus' parameter set.
 
     .PARAMETER Status
         Gets the status of a container by ID.
@@ -309,11 +308,11 @@ function Get-DBPoolContainer {
                     } elseif ($PSCmdlet.ParameterSetName -eq 'ListContainer') {
                         $response = $response.containers
                     } elseif ($PSCmdlet.ParameterSetName -eq 'ContainerStatus') {
-                        $response = foreach ($n in $($response.containers.id)) {
+                        foreach ($container in $($response.containers | Sort-Object -Property Name)) {
                             $requestResponse = $null
-                            Write-Verbose "Running the [ $($PSCmdlet.ParameterSetName) ] parameter set for ID $n"
+                            Write-Verbose "Running the [ $($PSCmdlet.ParameterSetName) ] parameter set for Container Name: [ $($container.name) ] - ID: $($container.id)"
 
-                            $uri = "$requestPath/$n/status"
+                            $uri = "$requestPath/$($container.id)/status"
 
                             try {
                                 $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri $uri -ErrorAction Stop -Verbose:$false
@@ -322,6 +321,7 @@ function Get-DBPoolContainer {
                                 }
                             } catch {
                                 Write-Error $_
+                                Write-Warning "If you need to report an error to the DBE team, include this request ID which can be used to search through the application logs for messages that were logged while processing your request [ X-App-Request-Id: $DBPool_appRequestId ]"
                                 continue
                             }
 
