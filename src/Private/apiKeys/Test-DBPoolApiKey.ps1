@@ -69,6 +69,7 @@ function Test-DBPoolApiKey {
                 StatusDescription = $_.Exception.Response.StatusDescription
                 Message = $_.Exception.Message
                 URI = $($DBPool_Base_URI + $resource_uri)
+                "Response Header 'X-App-Request-Id'" = [string]($_.Exception.Response.Headers.GetValues('X-App-Request-Id'))
             }
 
         }

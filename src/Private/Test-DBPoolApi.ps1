@@ -50,7 +50,7 @@ function Test-DBPoolApi {
         Write-Debug -Message "Api URL is $base_uri"
         Write-Debug -Message "Api Key is $DBPool_ApiKey"
         if (!($base_uri -and $apiKey)) {
-            Write-Warning "API parameters are missing. Please run Set-DBPoolApiParameters first!"
+            Write-Warning "API parameters are missing. Please run 'Set-DBPoolApiParameter' first!"
         }
 
         # Use 'Add-DBPoolBaseURI' to remove superfluous trailing slashes
