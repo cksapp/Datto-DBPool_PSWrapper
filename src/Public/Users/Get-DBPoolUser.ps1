@@ -5,9 +5,13 @@ function Get-DBPoolUser {
 
     .DESCRIPTION
         The Get-DBPoolUser function is used to get a user details from DBPool.
-        Default will get the current authenticated user details, but can be used to get any user details by username.
+        Will retrieve the current authenticated user details, but can also be used to get other user details by username.
 
-    .PARAMETER username
+    .PARAMETER PlainTextAPIKey
+        This switch will return the API Key in plain text.
+        By default, the API Key is returned as a SecureString.
+
+    .PARAMETER Username
         The username of the user to get details for.
         This accepts an array of strings.
 
@@ -22,10 +26,24 @@ function Get-DBPoolUser {
 
         This will get the user details for the current authenticated user.
 
+        ----------------------------------------------------------------
+
+        id          : 1234
+        username    : john.doe
+        displayName : John Doe
+        email       : John.Doe@company.tld
+        apiKey      : System.Security.SecureString
+
     .EXAMPLE
         Get-DBPoolUser -username "John.Doe"
 
         This will get the user details for the user "John.Doe".
+
+        ----------------------------------------------------------------
+
+        id username  displayName email
+        -- --------  ----------- -----
+        1234 john.doe John Doe   John.Doe@company.tld
 
     .NOTES
         Equivalent API endpoint:
@@ -41,6 +59,9 @@ function Get-DBPoolUser {
     [CmdletBinding(DefaultParameterSetName = 'Self')]
     [OutputType([PSCustomObject])]
     param (
+        [Parameter(ParameterSetName = 'Self', Position = 0)]
+        [switch]$PlainTextAPIKey,
+
         [Parameter(ParameterSetName = 'User', Mandatory = $false, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
         [string[]]$Username
     )
@@ -51,40 +72,39 @@ function Get-DBPoolUser {
 
     process {
 
-        if ($null -eq $Username -or $Username.Count -eq 0) {
+        if ($PSCmdlet.ParameterSetName -eq 'Self') {
             Write-Verbose "Running the [ $($PSCmdlet.ParameterSetName) ] parameter set"
 
             try {
                 $response = Invoke-DBPoolRequest -Method $method -resource_Uri '/api/v2/self' -ErrorAction Stop
+                if ($null -ne $response) {
+                    $response = $response | ConvertFrom-Json
+                    if ($response.ApiKey -and -not $PlainTextAPIKey) {
+                        $response.ApiKey = $response.ApiKey | ConvertTo-SecureString -AsPlainText -Force
+                    }
+                    $response
+                }
             }
             catch {
                 Write-Error $_
             }
 
-            if ($null -ne $response) {
-                    $response = $response | ConvertFrom-Json
-                }
         } else {
-            $response = foreach ($uName in $Username) {
+            foreach ($uName in $Username) {
                 $requestResponse = $null
                 Write-Verbose "Running the [ $($PSCmdlet.ParameterSetName) ] parameter set for Username $uName"
                 $requestPath = "/api/v2/users/$uName"
 
                 try {
-                    $requestResponse = Invoke-DBPoolRequest -Method $method -resource_Uri $requestPath -ErrorAction Stop
-                }
-                catch {
+                    $requestResponse = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath -ErrorAction Stop
+                    if ($null -ne $requestResponse) {
+                        $requestResponse | ConvertFrom-Json | Write-Output
+                    }
+                } catch {
                     Write-Error $_
-                }
-
-                if ($null -ne $requestResponse) {
-                    $requestResponse | ConvertFrom-Json
                 }
             }
         }
-
-        # Return the response
-        $response
 
     }
 
