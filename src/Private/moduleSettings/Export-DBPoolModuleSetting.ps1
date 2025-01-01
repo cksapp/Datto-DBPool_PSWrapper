@@ -46,7 +46,7 @@ function Export-DBPoolModuleSetting {
         N/A
 
     .LINK
-        N/A
+        https://datto-dbpool-api.kentsapp.com/Internal/moduleSettings/Export-DBPoolModuleSetting/
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'set')]

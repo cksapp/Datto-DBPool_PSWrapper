@@ -21,7 +21,7 @@ function Get-DBPoolBaseURI {
         N/A
 
     .LINK
-        N/A
+        https://datto-dbpool-api.kentsapp.com/Internal/baseUri/Get-DBPoolBaseURI/
 #>
 
     [cmdletbinding()]

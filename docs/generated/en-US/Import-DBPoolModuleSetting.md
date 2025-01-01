@@ -1,30 +1,24 @@
 ---
 external help file: Datto.DBPool.API-help.xml
 Module Name: Datto.DBPool.API
-online version:
+online version: https://datto-dbpool-api.kentsapp.com/Internal/moduleSettings/Import-DBPoolModuleSetting/
 schema: 2.0.0
 ---
 
-# Get-DBPoolModuleSetting
+# Import-DBPoolModuleSetting
 
 ## SYNOPSIS
-Gets the saved DBPool configuration settings
+Imports the DBPool BaseURI, API Key, & JSON configuration information to the current session.
 
 ## SYNTAX
 
-### index (Default)
 ```
-Get-DBPoolModuleSetting [-DBPoolConfPath <String>] [-DBPoolConfFile <String>] [<CommonParameters>]
-```
-
-### show
-```
-Get-DBPoolModuleSetting [-openConfFile] [<CommonParameters>]
+Import-DBPoolModuleSetting [-DBPoolConfPath <String>] [-DBPoolConfFile <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Get-DBPoolModuleSetting cmdlet gets the saved DBPool configuration settings
-from the local system.
+The Import-DBPoolModuleSetting cmdlet imports the DBPool BaseURI, API Key, & JSON configuration
+information stored in the DBPool configuration file to the users current session.
 
 By default the configuration file is stored in the following location:
     $env:USERPROFILE\DBPoolAPI
@@ -33,21 +27,22 @@ By default the configuration file is stored in the following location:
 
 ### EXAMPLE 1
 ```
-Get-DBPoolModuleSetting
+Import-DBPoolModuleSetting
 ```
 
-Gets the contents of the configuration file that was created with the
-Export-DBPoolModuleSetting
+Validates that the configuration file created with the Export-DBPoolModuleSetting cmdlet exists
+then imports the stored data into the current users session.
 
 The default location of the DBPool configuration file is:
     $env:USERPROFILE\DBPoolAPI\config.psd1
 
 ### EXAMPLE 2
 ```
-Get-DBPoolModuleSetting -DBPoolConfPath C:\DBPoolAPI -DBPoolConfFile MyConfig.psd1 -openConfFile
+Import-DBPoolModuleSetting -DBPoolConfPath C:\DBPoolAPI -DBPoolConfFile MyConfig.psd1
 ```
 
-Opens the configuration file from the defined location in the default editor
+Validates that the configuration file created with the Export-DBPoolModuleSetting cmdlet exists
+then imports the stored data into the current users session.
 
 The location of the DBPool configuration file in this example is:
     C:\DBPoolAPI\MyConfig.psd1
@@ -62,7 +57,7 @@ By default the configuration file is stored in the following location:
 
 ```yaml
 Type: String
-Parameter Sets: index
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -80,27 +75,12 @@ By default the configuration file is named:
 
 ```yaml
 Type: String
-Parameter Sets: index
+Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: Named
 Default value: Config.psd1
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -openConfFile
-Opens the DBPool configuration file
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: show
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -113,11 +93,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### N/A
 ## OUTPUTS
 
-### [void] - No output is returned.
+### N/A
 ## NOTES
 N/A
 
 ## RELATED LINKS
 
-[N/A]()
+[https://datto-dbpool-api.kentsapp.com/Internal/moduleSettings/Import-DBPoolModuleSetting/](https://datto-dbpool-api.kentsapp.com/Internal/moduleSettings/Import-DBPoolModuleSetting/)
 

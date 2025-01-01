@@ -37,7 +37,7 @@ function Test-DBPoolApiKey {
         N/A
 
     .LINK
-        N/A
+        https://datto-dbpool-api.kentsapp.com/Internal/apiKeys/Test-DBPoolApiKey/
 #>
 
     [cmdletbinding()]

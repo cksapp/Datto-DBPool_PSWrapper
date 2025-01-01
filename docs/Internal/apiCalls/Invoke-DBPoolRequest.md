@@ -1,23 +1,25 @@
 ---
 external help file: Datto.DBPool.API-help.xml
 Module Name: Datto.DBPool.API
-online version:
+online version: https://datto-dbpool-api.kentsapp.com/Internal/apiCalls/Invoke-DBPoolRequest/
 schema: 2.0.0
 ---
 
 # Invoke-DBPoolRequest
 
 ## SYNOPSIS
+
 Internal function to make an API request to the DBPool API
 
 ## SYNTAX
 
-```
+```PowerShell
 Invoke-DBPoolRequest [[-method] <String>] [-resource_Uri] <String> [[-uri_Filter] <Hashtable>]
  [[-data] <Hashtable>] [[-DBPool_JSON_Conversion_Depth] <Int32>] [-allPages] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 The Invoke-DBPoolRequest cmdlet invokes an API request to DBPool API
 
 This is an internal function that is used by all public functions
@@ -25,9 +27,9 @@ This is an internal function that is used by all public functions
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
+```PowerShell
 Invoke-DBPoolRequest -method GET -resource_Uri '/api/v2/self' -uri_Filter $uri_Filter
-```
 
 Name                           Value
 ----                           -----
@@ -35,12 +37,15 @@ Method                         GET
 Uri                            https://dbpool.datto.net/api/v2/self
 Headers                        {X-App-Apikey = 3feb2b29-919c-409c-985d-e99cbae43a6d}
 Body
+```
 
 Invoke an API request against the defined resource using any of the provided parameters
 
 ### EXAMPLE 2
-```
+
+```PowerShell
 Invoke-DBPoolRequest -method GET -resource_Uri '/api/openapi.json' -uri_Filter $uri_Filter
+
 Name                           Value
 ----                           -----
 Method                         GET
@@ -54,6 +59,7 @@ Invoke an API request against the defined resource using any of the provided par
 ## PARAMETERS
 
 ### -method
+
 Defines the type of API method to use
 
 Allowed values:
@@ -72,6 +78,7 @@ Accept wildcard characters: False
 ```
 
 ### -resource_Uri
+
 Defines the resource uri (url) to use when creating the API call
 
 ```yaml
@@ -87,7 +94,8 @@ Accept wildcard characters: False
 ```
 
 ### -uri_Filter
-Used with the internal function \[ ConvertTo-DBPoolQueryString \] to combine
+
+Used with the internal function `ConvertTo-DBPoolQueryString` to combine
 a functions parameters with the resource_Uri parameter.
 
 This allows for the full uri query to occur
@@ -111,6 +119,7 @@ Accept wildcard characters: False
 ```
 
 ### -data
+
 Defines the data to be sent with the API request body when using POST or PATCH
 
 ```yaml
@@ -126,6 +135,7 @@ Accept wildcard characters: False
 ```
 
 ### -DBPool_JSON_Conversion_Depth
+
 Defines the depth of the JSON conversion for the 'data' parameter request body
 
 ```yaml
@@ -141,6 +151,7 @@ Accept wildcard characters: False
 ```
 
 ### -allPages
+
 Returns all items from an endpoint
 
 When using this parameter there is no need to use either the page or perPage
@@ -162,18 +173,21 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### N/A
+
 ## OUTPUTS
 
 ### [Microsoft.PowerShell.Commands.BasicHtmlWebResponseObject] - The response from the DBPool API
+
 ## NOTES
+
 N/A
 
 ## RELATED LINKS
 
-[N/A]()
-
+[https://datto-dbpool-api.kentsapp.com/Internal/apiCalls/Invoke-DBPoolRequest/](https://datto-dbpool-api.kentsapp.com/Internal/apiCalls/Invoke-DBPoolRequest/)

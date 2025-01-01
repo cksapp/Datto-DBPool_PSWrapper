@@ -44,7 +44,7 @@ function Add-DBPoolBaseURI {
         N/A
 
     .LINK
-        N/A
+        https://datto-dbpool-api.kentsapp.com/Internal/baseUri/Add-DBPoolBaseURI/
 #>
 
     [cmdletbinding()]

@@ -29,6 +29,17 @@ function Test-DBPoolApi {
         Test-DBPoolApi -base_uri "https://api.example.com"
 
         Checks the availability of the API at https://api.example.com
+
+    .EXAMPLE
+        Test-DBPoolApi -base_uri "https://api.example.com" -resource_Uri "/api/docs"
+
+        Checks the availability of the API at https://api.example.com/api/docs
+
+    .NOTES
+        N/A
+
+    .LINK
+        https://datto-dbpool-api.kentsapp.com/Internal/Test-DBPoolApi/
 #>
 
     [CmdletBinding()]

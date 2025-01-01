@@ -1,7 +1,7 @@
 ---
 external help file: Datto.DBPool.API-help.xml
 Module Name: Datto.DBPool.API
-online version:
+online version: https://datto-dbpool-api.kentsapp.com/Containers/Get-DBPoolContainer/
 schema: 2.0.0
 ---
 
@@ -14,24 +14,28 @@ The Get-DBPoolContainer function retrieves container information from the DBPool
 ## SYNTAX
 
 ### ListContainer (Default)
-```
+
+```PowerShell
 Get-DBPoolContainer [-ListContainer] [[-Id] <Int32[]>] [-Name <String[]>] [-DefaultDatabase <String[]>]
  [-NotLike] [<CommonParameters>]
 ```
 
 ### ParentContainer
-```
+
+```PowerShell
 Get-DBPoolContainer [-ParentContainer] [[-Id] <Int32[]>] [-Name <String[]>] [-DefaultDatabase <String[]>]
  [-NotLike] [<CommonParameters>]
 ```
 
 ### ChildContainer
-```
+
+```PowerShell
 Get-DBPoolContainer [-ChildContainer] [<CommonParameters>]
 ```
 
 ### ContainerStatus
-```
+
+```PowerShell
 Get-DBPoolContainer [[-Id] <Int32[]>] [-Status] [<CommonParameters>]
 ```
 
@@ -63,12 +67,20 @@ Get a list of containers from the DBPool API by ID
 ### EXAMPLE 3
 
 ```PowerShell
-Get-DBPoolContainer -Status -Id @( 12345, 67890 )
+Get-DBPoolContainer -Status
+```
+
+Get the status of all containers from the DBPool API
+
+### EXAMPLE 4
+
+```PowerShell
+Get-DBPoolContainer -Status -Id 12345, 67890
 ```
 
 Get the status of an array of containers by IDs
 
-### EXAMPLE 4
+### EXAMPLE 5
 
 ```PowerShell
 Get-DBPoolContainer -ParentContainer
@@ -76,7 +88,7 @@ Get-DBPoolContainer -ParentContainer
 
 Get a list of parent containers from the DBPool API
 
-### EXAMPLE 5
+### EXAMPLE 6
 
 ```PowerShell
 Get-DBPoolContainer -ParentContainer -Id 12345
@@ -84,7 +96,7 @@ Get-DBPoolContainer -ParentContainer -Id 12345
 
 Get a list of parent containers from the DBPool API by ID
 
-### EXAMPLE 6
+### EXAMPLE 7
 
 ```PowerShell
 Get-DBPoolContainer -ChildContainer
@@ -92,7 +104,7 @@ Get-DBPoolContainer -ChildContainer
 
 Get a list of child containers from the DBPool API
 
-### EXAMPLE 7
+### EXAMPLE 8
 
 ```PowerShell
 Get-DBPoolContainer -Name 'MyContainer'
@@ -102,7 +114,7 @@ Get-DBPoolContainer -ParentContainer -Name 'ParentContainer*'
 Uses 'Where-Object' to get a list of containers from the DBPool API, or parent containers by name
 Accepts wildcard input
 
-### EXAMPLE 8
+### EXAMPLE 9
 
 ```PowerShell
 Get-DBPoolContainer -Name 'MyContainer' -NotLike
@@ -112,7 +124,7 @@ Get-DBPoolContainer -ParentContainer -Name 'ParentContainer*' -NotLike
 Uses 'Where-Object' to get a list of containers from the DBPool API, or parent containers where the name does not match the filter
 Accepts wildcard input
 
-### EXAMPLE 9
+### EXAMPLE 10
 
 ```PowerShell
 Get-DBPoolContainer -DefaultDatabase 'Database'
@@ -122,7 +134,7 @@ Get-DBPoolContainer -ParentContainer -DefaultDatabase 'Database*'
 Get a list of containers from the DBPool API, or parent containers by database
 Accepts wildcard input
 
-### EXAMPLE 10
+### EXAMPLE 11
 
 ```PowerShell
 Get-DBPoolContainer -DefaultDatabase 'Database' -NotLike
@@ -270,15 +282,16 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### [int] -Id
+### [int] - Id
 
 The ID of the container to get details for.
 
-### [string] - Name
+### [string] Name
 
 The name of the container to get details for.
 
@@ -288,9 +301,7 @@ The database of the container to get details for.
 
 ## OUTPUTS
 
-### [PSCustomObject]
-
-The response from the DBPool API.
+### [PSCustomObject] - The response from the DBPool API
 
 ## NOTES
 
@@ -298,6 +309,14 @@ The -Name, and -DefaultDatabase parameters are not native endpoints of the DBPoo
 This is a custom function which uses 'Where-Object', along with the optional -NotLike parameter to return the response using the provided filter.
 
 If no match is found an error is output, and the original response is returned.
+
+Equivalent API endpoint:
+
+- GET /api/v2/containers
+- GET /api/v2/parents
+- GET /api/v2/children
+- GET /api/v2/containers/{id}
+- GET /api/v2/containers/{id}/status
 
 ## RELATED LINKS
 

@@ -1,7 +1,7 @@
 ---
 external help file: Datto.DBPool.API-help.xml
 Module Name: Datto.DBPool.API
-online version:
+online version: https://datto-dbpool-api.kentsapp.com/Internal/baseUri/Add-DBPoolBaseURI/
 schema: 2.0.0
 ---
 
@@ -95,5 +95,5 @@ N/A
 
 ## RELATED LINKS
 
-[N/A]()
+[https://datto-dbpool-api.kentsapp.com/Internal/baseUri/Add-DBPoolBaseURI/](https://datto-dbpool-api.kentsapp.com/Internal/baseUri/Add-DBPoolBaseURI/)
 

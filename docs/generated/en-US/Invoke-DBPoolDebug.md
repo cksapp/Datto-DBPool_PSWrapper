@@ -1,7 +1,7 @@
 ---
 external help file: Datto.DBPool.API-help.xml
 Module Name: Datto.DBPool.API
-online version:
+online version: https://datto-dbpool-api.kentsapp.com/Debug/Invoke-DBPoolDebug/
 schema: 2.0.0
 ---
 
@@ -57,9 +57,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### [System.Management.Automation.ErrorRecord] - Returns an example exception response from the DBPool API.
 ## NOTES
-N/A
+Equivalent API endpoint:
+    - GET /api/docs/error
 
 ## RELATED LINKS
 
-[N/A]()
+[https://datto-dbpool-api.kentsapp.com/Debug/Invoke-DBPoolDebug/](https://datto-dbpool-api.kentsapp.com/Debug/Invoke-DBPoolDebug/)
 

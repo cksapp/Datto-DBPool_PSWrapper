@@ -1,38 +1,41 @@
 ---
 external help file: Datto.DBPool.API-help.xml
 Module Name: Datto.DBPool.API
-online version:
+online version: https://datto-dbpool-api.kentsapp.com/Containers/Remove-DBPoolContainer/
 schema: 2.0.0
 ---
 
 # Remove-DBPoolContainer
 
 ## SYNOPSIS
+
 The Remove-DBPoolContainer function is used to delete a container in the DBPool.
 
 ## SYNTAX
 
-```
+```PowerShell
 Remove-DBPoolContainer [-Id] <Int32[]> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 The Remove-DBPoolContainer function is used to delete containers in the DBPool based on the provided container ID.
 
-!!
-This is a destructive operation and will destory the container !!
+**!! This is a destructive operation and will destory the container !!**
 
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
+```PowerShell
 Remove-DBPoolContainer -Id '12345'
 ```
 
 This will delete the provided container by ID.
 
 ### EXAMPLE 2
-```
+
+```PowerShell
 @( 12345, 56789 ) | Remove-DBPoolContainer -Confirm:$false
 ```
 
@@ -41,6 +44,7 @@ This will delete the containers with ID 12345, and 56789.
 ## PARAMETERS
 
 ### -Id
+
 The ID of the container to delete.
 This accepts an array of integers.
 
@@ -57,6 +61,7 @@ Accept wildcard characters: False
 ```
 
 ### -Force
+
 Forces the removal of the container without prompting for confirmation.
 
 ```yaml
@@ -72,6 +77,7 @@ Accept wildcard characters: False
 ```
 
 ### -WhatIf
+
 Shows what would happen if the cmdlet runs.
 The cmdlet is not run.
 
@@ -88,6 +94,7 @@ Accept wildcard characters: False
 ```
 
 ### -Confirm
+
 Prompts you for confirmation before running the cmdlet.
 
 ```yaml
@@ -103,18 +110,23 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### [int] - The ID of the container to delete.
+### [int] - The ID of the container to delete
+
 ## OUTPUTS
 
-### [void] - No output is returned.
+### [void] - No output is returned
+
 ## NOTES
-N/A
+
+Equivalent API endpoint:
+
+- DELETE /api/v2/containers/{id}
 
 ## RELATED LINKS
 
-[N/A]()
-
+[https://datto-dbpool-api.kentsapp.com/Containers/Remove-DBPoolContainer/](https://datto-dbpool-api.kentsapp.com/Containers/Remove-DBPoolContainer/)

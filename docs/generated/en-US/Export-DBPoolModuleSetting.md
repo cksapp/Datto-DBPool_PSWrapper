@@ -1,50 +1,46 @@
 ---
 external help file: Datto.DBPool.API-help.xml
 Module Name: Datto.DBPool.API
-online version:
+online version: https://datto-dbpool-api.kentsapp.com/Internal/moduleSettings/Export-DBPoolModuleSetting/
 schema: 2.0.0
 ---
 
-# Import-DBPoolModuleSetting
+# Export-DBPoolModuleSetting
 
 ## SYNOPSIS
-Imports the DBPool BaseURI, API Key, & JSON configuration information to the current session.
+Exports the DBPool BaseURI, API Key, & JSON configuration information to file.
 
 ## SYNTAX
 
 ```
-Import-DBPoolModuleSetting [-DBPoolConfPath <String>] [-DBPoolConfFile <String>] [<CommonParameters>]
+Export-DBPoolModuleSetting [-DBPoolConfPath <String>] [-DBPoolConfFile <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Import-DBPoolModuleSetting cmdlet imports the DBPool BaseURI, API Key, & JSON configuration
-information stored in the DBPool configuration file to the users current session.
+The Export-DBPoolModuleSetting cmdlet exports the DBPool BaseURI, API Key, & JSON configuration information to file.
 
-By default the configuration file is stored in the following location:
-    $env:USERPROFILE\DBPoolAPI
+Making use of PowerShell's System.Security.SecureString type, exporting module settings encrypts your API key in a format
+that can only be unencrypted with the your Windows account as this encryption is tied to your user principal.
+This means that you cannot copy your configuration file to another computer or user account and expect it to work.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Import-DBPoolModuleSetting
+Export-DBPoolModuleSetting
 ```
 
-Validates that the configuration file created with the Export-DBPoolModuleSetting cmdlet exists
-then imports the stored data into the current users session.
-
-The default location of the DBPool configuration file is:
+Validates that the BaseURI, API Key, and JSON depth are set then exports their values
+to the current user's DBPool configuration file located at:
     $env:USERPROFILE\DBPoolAPI\config.psd1
 
 ### EXAMPLE 2
 ```
-Import-DBPoolModuleSetting -DBPoolConfPath C:\DBPoolAPI -DBPoolConfFile MyConfig.psd1
+Export-DBPoolModuleSetting -DBPoolConfPath C:\DBPoolAPI -DBPoolConfFile MyConfig.psd1
 ```
 
-Validates that the configuration file created with the Export-DBPoolModuleSetting cmdlet exists
-then imports the stored data into the current users session.
-
-The location of the DBPool configuration file in this example is:
+Validates that the BaseURI, API Key, and JSON depth are set then exports their values
+to the current user's DBPool configuration file located at:
     C:\DBPoolAPI\MyConfig.psd1
 
 ## PARAMETERS
@@ -93,11 +89,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### N/A
 ## OUTPUTS
 
-### N/A
+### [void] - No output is returned.
 ## NOTES
 N/A
 
 ## RELATED LINKS
 
-[N/A]()
+[https://datto-dbpool-api.kentsapp.com/Internal/moduleSettings/Export-DBPoolModuleSetting/](https://datto-dbpool-api.kentsapp.com/Internal/moduleSettings/Export-DBPoolModuleSetting/)
 

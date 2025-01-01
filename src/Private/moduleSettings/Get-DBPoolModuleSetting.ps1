@@ -52,7 +52,7 @@ function Get-DBPoolModuleSetting {
         N/A
 
     .LINK
-        N/A
+        https://datto-dbpool-api.kentsapp.com/Internal/moduleSettings/Get-DBPoolModuleSetting/
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'index')]

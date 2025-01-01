@@ -1,22 +1,24 @@
 ---
 external help file: Datto.DBPool.API-help.xml
 Module Name: Datto.DBPool.API
-online version:
+online version: https://datto-dbpool-api.kentsapp.com/Internal/moduleSettings/Remove-DBPoolModuleSetting/
 schema: 2.0.0
 ---
 
 # Remove-DBPoolModuleSetting
 
 ## SYNOPSIS
+
 Removes the stored DBPool configuration folder.
 
 ## SYNTAX
 
-```
+```PowerShell
 Remove-DBPoolModuleSetting [-DBPoolConfPath <String>] [-andVariables] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 The Remove-DBPoolModuleSetting cmdlet removes the DBPool folder and its files.
 This cmdlet also has the option to remove sensitive DBPool variables as well.
 
@@ -26,7 +28,8 @@ By default configuration files are stored in the following location and will be 
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
+```PowerShell
 Remove-DBPoolModuleSetting
 ```
 
@@ -36,7 +39,8 @@ The default location of the DBPool configuration folder is:
     $env:USERPROFILE\DBPoolAPI
 
 ### EXAMPLE 2
-```
+
+```PowerShell
 Remove-DBPoolModuleSetting -DBPoolConfPath C:\DBPoolAPI -andVariables
 ```
 
@@ -49,6 +53,7 @@ The location of the DBPool configuration folder in this example is:
 ## PARAMETERS
 
 ### -DBPoolConfPath
+
 Define the location of the DBPool configuration folder.
 
 By default the configuration folder is located at:
@@ -67,6 +72,7 @@ Accept wildcard characters: False
 ```
 
 ### -andVariables
+
 Define if sensitive DBPool variables should be removed as well.
 
 By default the variables are not removed.
@@ -84,6 +90,7 @@ Accept wildcard characters: False
 ```
 
 ### -WhatIf
+
 Shows what would happen if the cmdlet runs.
 The cmdlet is not run.
 
@@ -100,6 +107,7 @@ Accept wildcard characters: False
 ```
 
 ### -Confirm
+
 Prompts you for confirmation before running the cmdlet.
 
 ```yaml
@@ -115,18 +123,21 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### N/A
+
 ## OUTPUTS
 
-### [void] - No output is returned.
+### [void] - No output is returned
+
 ## NOTES
+
 N/A
 
 ## RELATED LINKS
 
-[N/A]()
-
+[https://datto-dbpool-api.kentsapp.com/Internal/moduleSettings/Remove-DBPoolModuleSetting/](https://datto-dbpool-api.kentsapp.com/Internal/moduleSettings/Remove-DBPoolModuleSetting/)

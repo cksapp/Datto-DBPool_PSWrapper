@@ -1,49 +1,34 @@
 ---
 external help file: Datto.DBPool.API-help.xml
 Module Name: Datto.DBPool.API
-online version:
+online version: https://datto-dbpool-api.kentsapp.com/Internal/baseUri/Remove-DBPoolBaseURI/
 schema: 2.0.0
 ---
 
-# Remove-DBPoolApiKey
+# Remove-DBPoolBaseURI
 
 ## SYNOPSIS
-Removes the DBPool API Key global variable.
+Removes the DBPool base URI global variable.
 
 ## SYNTAX
 
 ```
-Remove-DBPoolApiKey [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-DBPoolBaseURI [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Remove-DBPoolAPIKey cmdlet removes the DBPool API Key global variable.
+The Remove-DBPoolBaseURI cmdlet removes the DBPool base URI global variable.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Remove-DBPoolAPIKey
+Remove-DBPoolBaseURI
 ```
 
-Removes the DBPool API Key global variable.
+Removes the DBPool base URI global variable.
 
 ## PARAMETERS
-
-### -Force
-Forces the removal of the DBPool API Key global variable without prompting for confirmation.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
 
 ### -WhatIf
 Shows what would happen if the cmdlet runs.
@@ -90,5 +75,5 @@ N/A
 
 ## RELATED LINKS
 
-[N/A]()
+[https://datto-dbpool-api.kentsapp.com/Internal/baseUri/Remove-DBPoolBaseURI/](https://datto-dbpool-api.kentsapp.com/Internal/baseUri/Remove-DBPoolBaseURI/)
 

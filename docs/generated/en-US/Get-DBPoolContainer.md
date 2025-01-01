@@ -1,7 +1,7 @@
 ---
 external help file: Datto.DBPool.API-help.xml
 Module Name: Datto.DBPool.API
-online version:
+online version: https://datto-dbpool-api.kentsapp.com/Containers/Get-DBPoolContainer/
 schema: 2.0.0
 ---
 
@@ -58,33 +58,40 @@ Get a list of containers from the DBPool API by ID
 
 ### EXAMPLE 3
 ```
-Get-DBPoolContainer -Status -Id @( 12345, 67890 )
+Get-DBPoolContainer -Status
+```
+
+Get the status of all containers from the DBPool API
+
+### EXAMPLE 4
+```
+Get-DBPoolContainer -Status -Id 12345, 67890
 ```
 
 Get the status of an array of containers by IDs
 
-### EXAMPLE 4
+### EXAMPLE 5
 ```
 Get-DBPoolContainer -ParentContainer
 ```
 
 Get a list of parent containers from the DBPool API
 
-### EXAMPLE 5
+### EXAMPLE 6
 ```
 Get-DBPoolContainer -ParentContainer -Id 12345
 ```
 
 Get a list of parent containers from the DBPool API by ID
 
-### EXAMPLE 6
+### EXAMPLE 7
 ```
 Get-DBPoolContainer -ChildContainer
 ```
 
 Get a list of child containers from the DBPool API
 
-### EXAMPLE 7
+### EXAMPLE 8
 ```
 Get-DBPoolContainer -Name 'MyContainer'
 Get-DBPoolContainer -ParentContainer -Name 'ParentContainer*'
@@ -93,7 +100,7 @@ Get-DBPoolContainer -ParentContainer -Name 'ParentContainer*'
 Uses 'Where-Object' to get a list of containers from the DBPool API, or parent containers by name
 Accepts wildcard input
 
-### EXAMPLE 8
+### EXAMPLE 9
 ```
 Get-DBPoolContainer -Name 'MyContainer' -NotLike
 Get-DBPoolContainer -ParentContainer -Name 'ParentContainer*' -NotLike
@@ -102,7 +109,7 @@ Get-DBPoolContainer -ParentContainer -Name 'ParentContainer*' -NotLike
 Uses 'Where-Object' to get a list of containers from the DBPool API, or parent containers where the name does not match the filter
 Accepts wildcard input
 
-### EXAMPLE 9
+### EXAMPLE 10
 ```
 Get-DBPoolContainer -DefaultDatabase 'Database'
 Get-DBPoolContainer -ParentContainer -DefaultDatabase 'Database*'
@@ -111,7 +118,7 @@ Get-DBPoolContainer -ParentContainer -DefaultDatabase 'Database*'
 Get a list of containers from the DBPool API, or parent containers by database
 Accepts wildcard input
 
-### EXAMPLE 10
+### EXAMPLE 11
 ```
 Get-DBPoolContainer -DefaultDatabase 'Database' -NotLike
 Get-DBPoolContainer -ParentContainer -DefaultDatabase 'Database*' -NotLike
@@ -170,7 +177,6 @@ Accept wildcard characters: False
 
 ### -Id
 The ID of the container details to get from the DBPool.
-This parameter is required when using the 'ContainerStatus' parameter set.
 
 ```yaml
 Type: Int32[]
@@ -270,7 +276,14 @@ This is a custom function which uses 'Where-Object', along with the optional -No
 
 If no match is found an error is output, and the original response is returned.
 
+Equivalent API endpoint:
+    - GET /api/v2/containers
+    - GET /api/v2/parents
+    - GET /api/v2/children
+    - GET /api/v2/containers/{id}
+    - GET /api/v2/containers/{id}/status
+
 ## RELATED LINKS
 
-[N/A]()
+[https://datto-dbpool-api.kentsapp.com/Containers/Get-DBPoolContainer/](https://datto-dbpool-api.kentsapp.com/Containers/Get-DBPoolContainer/)
 

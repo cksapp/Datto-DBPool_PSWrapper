@@ -38,7 +38,7 @@ function Set-DBPoolApiParameter {
         See Datto DBPool API help files for more information.
 
     .LINK
-        N/A
+        https://datto-dbpool-api.kentsapp.com/Internal/Set-DBPoolApiParameter/
 #>
 
     [CmdletBinding(SupportsShouldProcess = $True, ConfirmImpact = 'Low')]

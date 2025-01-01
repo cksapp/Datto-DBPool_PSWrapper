@@ -26,7 +26,7 @@ function Import-DBPoolModuleSetting {
         N/A
 
     .OUTPUTS
-        N/A
+        [void] - No output is returned.
 
     .EXAMPLE
         Import-DBPoolModuleSetting
@@ -50,7 +50,7 @@ function Import-DBPoolModuleSetting {
         N/A
 
     .LINK
-        N/A
+        https://datto-dbpool-api.kentsapp.com/Internal/moduleSettings/Import-DBPoolModuleSetting/
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'set')]

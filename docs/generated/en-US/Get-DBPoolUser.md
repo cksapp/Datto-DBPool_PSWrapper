@@ -1,7 +1,7 @@
 ---
 external help file: Datto.DBPool.API-help.xml
 Module Name: Datto.DBPool.API
-online version:
+online version: https://datto-dbpool-api.kentsapp.com/Users/Get-DBPoolUser/
 schema: 2.0.0
 ---
 
@@ -14,7 +14,7 @@ Get a user from DBPool
 
 ### Self (Default)
 ```
-Get-DBPoolUser [<CommonParameters>]
+Get-DBPoolUser [-PlainTextAPIKey] [<CommonParameters>]
 ```
 
 ### User
@@ -24,7 +24,7 @@ Get-DBPoolUser [[-Username] <String[]>] [<CommonParameters>]
 
 ## DESCRIPTION
 The Get-DBPoolUser function is used to get a user details from DBPool.
-Default will get the current authenticated user details, but can be used to get any user details by username.
+Will retrieve the current authenticated user details, but can also be used to get other user details by username.
 
 ## EXAMPLES
 
@@ -35,6 +35,14 @@ Get-DBPoolUser
 
 This will get the user details for the current authenticated user.
 
+----------------------------------------------------------------
+
+id          : 1234
+username    : john.doe
+displayName : John Doe
+email       : John.Doe@company.tld
+apiKey      : System.Security.SecureString
+
 ### EXAMPLE 2
 ```
 Get-DBPoolUser -username "John.Doe"
@@ -42,7 +50,29 @@ Get-DBPoolUser -username "John.Doe"
 
 This will get the user details for the user "John.Doe".
 
+----------------------------------------------------------------
+
+id username  displayName email
+-- --------  ----------- -----
+1234 john.doe John Doe   John.Doe@company.tld
+
 ## PARAMETERS
+
+### -PlainTextAPIKey
+This switch will return the API Key in plain text.
+By default, the API Key is returned as a SecureString.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: Self
+Aliases:
+
+Required: False
+Position: 1
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -Username
 The username of the user to get details for.
@@ -70,9 +100,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### [PSCustomObject] - The user details from DBPool.
 ## NOTES
-N/A
+Equivalent API endpoint:
+    - GET /api/v2/self
+    - GET /api/v2/users/{username}
 
 ## RELATED LINKS
 
-[N/A]()
+[https://datto-dbpool-api.kentsapp.com/Users/Get-DBPoolUser/](https://datto-dbpool-api.kentsapp.com/Users/Get-DBPoolUser/)
 

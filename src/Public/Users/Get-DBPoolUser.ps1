@@ -108,5 +108,9 @@ function Get-DBPoolUser {
 
     }
 
-    end {}
+    end {
+
+        Remove-Variable -Name response -Force -ErrorAction SilentlyContinue
+
+    }
 }

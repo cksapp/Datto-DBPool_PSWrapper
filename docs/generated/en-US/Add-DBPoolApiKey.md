@@ -1,53 +1,54 @@
 ---
 external help file: Datto.DBPool.API-help.xml
 Module Name: Datto.DBPool.API
-online version:
+online version: https://datto-dbpool-api.kentsapp.com/Internal/apiKeys/Add-DBPoolApiKey/
 schema: 2.0.0
 ---
 
-# Remove-DBPoolContainer
+# Add-DBPoolApiKey
 
 ## SYNOPSIS
-The Remove-DBPoolContainer function is used to delete a container in the DBPool.
+Sets the API key for the DBPool.
 
 ## SYNTAX
 
 ```
-Remove-DBPoolContainer [-Id] <Int32[]> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
+Add-DBPoolApiKey [-apiKey] <SecureString> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Remove-DBPoolContainer function is used to delete containers in the DBPool based on the provided container ID.
+The Add-DBPoolApiKey cmdlet sets the API key which is used to authenticate API calls made to DBPool.
 
-!!
-This is a destructive operation and will destory the container !!
+Once the API key is defined, the secret key is encrypted using SecureString.
+
+The DBPool API key is retrieved via the DBPool UI at My Profile -\> API key
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Remove-DBPoolContainer -Id '12345'
+Add-DBPoolApiKey
 ```
 
-This will delete the provided container by ID.
+Prompts to enter in your personal API key.
 
 ### EXAMPLE 2
 ```
-@( 12345, 56789 ) | Remove-DBPoolContainer -Confirm:$false
+Add-DBPoolApiKey -ApiKey $secureString
+Read-Host "Enter your DBPool API Key" -AsSecureString | Add-DBPoolApiKey
 ```
 
-This will delete the containers with ID 12345, and 56789.
+Sets the API key for the DBPool.
 
 ## PARAMETERS
 
-### -Id
-The ID of the container to delete.
-This accepts an array of integers.
+### -apiKey
+Defines your API key for the DBPool.
 
 ```yaml
-Type: Int32[]
+Type: SecureString
 Parameter Sets: (All)
-Aliases: ContainerId
+Aliases:
 
 Required: True
 Position: 1
@@ -57,7 +58,7 @@ Accept wildcard characters: False
 ```
 
 ### -Force
-Forces the removal of the container without prompting for confirmation.
+Forces the setting of the DBPool API key.
 
 ```yaml
 Type: SwitchParameter
@@ -107,7 +108,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### [int] - The ID of the container to delete.
+### [SecureString] - The API key for the DBPool.
 ## OUTPUTS
 
 ### [void] - No output is returned.
@@ -116,5 +117,5 @@ N/A
 
 ## RELATED LINKS
 
-[N/A]()
+[https://datto-dbpool-api.kentsapp.com/Internal/apiKeys/Add-DBPoolApiKey/](https://datto-dbpool-api.kentsapp.com/Internal/apiKeys/Add-DBPoolApiKey/)
 

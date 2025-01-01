@@ -24,7 +24,7 @@ function Remove-DBPoolBaseURI {
         N/A
 
     .LINK
-        N/A
+        https://datto-dbpool-api.kentsapp.com/Internal/baseUri/Remove-DBPoolBaseURI/
 #>
 
     [cmdletbinding(SupportsShouldProcess)]

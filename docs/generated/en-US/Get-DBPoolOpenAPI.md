@@ -1,7 +1,7 @@
 ---
 external help file: Datto.DBPool.API-help.xml
 Module Name: Datto.DBPool.API
-online version:
+online version: https://datto-dbpool-api.kentsapp.com/OpenAPI/Get-DBPoolOpenAPI/
 schema: 2.0.0
 ---
 
@@ -56,9 +56,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### [PSCustomObject] - The OpenAPI json spec for the DBPool API documentation.
 ## NOTES
-N/A
+Equivalent API endpoint:
+    - GET /api/docs/openapi.json
 
 ## RELATED LINKS
 
-[N/A]()
+[https://datto-dbpool-api.kentsapp.com/OpenAPI/Get-DBPoolOpenAPI/](https://datto-dbpool-api.kentsapp.com/OpenAPI/Get-DBPoolOpenAPI/)
 

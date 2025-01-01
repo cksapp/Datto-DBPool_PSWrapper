@@ -18,7 +18,7 @@ function Invoke-DBPoolRequest {
         Defines the resource uri (url) to use when creating the API call
 
     .PARAMETER uri_Filter
-        Used with the internal function [ ConvertTo-DBPoolQueryString ] to combine
+        Used with the internal function 'ConvertTo-DBPoolQueryString' to combine
         a functions parameters with the resource_Uri parameter.
 
         This allows for the full uri query to occur
@@ -77,7 +77,7 @@ function Invoke-DBPoolRequest {
         N/A
 
     .LINK
-        N/A
+        https://datto-dbpool-api.kentsapp.com/Internal/apiCalls/Invoke-DBPoolRequest/
 
 #>
 
@@ -106,9 +106,7 @@ function Invoke-DBPoolRequest {
 
     )
 
-    begin {
-        $ConfirmPreference = 'None'
-    }
+    begin {}
 
     process {
 
@@ -123,7 +121,7 @@ function Invoke-DBPoolRequest {
 
         $query_String = ConvertTo-DBPoolQueryString -resource_Uri $resource_Uri -uri_Filter $uri_Filter
 
-        Set-Variable -Name 'DBPool_queryString' -Value $query_String -Scope Global -Force
+        Set-Variable -Name 'DBPool_queryString' -Value $query_String -Scope Global -Force -Confirm:$false
 
         if ($null -eq $data) {
             $request_Body = $null
@@ -145,7 +143,7 @@ function Invoke-DBPoolRequest {
                 $parameters['ContentType'] = 'application/json; charset=utf-8'
             }
 
-            Set-Variable -Name 'DBPool_invokeParameters' -Value $parameters -Scope Global -Force
+            Set-Variable -Name 'DBPool_invokeParameters' -Value $parameters -Scope Global -Force -Confirm:$false
 
             if ($allPages) {
 
@@ -176,7 +174,7 @@ function Invoke-DBPoolRequest {
                 $api_Response = Invoke-WebRequest @parameters -ErrorAction Stop
                 $appRequestId = $api_Response.Headers['X-App-Request-Id']
                 Write-Debug "If you need to report an error to the DBE team, include this request ID which can be used to search through the application logs for messages that were logged while processing your request [ X-App-Request-Id: $appRequestId ]"
-                Set-Variable -Name 'DBPool_appRequestId' -Value $appRequestId -Scope Global -Force
+                Set-Variable -Name 'DBPool_appRequestId' -Value $appRequestId -Scope Global -Force -Confirm:$false
             }
 
         } catch {
@@ -188,7 +186,7 @@ function Invoke-DBPoolRequest {
             $appRequestId = $null
             if ($_.Exception.Response -and $_.Exception.Response.Headers) {
                 $appRequestId = $_.Exception.Response.Headers.GetValues('X-App-Request-Id')
-                Set-Variable -Name 'DBPool_appRequestId' -Value $appRequestId -Scope Global -Force
+                Set-Variable -Name 'DBPool_appRequestId' -Value $appRequestId -Scope Global -Force -Confirm:$false
                 Write-Debug "If you need to report an error to the DBE team, include this request ID which can be used to search through the application logs for messages that were logged while processing your request [ X-App-Request-Id: $appRequestId ]"
             }
 
@@ -243,7 +241,7 @@ function Invoke-DBPoolRequest {
             'Auth'
         )
         foreach ($v in $var) {
-            Remove-Variable -Name $v -ErrorAction SilentlyContinue -Force
+            Remove-Variable -Name $v -ErrorAction SilentlyContinue -Force -Confirm:$false
         }
     }
 

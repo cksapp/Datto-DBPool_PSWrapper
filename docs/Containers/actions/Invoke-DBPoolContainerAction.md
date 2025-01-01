@@ -1,7 +1,7 @@
 ---
 external help file: Datto.DBPool.API-help.xml
 Module Name: Datto.DBPool.API
-online version:
+online version: https://datto-dbpool-api.kentsapp.com/Containers/actions/Invoke-DBPoolContainerAction/
 schema: 2.0.0
 ---
 
@@ -13,7 +13,7 @@ The Invoke-DBPoolContainerAction function is used to interact with various conta
 
 ## SYNTAX
 
-```
+```PowerShell
 Invoke-DBPoolContainerAction [-Action] <String> [-Id] <Int32[]> [-Force] [-TimeoutSeconds <Int32>]
  [-ThrottleLimit <Int32>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
@@ -171,43 +171,42 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### [int]
+### [int] - The ID of the container to perform the action on
 
-The ID of the container to perform the action on.
-
-### [string]
-
-The action to perform on the container.
+### [string] - The action to perform on the container
 
 ## OUTPUTS
 
-### [void]
-
-No output is returned.
+### [void] - No output is returned
 
 ## NOTES
 
-- **Actions:**
+Equivalent API endpoint:
 
-  - `refresh`
-    - Recreate the Docker container and ZFS snapshot for the container.
-  - `schema-merge`
-    - Attempt to apply upstream changes to the parent container to this child container.
-        This may break your container.
-        Refreshing a container is the supported way to update a child container's database schema.
-  - `start`
-    - Start the Docker container for the container.
+- POST /api/v2/containers/{id}/actions/{action}
 
-  - `restart`
-    - Stop and start the Docker container.
+**Actions:**
 
-  - `stop`
-    - Stop the Docker container.
+- `refresh`
+  - Recreate the Docker container and ZFS snapshot for the container.
+- `schema-merge`
+  - Attempt to apply upstream changes to the parent container to this child container.
+      This may break your container.
+      Refreshing a container is the supported way to update a child container's database schema.
+- `start`
+  - Start the Docker container for the container.
+
+- `restart`
+  - Stop and start the Docker container.
+
+- `stop`
+  - Stop the Docker container.
 
 ## RELATED LINKS
 
-[N/A]()
+[https://datto-dbpool-api.kentsapp.com/Containers/actions/Invoke-DBPoolContainerAction/](https://datto-dbpool-api.kentsapp.com/Containers/actions/Invoke-DBPoolContainerAction/)

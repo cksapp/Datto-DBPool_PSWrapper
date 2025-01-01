@@ -1,7 +1,7 @@
 ---
 external help file: Datto.DBPool.API-help.xml
 Module Name: Datto.DBPool.API
-online version:
+online version: https://datto-dbpool-api.kentsapp.com/Containers/New-DBPoolContainer/
 schema: 2.0.0
 ---
 
@@ -162,9 +162,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### [PSCustomObject] - The response from the DBPool API.
 ## NOTES
-N/A
+Equivalent API endpoint:
+    - POST /api/v2/containers
 
 ## RELATED LINKS
 
-[N/A]()
+[https://datto-dbpool-api.kentsapp.com/Containers/New-DBPoolContainer/](https://datto-dbpool-api.kentsapp.com/Containers/New-DBPoolContainer/)
 

@@ -1,37 +1,41 @@
 ---
 external help file: Datto.DBPool.API-help.xml
 Module Name: Datto.DBPool.API
-online version:
+online version: https://datto-dbpool-api.kentsapp.com/Containers/New-DBPoolContainer/
 schema: 2.0.0
 ---
 
 # New-DBPoolContainer
 
 ## SYNOPSIS
+
 The New-DBPoolContainer function is used to create a new container from the DBPool API.
 
 ## SYNTAX
 
-```
+```PowerShell
 New-DBPoolContainer [-ContainerName] <String> [-ParentId <Int32>] [-ParentName <String>]
  [-ParentDefaultDatabase <String>] [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 This function creates a new container in the DBPool based on the provided container name and parent container information.
 The ContainerName parameter is mandatory, and at least one of the parent parameters (ParentId, ParentName, or ParentDefaultDatabase) must be specified.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
+```PowerShell
 New-DBPoolContainer -ContainerName 'MyNewContainer' -ParentId 12345
 ```
 
 This will create a new container named 'MyNewContainer' based on the parent container with ID 12345.
 
 ### EXAMPLE 2
-```
+
+```PowerShell
 Get-DBPoolContainer -ParentContainer -Id 1 | New-DBPoolContainer -ContainerName 'MyNewContainer'
 ```
 
@@ -40,6 +44,7 @@ This will create a new container named 'MyNewContainer' based on the piped in pa
 ## PARAMETERS
 
 ### -ContainerName
+
 The name for the new container.
 
 ```yaml
@@ -55,6 +60,7 @@ Accept wildcard characters: False
 ```
 
 ### -ParentId
+
 The ID of the parent container to clone.
 
 ```yaml
@@ -70,6 +76,7 @@ Accept wildcard characters: False
 ```
 
 ### -ParentName
+
 The name of the parent container to clone.
 
 ```yaml
@@ -85,6 +92,7 @@ Accept wildcard characters: False
 ```
 
 ### -ParentDefaultDatabase
+
 The default database of the parent container to clone.
 
 ```yaml
@@ -100,6 +108,7 @@ Accept wildcard characters: False
 ```
 
 ### -Force
+
 Force the operation without confirmation.
 
 ```yaml
@@ -115,6 +124,7 @@ Accept wildcard characters: False
 ```
 
 ### -WhatIf
+
 Shows what would happen if the cmdlet runs.
 The cmdlet is not run.
 
@@ -131,6 +141,7 @@ Accept wildcard characters: False
 ```
 
 ### -Confirm
+
 Prompts you for confirmation before running the cmdlet.
 
 ```yaml
@@ -146,21 +157,37 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### [string] - The name for the new container.
-### [int] - The ID of the parent container to clone.
-### [string] - The name of the parent container to clone.
-### [string] - The default database of the parent container to clone.
+### [string] - ContainerName
+
+The name for the new container.
+
+### [int] - ParentId
+
+The ID of the parent container to clone.
+
+### [string] - ParentName
+
+The name of the parent container to clone.
+
+### [string] - ParentDefaultDatabase
+
+The default database of the parent container to clone.
+
 ## OUTPUTS
 
-### [PSCustomObject] - The response from the DBPool API.
+### [PSCustomObject] - The response from the DBPool API
+
 ## NOTES
-N/A
+
+Equivalent API endpoint:
+
+- POST /api/v2/containers
 
 ## RELATED LINKS
 
-[N/A]()
-
+[https://datto-dbpool-api.kentsapp.com/Containers/New-DBPoolContainer/](https://datto-dbpool-api.kentsapp.com/Containers/New-DBPoolContainer/)

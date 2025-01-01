@@ -1,7 +1,7 @@
 ---
 external help file: Datto.DBPool.API-help.xml
 Module Name: Datto.DBPool.API
-online version:
+online version: https://datto-dbpool-api.kentsapp.com/Internal/Set-DBPoolApiParameter/
 schema: 2.0.0
 ---
 
@@ -131,5 +131,5 @@ See Datto DBPool API help files for more information.
 
 ## RELATED LINKS
 
-[N/A]()
+[https://datto-dbpool-api.kentsapp.com/Internal/Set-DBPoolApiParameter/](https://datto-dbpool-api.kentsapp.com/Internal/Set-DBPoolApiParameter/)
 

@@ -1,38 +1,50 @@
 ---
 external help file: Datto.DBPool.API-help.xml
 Module Name: Datto.DBPool.API
-online version:
+online version: https://datto-dbpool-api.kentsapp.com/Internal/Test-DBPoolApi/
 schema: 2.0.0
 ---
 
 # Test-DBPoolApi
 
 ## SYNOPSIS
+
 Checks the availability of the DBPool API using an HTTP HEAD request.
 
 ## SYNTAX
 
-```
+```PowerShell
 Test-DBPoolApi [[-base_uri] <String>] [[-resource_Uri] <String>] [[-apiKey] <SecureString>]
  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 This function sends an HTTP HEAD request to the specified API URL using Invoke-WebRequest.
 Checks if the HTTP status code is 200, indicating that the API is available.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
+```PowerShell
 Test-DBPoolApi -base_uri "https://api.example.com"
 ```
 
-Checks the availability of the API at https://api.example.com
+Checks the availability of the API at [https://api.example.com](https://api.example.com)
+
+### EXAMPLE 2
+
+```PowerShell
+Test-DBPoolApi -base_uri "https://api.example.com" -resource_Uri "/api/docs"
+```
+
+Checks the availability of the API at [https://api.example.com/api/docs](https://api.example.com/api/docs)
 
 ## PARAMETERS
 
 ### -base_uri
+
 The base URL of the API to be checked.
 
 ```yaml
@@ -48,6 +60,7 @@ Accept wildcard characters: False
 ```
 
 ### -resource_Uri
+
 The URI of the API resource to be checked.
 
 The default value is '/api/docs/openapi.json'.
@@ -65,6 +78,7 @@ Accept wildcard characters: False
 ```
 
 ### -apiKey
+
 Optional: Access token for authorization.
 
 ```yaml
@@ -80,15 +94,23 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### [string] - The base URI for the DBPool API connection.
-### [SecureString] - The API key for the DBPool.
+### [string] - The base URI for the DBPool API connection
+
+### [SecureString] - The API key for the DBPool
+
 ## OUTPUTS
 
-### [System.Boolean] - Returns $true if the API is available, $false if not.
+### [System.Boolean] - Returns $true if the API is available, $false if not
+
 ## NOTES
 
+N/A
+
 ## RELATED LINKS
+
+[https://datto-dbpool-api.kentsapp.com/Internal/Test-DBPoolApi/](https://datto-dbpool-api.kentsapp.com/Internal/Test-DBPoolApi/)

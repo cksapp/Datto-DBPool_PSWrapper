@@ -40,13 +40,13 @@ function Get-DBPoolMetaData {
         in various troubleshooting scenarios such as rate-limiting.
 
         The full base uri test path in this example is:
-            http://dbpool.example.com/device
+            http://dbpool.example.com/api/v2/self
 
     .NOTES
         N/A
 
     .LINK
-        N/A
+        https://datto-dbpool-api.kentsapp.com/Internal/apiCalls/Get-DBPoolMetaData/
 #>
 
     [CmdletBinding()]
@@ -74,7 +74,7 @@ function Get-DBPoolMetaData {
             $DBPool_Headers.Add("Content-Type", 'application/json')
             $DBPool_Headers.Add('X-App-APIkey', $api_Key)
 
-            $rest_output = Invoke-WebRequest -method $method -uri ($base_uri + $resource_uri) -headers $DBPool_Headers -ErrorAction Stop
+            $response = Invoke-WebRequest -method $method -uri ($base_uri + $resource_uri) -headers $DBPool_Headers -ErrorAction Stop
         }
         catch {
 
@@ -91,17 +91,17 @@ function Get-DBPoolMetaData {
             Remove-Variable -Name DBPool_Headers -Force
         }
 
-        if ($rest_output){
+        if ($response){
             $data = @{}
-            $data = $rest_output
+            $data = $response
 
             [PSCustomObject]@{
                 RequestUri              = $($DBPool_Base_URI + $resource_uri)
                 StatusCode              = $data.StatusCode
                 StatusDescription       = $data.StatusDescription
                 'Content-Type'          = $data.headers.'Content-Type'
-                <#'X-App-Request-Id'      = $data.headers.'X-App-Request-Id'
-                'X-API-Limit-Remaining' = $data.headers.'X-API-Limit-Remaining'
+                'X-App-Request-Id'      = $data.headers.'X-App-Request-Id'
+                <#'X-API-Limit-Remaining' = $data.headers.'X-API-Limit-Remaining'
                 'X-API-Limit-Resets'    = $data.headers.'X-API-Limit-Resets'
                 'X-API-Limit-Cost'      = $data.headers.'X-API-Limit-Cost'#>
                 raw                     = $data

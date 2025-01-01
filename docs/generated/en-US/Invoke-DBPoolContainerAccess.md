@@ -1,7 +1,7 @@
 ---
 external help file: Datto.DBPool.API-help.xml
 Module Name: Datto.DBPool.API
-online version:
+online version: https://datto-dbpool-api.kentsapp.com/Containers/access/Invoke-DBPoolContainerAccess/
 schema: 2.0.0
 ---
 
@@ -179,9 +179,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### [PSCustomObject] - The response from the DBPool API.
 ### [void] - No output is returned.
 ## NOTES
-N/A
+Equivalent API endpoint:
+    - GET /api/v2/containers/{id}/access/{username}
+    - PUT /api/v2/containers/{id}/access/{username}
+    - DELETE /api/v2/containers/{id}/access/{username}
 
 ## RELATED LINKS
 
-[N/A]()
+[https://datto-dbpool-api.kentsapp.com/Containers/access/Invoke-DBPoolContainerAccess/](https://datto-dbpool-api.kentsapp.com/Containers/access/Invoke-DBPoolContainerAccess/)
 

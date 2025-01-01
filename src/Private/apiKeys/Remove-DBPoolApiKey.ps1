@@ -24,7 +24,7 @@ function Remove-DBPoolApiKey {
         N/A
 
     .LINK
-        N/A
+        https://datto-dbpool-api.kentsapp.com/Internal/apiKeys/Remove-DBPoolApiKey/
 #>
 
     [cmdletbinding(SupportsShouldProcess, ConfirmImpact = 'Low')]

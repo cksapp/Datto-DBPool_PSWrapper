@@ -1,7 +1,7 @@
 ---
 external help file: Datto.DBPool.API-help.xml
 Module Name: Datto.DBPool.API
-online version:
+online version: https://datto-dbpool-api.kentsapp.com/Internal/Test-DBPoolApi/
 schema: 2.0.0
 ---
 
@@ -29,6 +29,13 @@ Test-DBPoolApi -base_uri "https://api.example.com"
 ```
 
 Checks the availability of the API at https://api.example.com
+
+### EXAMPLE 2
+```
+Test-DBPoolApi -base_uri "https://api.example.com" -resource_Uri "/api/docs"
+```
+
+Checks the availability of the API at https://api.example.com/api/docs
 
 ## PARAMETERS
 
@@ -90,5 +97,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### [System.Boolean] - Returns $true if the API is available, $false if not.
 ## NOTES
+N/A
 
 ## RELATED LINKS
+
+[https://datto-dbpool-api.kentsapp.com/Internal/Test-DBPoolApi/](https://datto-dbpool-api.kentsapp.com/Internal/Test-DBPoolApi/)
+

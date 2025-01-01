@@ -53,7 +53,7 @@ function ConvertTo-DBPoolQueryString {
         N/A
 
     .LINK
-        N/A
+        https://datto-dbpool-api.kentsapp.com/Internal/apiCalls/ConvertTo-DBPoolQueryString/
 
 #>
 

@@ -48,7 +48,7 @@ function Remove-DBPoolModuleSetting {
         N/A
 
     .LINK
-        N/A
+        https://datto-dbpool-api.kentsapp.com/Internal/moduleSettings/Remove-DBPoolModuleSetting/
 #>
 
     [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName = 'set')]

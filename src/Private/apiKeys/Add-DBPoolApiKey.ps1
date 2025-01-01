@@ -37,7 +37,7 @@ function Add-DBPoolApiKey {
         N/A
 
     .LINK
-        N/A
+        https://datto-dbpool-api.kentsapp.com/Internal/apiKeys/Add-DBPoolApiKey/
 #>
 
     [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Low')]

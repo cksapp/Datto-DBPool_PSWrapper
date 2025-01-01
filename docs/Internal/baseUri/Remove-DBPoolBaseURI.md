@@ -1,28 +1,31 @@
 ---
 external help file: Datto.DBPool.API-help.xml
 Module Name: Datto.DBPool.API
-online version:
+online version: https://datto-dbpool-api.kentsapp.com/Internal/baseUri/Remove-DBPoolBaseURI/
 schema: 2.0.0
 ---
 
 # Remove-DBPoolBaseURI
 
 ## SYNOPSIS
+
 Removes the DBPool base URI global variable.
 
 ## SYNTAX
 
-```
+```PowerShell
 Remove-DBPoolBaseURI [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 The Remove-DBPoolBaseURI cmdlet removes the DBPool base URI global variable.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
+```PowerShell
 Remove-DBPoolBaseURI
 ```
 
@@ -31,6 +34,7 @@ Removes the DBPool base URI global variable.
 ## PARAMETERS
 
 ### -WhatIf
+
 Shows what would happen if the cmdlet runs.
 The cmdlet is not run.
 
@@ -47,6 +51,7 @@ Accept wildcard characters: False
 ```
 
 ### -Confirm
+
 Prompts you for confirmation before running the cmdlet.
 
 ```yaml
@@ -62,18 +67,21 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### N/A
+
 ## OUTPUTS
 
-### [void] - No output is returned.
+### [void] - No output is returned
+
 ## NOTES
+
 N/A
 
 ## RELATED LINKS
 
-[N/A]()
-
+[https://datto-dbpool-api.kentsapp.com/Internal/baseUri/Remove-DBPoolBaseURI/](https://datto-dbpool-api.kentsapp.com/Internal/baseUri/Remove-DBPoolBaseURI/)

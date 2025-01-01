@@ -1,42 +1,48 @@
 ---
 external help file: Datto.DBPool.API-help.xml
 Module Name: Datto.DBPool.API
-online version:
+online version: https://datto-dbpool-api.kentsapp.com/Containers/access/Invoke-DBPoolContainerAccess/
 schema: 2.0.0
 ---
 
 # Invoke-DBPoolContainerAccess
 
 ## SYNOPSIS
+
 The Invoke-DBPoolContainerAccess function is used to interact with various container access operations in the Datto DBPool API.
 
 ## SYNTAX
 
 ### GetAccess (Default)
-```
+
+```PowerShell
 Invoke-DBPoolContainerAccess [-Id] <Int32[]> [-Username] <String[]> [-GetAccess] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
 ### RemoveAccess
-```
+
+```PowerShell
 Invoke-DBPoolContainerAccess [-Id] <Int32[]> [-Username] <String[]> [-RemoveAccess] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
 ### AddAccess
-```
+
+```PowerShell
 Invoke-DBPoolContainerAccess [-Id] <Int32[]> [-Username] <String[]> [-AddAccess] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 The Invoke-DBPoolContainerAccess function is used to Get, Add, or Remove access to a container in the Datto DBPool API based on a given username.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
+```PowerShell
 Invoke-DBPoolContainerAccess -Id '12345' -Username 'John.Doe'
 Invoke-DBPoolContainerAccess -Id '12345' -Username 'John.Doe' -GetAccess
 ```
@@ -44,14 +50,16 @@ Invoke-DBPoolContainerAccess -Id '12345' -Username 'John.Doe' -GetAccess
 This will get access to the container with ID 12345 for the user "John.Doe"
 
 ### EXAMPLE 2
-```
+
+```PowerShell
 Invoke-DBPoolContainerAccess -Id @( '12345', '56789' ) -Username 'John.Doe' -AddAccess
 ```
 
 This will add access to the containers with ID 12345, and 56789 for the user "John.Doe"
 
 ### EXAMPLE 3
-```
+
+```PowerShell
 Invoke-DBPoolContainerAccess -Id '12345' -Username @( 'Jane.Doe', 'John.Doe' ) -RemoveAccess
 ```
 
@@ -60,6 +68,7 @@ This will remove access to the container with ID 12345 for the users "Jane.Doe",
 ## PARAMETERS
 
 ### -Id
+
 The ID of the container to access.
 This accepts an array of integers.
 
@@ -76,6 +85,7 @@ Accept wildcard characters: False
 ```
 
 ### -Username
+
 The username to access the container.
 This accepts an array of strings.
 
@@ -92,6 +102,7 @@ Accept wildcard characters: False
 ```
 
 ### -GetAccess
+
 Gets the current access to a container by ID for the given username.
 
 ```yaml
@@ -107,6 +118,7 @@ Accept wildcard characters: False
 ```
 
 ### -AddAccess
+
 Adds access to a container by ID for the given username.
 
 ```yaml
@@ -122,6 +134,7 @@ Accept wildcard characters: False
 ```
 
 ### -RemoveAccess
+
 Removes access to a container by ID for the given username.
 
 ```yaml
@@ -137,6 +150,7 @@ Accept wildcard characters: False
 ```
 
 ### -WhatIf
+
 Shows what would happen if the cmdlet runs.
 The cmdlet is not run.
 
@@ -153,6 +167,7 @@ Accept wildcard characters: False
 ```
 
 ### -Confirm
+
 Prompts you for confirmation before running the cmdlet.
 
 ```yaml
@@ -168,20 +183,29 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### [int] - The ID of the container to access.
-### [string] - The username to access the container.
+### [int] - The ID of the container to access
+
+### [string] - The username to access the container
+
 ## OUTPUTS
 
-### [PSCustomObject] - The response from the DBPool API.
-### [void] - No output is returned.
+### [PSCustomObject] - The response from the DBPool API
+
+### [void] - No output is returned
+
 ## NOTES
-N/A
+
+Equivalent API endpoint:
+
+- GET /api/v2/containers/{id}/access/{username}
+- PUT /api/v2/containers/{id}/access/{username}
+- DELETE /api/v2/containers/{id}/access/{username}
 
 ## RELATED LINKS
 
-[N/A]()
-
+[https://datto-dbpool-api.kentsapp.com/Containers/access/Invoke-DBPoolContainerAccess/](https://datto-dbpool-api.kentsapp.com/Containers/access/Invoke-DBPoolContainerAccess/)

@@ -1,7 +1,7 @@
 ---
 external help file: Datto.DBPool.API-help.xml
 Module Name: Datto.DBPool.API
-online version:
+online version: https://datto-dbpool-api.kentsapp.com/Containers/actions/Invoke-DBPoolContainerAction/
 schema: 2.0.0
 ---
 
@@ -168,6 +168,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### [void] - No output is returned.
 ## NOTES
+Equivalent API endpoint:
+    - POST /api/v2/containers/{id}/actions/{action}
+
 Actions:
 
     refresh:
@@ -189,5 +192,5 @@ Refreshing a container is the supported way to update a child container's databa
 
 ## RELATED LINKS
 
-[N/A]()
+[https://datto-dbpool-api.kentsapp.com/Containers/actions/Invoke-DBPoolContainerAction/](https://datto-dbpool-api.kentsapp.com/Containers/actions/Invoke-DBPoolContainerAction/)
 

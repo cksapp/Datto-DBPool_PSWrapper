@@ -63,7 +63,12 @@ function Get-DBPoolContainer {
         Get a list of containers from the DBPool API by ID
 
     .EXAMPLE
-        Get-DBPoolContainer -Status -Id @( 12345, 67890 )
+        Get-DBPoolContainer -Status
+
+        Get the status of all containers from the DBPool API
+
+    .EXAMPLE
+        Get-DBPoolContainer -Status -Id 12345, 67890
 
         Get the status of an array of containers by IDs
 
