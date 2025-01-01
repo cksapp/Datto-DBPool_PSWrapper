@@ -68,14 +68,14 @@ function Rename-DBPoolContainer {
 
     process {
 
-        $response = foreach ($n in $Id) {
+        foreach ($n in $Id) {
             $requestResponse = $null
             $requestPath = "/api/v2/containers/$n"
 
             # Try to get the container name to output for the ID when using the Verbose preference
             if ($VerbosePreference -eq 'Continue') {
                 try {
-                    $containerName = (Get-DBPoolContainer -Id $n -ErrorAction Stop).name
+                    $containerName = (Get-DBPoolContainer -Id $n -WarningAction SilentlyContinue -ErrorAction Stop -Verbose:$false).name
                 } catch {
                     Write-Warning "Failed to get the container name for ID $n. $_"
                     $containerName = '## FailedToGetContainerName ##'
@@ -88,19 +88,14 @@ function Rename-DBPoolContainer {
                 if ($requestResponse.StatusCode -eq 200) {
                     Write-Information "Successfully updated Container [ ID: $n ]"
                 }
-            }
-            catch {
+                if ($null -ne $requestResponse) {
+                    $requestResponse | ConvertFrom-Json -ErrorAction Stop
+                }
+            } catch {
                 Write-Error $_
             }
 
-            if ($null -ne $requestResponse) {
-                $requestResponse | ConvertFrom-Json
-            }
-
         }
-
-        # Return the response
-        $response
 
     }
 
