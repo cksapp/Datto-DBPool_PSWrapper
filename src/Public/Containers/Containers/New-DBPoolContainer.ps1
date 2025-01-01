@@ -49,10 +49,11 @@ function New-DBPoolContainer {
         This will create a new container named 'MyNewContainer' based on the piped in parent container.
 
     .NOTES
-        N/A
+        Equivalent API endpoint:
+            - POST /api/v2/containers
 
     .LINK
-        N/A
+        https://datto-dbpool-api.kentsapp.com/Containers/New-DBPoolContainer/
 #>
 
     [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Low')]

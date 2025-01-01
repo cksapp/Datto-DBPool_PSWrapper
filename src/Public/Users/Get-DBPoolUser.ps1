@@ -28,10 +28,12 @@ function Get-DBPoolUser {
         This will get the user details for the user "John.Doe".
 
     .NOTES
-        N/A
+        Equivalent API endpoint:
+            - GET /api/v2/self
+            - GET /api/v2/users/{username}
 
     .LINK
-        N/A
+        https://datto-dbpool-api.kentsapp.com/Users/Get-DBPoolUser/
 
 #>
 

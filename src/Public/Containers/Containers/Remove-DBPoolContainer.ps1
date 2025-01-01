@@ -32,10 +32,11 @@ function Remove-DBPoolContainer {
         This will delete the containers with ID 12345, and 56789.
 
     .NOTES
-        N/A
+        Equivalent API endpoint:
+            - DELETE /api/v2/containers/{id}
 
     .LINK
-        N/A
+        https://datto-dbpool-api.kentsapp.com/Containers/Remove-DBPoolContainer/
 #>
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
@@ -71,7 +72,7 @@ function Remove-DBPoolContainer {
             # Try to get the container name to output for the ID when using the Verbose preference
             if ($VerbosePreference -eq 'Continue') {
                 try {
-                    $containerName = (Get-DBPoolContainer -Id $n -ErrorAction Stop).name
+                    $containerName = (Get-DBPoolContainer -Id $n -WarningAction SilentlyContinue -ErrorAction Stop -Verbose:$false).name
                 } catch {
                     Write-Warning "Failed to get the container name for ID $n. $_"
                     $containerName = '## FailedToGetContainerName ##'
@@ -83,14 +84,13 @@ function Remove-DBPoolContainer {
 
                 try {
                     $response = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath -ErrorAction Stop
-                }
-                catch {
+                    if ($response.StatusCode -eq 204) {
+                        Write-Information "Success: Container [ ID: $n ] destroyed."
+                    }
+                } catch {
                     Write-Error $_
                 }
 
-                if ($response.StatusCode -eq 204) {
-                    Write-Information "Success: Container [ ID: $n ] destroyed."
-                }
             }
         }
 

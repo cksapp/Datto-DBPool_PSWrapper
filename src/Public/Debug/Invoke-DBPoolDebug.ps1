@@ -23,10 +23,11 @@ function Invoke-DBPoolDebug {
         Sends a 'GET' request to the DBPool API and returns a '418' exception response error.
 
     .NOTES
-        N/A
+        Equivalent API endpoint:
+            - GET /api/docs/error
 
     .LINK
-        N/A
+        https://datto-dbpool-api.kentsapp.com/Debug/Invoke-DBPoolDebug/
 
 #>
 
@@ -48,16 +49,12 @@ function Invoke-DBPoolDebug {
 
         try {
             $response = Invoke-DBPoolRequest -method $method -resource_Uri $requestPath -ErrorAction Stop
+            if ($null -ne $response) {
+                $response | ConvertFrom-Json -ErrorAction Stop
+            }
         } catch {
             Write-Error $_
         }
-
-        if ($null -ne $response) {
-                $response = $response | ConvertFrom-Json
-            }
-
-        # Return the response
-        $response
 
     }
 

@@ -31,10 +31,11 @@ function Rename-DBPoolContainer {
         This will update the containers with ID 12345, and 56789 to have the name 'NewContainerName'
 
     .NOTES
-        N/A
+        Equivalent API endpoint:
+            - PATCH /api/v2/containers/{id}
 
     .LINK
-        N/A
+        https://datto-dbpool-api.kentsapp.com/Containers/Rename-DBPoolContainer/
 #>
 
     [CmdletBinding()]

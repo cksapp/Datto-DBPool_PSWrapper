@@ -48,10 +48,13 @@ function Invoke-DBPoolContainerAccess {
         This will remove access to the container with ID 12345 for the users "Jane.Doe", and "John.Doe"
 
     .NOTES
-        N/A
+        Equivalent API endpoint:
+            - GET /api/v2/containers/{id}/access/{username}
+            - PUT /api/v2/containers/{id}/access/{username}
+            - DELETE /api/v2/containers/{id}/access/{username}
 
     .LINK
-        N/A
+        https://datto-dbpool-api.kentsapp.com/Containers/access/Invoke-DBPoolContainerAccess/
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'GetAccess', SupportsShouldProcess = $true, ConfirmImpact = 'Medium')]

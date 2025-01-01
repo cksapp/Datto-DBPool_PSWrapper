@@ -47,6 +47,9 @@ function Invoke-DBPoolContainerAction {
         This will refresh all containers without prompting for confirmation.
 
     .NOTES
+        Equivalent API endpoint:
+            - POST /api/v2/containers/{id}/actions/{action}
+
         Actions:
 
             refresh:
@@ -66,7 +69,7 @@ function Invoke-DBPoolContainerAction {
                 Stop the Docker container.
 
     .LINK
-        N/A
+        https://datto-dbpool-api.kentsapp.com/Containers/actions/Invoke-DBPoolContainerAction/
 #>
 
     [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Medium')]
@@ -142,9 +145,9 @@ function Invoke-DBPoolContainerAction {
                 # Try to get the container name to output for the ID when using the Verbose preference
                 if ($VerbosePreference -eq 'Continue') {
                     try {
-                        $containerName = (Get-DBPoolContainer -Id $n -ErrorAction stop -Verbose:($VerbosePreference -eq 'SilentlyContinue')).name
+                        $containerName = (Get-DBPoolContainer -Id $n -WarningAction SilentlyContinue -ErrorAction Stop -Verbose:$false).name
                     } catch {
-                        Write-Error "Failed to get the container name for ID $n. $_"
+                        Write-Warning "Failed to get the container name for ID $n. $_"
                         $containerName = '## FailedToGetContainerName ##'
                     }
                 }
@@ -183,9 +186,9 @@ function Invoke-DBPoolContainerAction {
                         # Try to get the container name to output for the ID when using the Verbose preference
                         if ($using:VerbosePreference -eq 'Continue') {
                             try {
-                                $containerName = (Get-DBPoolContainer -Id $n -ErrorAction Stop).name
+                                $containerName = (Get-DBPoolContainer -Id $n -WarningAction SilentlyContinue -ErrorAction Stop -Verbose:$false).name
                             } catch {
-                                Write-Error "Failed to get the container name for ID $n. $_"
+                                Write-Warning "Failed to get the container name for ID $n. $_"
                                 $containerName = '## FailedToGetContainerName ##'
                             }
                         }
@@ -216,9 +219,9 @@ function Invoke-DBPoolContainerAction {
                     # Try to get the container name to output for the ID when using the Verbose preference
                     if ($VerbosePreference -eq 'Continue') {
                         try {
-                            $containerName = (Get-DBPoolContainer -Id $n -ErrorAction stop -Verbose:($VerbosePreference -eq 'SilentlyContinue')).name
+                            $containerName = (Get-DBPoolContainer -Id $n -WarningAction SilentlyContinue -ErrorAction Stop -Verbose:$false).name
                         } catch {
-                            Write-Error "Failed to get the container name for ID $n. $_"
+                            Write-Warning "Failed to get the container name for ID $n. $_"
                             $containerName = '## FailedToGetContainerName ##'
                         }
                     }

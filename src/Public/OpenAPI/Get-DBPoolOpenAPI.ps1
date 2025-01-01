@@ -22,10 +22,11 @@ function Get-DBPoolOpenAPI {
         This will get the OpenAPI json spec for the DBPool API documentation.
 
     .NOTES
-        N/A
+        Equivalent API endpoint:
+            - GET /api/docs/openapi.json
 
     .LINK
-        N/A
+        https://datto-dbpool-api.kentsapp.com/OpenAPI/Get-DBPoolOpenAPI/
 #>
 
 
@@ -44,18 +45,13 @@ function Get-DBPoolOpenAPI {
     process {
 
         try {
-            $response = Invoke-DBPoolRequest -Method Get -resource_Uri $requestPath -ErrorAction Stop -WarningAction SilentlyContinue
-        }
-        catch {
+            $response = Invoke-DBPoolRequest -method Get -resource_Uri $requestPath -ErrorAction Stop -WarningAction SilentlyContinue
+            if ($null -ne $response) {
+                $response | ConvertFrom-Json -ErrorAction Stop
+            }
+        } catch {
             Write-Error $_
         }
-
-        if ($null -ne $response) {
-            $response = $response | ConvertFrom-Json
-        }
-
-        # Return the response
-        $response
 
     }
 
