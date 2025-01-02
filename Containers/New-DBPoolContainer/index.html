@@ -20,7 +20,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.48">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
     
     
       
@@ -357,6 +357,24 @@
           
   
   Users
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../en-US/Add-DBPoolApiKey/" class="md-tabs__link">
+          
+  
+  en US
 
         </a>
       </li>
@@ -703,36 +721,36 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#string-the-name-for-the-new-container" class="md-nav__link">
+  <a href="#string-containername" class="md-nav__link">
     <span class="md-ellipsis">
-      [string] - The name for the new container.
+      [string] - ContainerName
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#int-the-id-of-the-parent-container-to-clone" class="md-nav__link">
+  <a href="#int-parentid" class="md-nav__link">
     <span class="md-ellipsis">
-      [int] - The ID of the parent container to clone.
+      [int] - ParentId
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#string-the-name-of-the-parent-container-to-clone" class="md-nav__link">
+  <a href="#string-parentname" class="md-nav__link">
     <span class="md-ellipsis">
-      [string] - The name of the parent container to clone.
+      [string] - ParentName
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#string-the-default-database-of-the-parent-container-to-clone" class="md-nav__link">
+  <a href="#string-parentdefaultdatabase" class="md-nav__link">
     <span class="md-ellipsis">
-      [string] - The default database of the parent container to clone.
+      [string] - ParentDefaultDatabase
     </span>
   </a>
   
@@ -756,7 +774,7 @@
           <li class="md-nav__item">
   <a href="#pscustomobject-the-response-from-the-dbpool-api" class="md-nav__link">
     <span class="md-ellipsis">
-      [PSCustomObject] - The response from the DBPool API.
+      [PSCustomObject] - The response from the DBPool API
     </span>
   </a>
   
@@ -1740,6 +1758,576 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    en US
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            en US
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../en-US/Add-DBPoolApiKey/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Add-DBPoolApiKey
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../en-US/Add-DBPoolBaseURI/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Add-DBPoolBaseURI
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../en-US/ConvertTo-DBPoolQueryString/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ConvertTo-DBPoolQueryString
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../en-US/Export-DBPoolModuleSetting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Export-DBPoolModuleSetting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../en-US/Get-DBPoolApiKey/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Get-DBPoolApiKey
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../en-US/Get-DBPoolBaseURI/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Get-DBPoolBaseURI
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../en-US/Get-DBPoolContainer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Get-DBPoolContainer
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../en-US/Get-DBPoolMetaData/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Get-DBPoolMetaData
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../en-US/Get-DBPoolModuleSetting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Get-DBPoolModuleSetting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../en-US/Get-DBPoolOpenAPI/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Get-DBPoolOpenAPI
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../en-US/Get-DBPoolUser/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Get-DBPoolUser
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../en-US/Import-DBPoolModuleSetting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Import-DBPoolModuleSetting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../en-US/Invoke-DBPoolContainerAccess/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Invoke-DBPoolContainerAccess
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../en-US/Invoke-DBPoolContainerAction/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Invoke-DBPoolContainerAction
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../en-US/Invoke-DBPoolDebug/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Invoke-DBPoolDebug
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../en-US/Invoke-DBPoolRequest/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Invoke-DBPoolRequest
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../en-US/New-DBPoolContainer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    New-DBPoolContainer
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../en-US/Remove-DBPoolApiKey/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Remove-DBPoolApiKey
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../en-US/Remove-DBPoolBaseURI/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Remove-DBPoolBaseURI
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../en-US/Remove-DBPoolContainer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Remove-DBPoolContainer
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../en-US/Remove-DBPoolModuleSetting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Remove-DBPoolModuleSetting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../en-US/Rename-DBPoolContainer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Rename-DBPoolContainer
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../en-US/Set-DBPoolApiParameter/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Set-DBPoolApiParameter
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../en-US/Test-DBPoolApi/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Test-DBPoolApi
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../en-US/Test-DBPoolApiKey/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Test-DBPoolApiKey
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -1924,36 +2512,36 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#string-the-name-for-the-new-container" class="md-nav__link">
+  <a href="#string-containername" class="md-nav__link">
     <span class="md-ellipsis">
-      [string] - The name for the new container.
+      [string] - ContainerName
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#int-the-id-of-the-parent-container-to-clone" class="md-nav__link">
+  <a href="#int-parentid" class="md-nav__link">
     <span class="md-ellipsis">
-      [int] - The ID of the parent container to clone.
+      [int] - ParentId
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#string-the-name-of-the-parent-container-to-clone" class="md-nav__link">
+  <a href="#string-parentname" class="md-nav__link">
     <span class="md-ellipsis">
-      [string] - The name of the parent container to clone.
+      [string] - ParentName
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#string-the-default-database-of-the-parent-container-to-clone" class="md-nav__link">
+  <a href="#string-parentdefaultdatabase" class="md-nav__link">
     <span class="md-ellipsis">
-      [string] - The default database of the parent container to clone.
+      [string] - ParentDefaultDatabase
     </span>
   </a>
   
@@ -1977,7 +2565,7 @@
           <li class="md-nav__item">
   <a href="#pscustomobject-the-response-from-the-dbpool-api" class="md-nav__link">
     <span class="md-ellipsis">
-      [PSCustomObject] - The response from the DBPool API.
+      [PSCustomObject] - The response from the DBPool API
     </span>
   </a>
   
@@ -2036,11 +2624,11 @@
 The ContainerName parameter is mandatory, and at least one of the parent parameters (ParentId, ParentName, or ParentDefaultDatabase) must be specified.</p>
 <h2 id="examples">EXAMPLES</h2>
 <h3 id="example-1">EXAMPLE 1</h3>
-<div class="highlight"><pre><span></span><code>New-DBPoolContainer -ContainerName &#39;MyNewContainer&#39; -ParentId 12345
+<div class="highlight"><pre><span></span><code><span class="nb">New-DBPoolContainer</span> <span class="n">-ContainerName</span> <span class="s1">&#39;MyNewContainer&#39;</span> <span class="n">-ParentId</span> <span class="n">12345</span>
 </code></pre></div>
 <p>This will create a new container named 'MyNewContainer' based on the parent container with ID 12345.</p>
 <h3 id="example-2">EXAMPLE 2</h3>
-<div class="highlight"><pre><span></span><code>Get-DBPoolContainer -ParentContainer -Id 1 | New-DBPoolContainer -ContainerName &#39;MyNewContainer&#39;
+<div class="highlight"><pre><span></span><code><span class="nb">Get-DBPoolContainer</span> <span class="n">-ParentContainer</span> <span class="n">-Id</span> <span class="n">1</span> <span class="p">|</span> <span class="nb">New-DBPoolContainer</span> <span class="n">-ContainerName</span> <span class="s1">&#39;MyNewContainer&#39;</span>
 </code></pre></div>
 <p>This will create a new container named 'MyNewContainer' based on the piped in parent container.</p>
 <h2 id="parameters">PARAMETERS</h2>
@@ -2132,16 +2720,23 @@ The cmdlet is not run.</p>
 <h3 id="commonparameters">CommonParameters</h3>
 <p>This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see <a href="http://go.microsoft.com/fwlink/?LinkID=113216">about_CommonParameters</a>.</p>
 <h2 id="inputs">INPUTS</h2>
-<h3 id="string-the-name-for-the-new-container">[string] - The name for the new container.</h3>
-<h3 id="int-the-id-of-the-parent-container-to-clone">[int] - The ID of the parent container to clone.</h3>
-<h3 id="string-the-name-of-the-parent-container-to-clone">[string] - The name of the parent container to clone.</h3>
-<h3 id="string-the-default-database-of-the-parent-container-to-clone">[string] - The default database of the parent container to clone.</h3>
+<h3 id="string-containername">[string] - ContainerName</h3>
+<p>The name for the new container.</p>
+<h3 id="int-parentid">[int] - ParentId</h3>
+<p>The ID of the parent container to clone.</p>
+<h3 id="string-parentname">[string] - ParentName</h3>
+<p>The name of the parent container to clone.</p>
+<h3 id="string-parentdefaultdatabase">[string] - ParentDefaultDatabase</h3>
+<p>The default database of the parent container to clone.</p>
 <h2 id="outputs">OUTPUTS</h2>
-<h3 id="pscustomobject-the-response-from-the-dbpool-api">[PSCustomObject] - The response from the DBPool API.</h3>
+<h3 id="pscustomobject-the-response-from-the-dbpool-api">[PSCustomObject] - The response from the DBPool API</h3>
 <h2 id="notes">NOTES</h2>
-<p>N/A</p>
+<p>Equivalent API endpoint:</p>
+<ul>
+<li>POST /api/v2/containers</li>
+</ul>
 <h2 id="related-links">RELATED LINKS</h2>
-<p><a href="">N/A</a></p>
+<p><a href="https://datto-dbpool-api.kentsapp.com/Containers/New-DBPoolContainer/">https://datto-dbpool-api.kentsapp.com/Containers/New-DBPoolContainer/</a></p>
 
 
 
@@ -2226,7 +2821,7 @@ The cmdlet is not run.</p>
     <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "header.autohide", "navigation.instant", "navigation.instant.progress", "navigation.tabs", "navigation.top", "search.suggest", "search.highlight", "search.share"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      <script src="../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
       
         <script src="../../js/open_in_new_tab.js"></script>
       
