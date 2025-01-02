@@ -338,7 +338,7 @@ function Get-DBPoolMetaData {
         in various troubleshooting scenarios such as rate-limiting.
 
         The full base uri test path in this example is:
-            http://dbpool.example.com/device
+            http://dbpool.example.com/api/v2/self
 
     .NOTES
         N/A
@@ -372,7 +372,7 @@ function Get-DBPoolMetaData {
             $DBPool_Headers.Add("Content-Type", 'application/json')
             $DBPool_Headers.Add('X-App-APIkey', $api_Key)
 
-            $rest_output = Invoke-WebRequest -method $method -uri ($base_uri + $resource_uri) -headers $DBPool_Headers -ErrorAction Stop
+            $response = Invoke-WebRequest -method $method -uri ($base_uri + $resource_uri) -headers $DBPool_Headers -ErrorAction Stop
         }
         catch {
 
@@ -389,17 +389,17 @@ function Get-DBPoolMetaData {
             Remove-Variable -Name DBPool_Headers -Force
         }
 
-        if ($rest_output){
+        if ($response){
             $data = @{}
-            $data = $rest_output
+            $data = $response
 
             [PSCustomObject]@{
                 RequestUri              = $($DBPool_Base_URI + $resource_uri)
                 StatusCode              = $data.StatusCode
                 StatusDescription       = $data.StatusDescription
                 'Content-Type'          = $data.headers.'Content-Type'
-                <#'X-App-Request-Id'      = $data.headers.'X-App-Request-Id'
-                'X-API-Limit-Remaining' = $data.headers.'X-API-Limit-Remaining'
+                'X-App-Request-Id'      = $data.headers.'X-App-Request-Id'
+                <#'X-API-Limit-Remaining' = $data.headers.'X-API-Limit-Remaining'
                 'X-API-Limit-Resets'    = $data.headers.'X-API-Limit-Resets'
                 'X-API-Limit-Cost'      = $data.headers.'X-API-Limit-Cost'#>
                 raw                     = $data
@@ -433,7 +433,7 @@ function Invoke-DBPoolRequest {
         Defines the resource uri (url) to use when creating the API call
 
     .PARAMETER uri_Filter
-        Used with the internal function [ ConvertTo-DBPoolQueryString ] to combine
+        Used with the internal function 'ConvertTo-DBPoolQueryString' to combine
         a functions parameters with the resource_Uri parameter.
 
         This allows for the full uri query to occur
@@ -521,9 +521,7 @@ function Invoke-DBPoolRequest {
 
     )
 
-    begin {
-        $ConfirmPreference = 'None'
-    }
+    begin {}
 
     process {
 
@@ -538,7 +536,7 @@ function Invoke-DBPoolRequest {
 
         $query_String = ConvertTo-DBPoolQueryString -resource_Uri $resource_Uri -uri_Filter $uri_Filter
 
-        Set-Variable -Name 'DBPool_queryString' -Value $query_String -Scope Global -Force
+        Set-Variable -Name 'DBPool_queryString' -Value $query_String -Scope Global -Force -Confirm:$false
 
         if ($null -eq $data) {
             $request_Body = $null
@@ -560,7 +558,7 @@ function Invoke-DBPoolRequest {
                 $parameters['ContentType'] = 'application/json; charset=utf-8'
             }
 
-            Set-Variable -Name 'DBPool_invokeParameters' -Value $parameters -Scope Global -Force
+            Set-Variable -Name 'DBPool_invokeParameters' -Value $parameters -Scope Global -Force -Confirm:$false
 
             if ($allPages) {
 
@@ -591,7 +589,7 @@ function Invoke-DBPoolRequest {
                 $api_Response = Invoke-WebRequest @parameters -ErrorAction Stop
                 $appRequestId = $api_Response.Headers['X-App-Request-Id']
                 Write-Debug "If you need to report an error to the DBE team, include this request ID which can be used to search through the application logs for messages that were logged while processing your request [ X-App-Request-Id: $appRequestId ]"
-                Set-Variable -Name 'DBPool_appRequestId' -Value $appRequestId -Scope Global -Force
+                Set-Variable -Name 'DBPool_appRequestId' -Value $appRequestId -Scope Global -Force -Confirm:$false
             }
 
         } catch {
@@ -603,7 +601,7 @@ function Invoke-DBPoolRequest {
             $appRequestId = $null
             if ($_.Exception.Response -and $_.Exception.Response.Headers) {
                 $appRequestId = $_.Exception.Response.Headers.GetValues('X-App-Request-Id')
-                Set-Variable -Name 'DBPool_appRequestId' -Value $appRequestId -Scope Global -Force
+                Set-Variable -Name 'DBPool_appRequestId' -Value $appRequestId -Scope Global -Force -Confirm:$false
                 Write-Debug "If you need to report an error to the DBE team, include this request ID which can be used to search through the application logs for messages that were logged while processing your request [ X-App-Request-Id: $appRequestId ]"
             }
 
@@ -658,7 +656,7 @@ function Invoke-DBPoolRequest {
             'Auth'
         )
         foreach ($v in $var) {
-            Remove-Variable -Name $v -ErrorAction SilentlyContinue -Force
+            Remove-Variable -Name $v -ErrorAction SilentlyContinue -Force -Confirm:$false
         }
     }
 
@@ -1401,7 +1399,7 @@ function Import-DBPoolModuleSetting {
         N/A
 
     .OUTPUTS
-        N/A
+        [void] - No output is returned.
 
     .EXAMPLE
         Import-DBPoolModuleSetting
