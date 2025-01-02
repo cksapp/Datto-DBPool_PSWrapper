@@ -158,8 +158,8 @@ Read-Host "Enter your DBPool API Key" -AsSecureString | Add-DBPoolApiKey</dev:co
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>N/A</maml:linkText>
-        <maml:uri></maml:uri>
+        <maml:linkText>https://datto-dbpool-api.kentsapp.com/Internal/apiKeys/Add-DBPoolApiKey/</maml:linkText>
+        <maml:uri>https://datto-dbpool-api.kentsapp.com/Internal/apiKeys/Add-DBPoolApiKey/</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -284,8 +284,8 @@ Read-Host "Enter your DBPool API Key" -AsSecureString | Add-DBPoolApiKey</dev:co
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>N/A</maml:linkText>
-        <maml:uri></maml:uri>
+        <maml:linkText>https://datto-dbpool-api.kentsapp.com/Internal/baseUri/Add-DBPoolBaseURI/</maml:linkText>
+        <maml:uri>https://datto-dbpool-api.kentsapp.com/Internal/baseUri/Add-DBPoolBaseURI/</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -401,8 +401,8 @@ Read-Host "Enter your DBPool API Key" -AsSecureString | Add-DBPoolApiKey</dev:co
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>N/A</maml:linkText>
-        <maml:uri></maml:uri>
+        <maml:linkText>https://datto-dbpool-api.kentsapp.com/Internal/apiCalls/ConvertTo-DBPoolQueryString/</maml:linkText>
+        <maml:uri>https://datto-dbpool-api.kentsapp.com/Internal/apiCalls/ConvertTo-DBPoolQueryString/</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -521,8 +521,8 @@ Read-Host "Enter your DBPool API Key" -AsSecureString | Add-DBPoolApiKey</dev:co
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>N/A</maml:linkText>
-        <maml:uri></maml:uri>
+        <maml:linkText>https://datto-dbpool-api.kentsapp.com/Internal/moduleSettings/Export-DBPoolModuleSetting/</maml:linkText>
+        <maml:uri>https://datto-dbpool-api.kentsapp.com/Internal/moduleSettings/Export-DBPoolModuleSetting/</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -611,8 +611,8 @@ Read-Host "Enter your DBPool API Key" -AsSecureString | Add-DBPoolApiKey</dev:co
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>N/A</maml:linkText>
-        <maml:uri></maml:uri>
+        <maml:linkText>https://datto-dbpool-api.kentsapp.com/Internal/apiKeys/Get-DBPoolApiKey/</maml:linkText>
+        <maml:uri>https://datto-dbpool-api.kentsapp.com/Internal/apiKeys/Get-DBPoolApiKey/</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -670,8 +670,8 @@ Read-Host "Enter your DBPool API Key" -AsSecureString | Add-DBPoolApiKey</dev:co
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>N/A</maml:linkText>
-        <maml:uri></maml:uri>
+        <maml:linkText>https://datto-dbpool-api.kentsapp.com/Internal/baseUri/Get-DBPoolBaseURI/</maml:linkText>
+        <maml:uri>https://datto-dbpool-api.kentsapp.com/Internal/baseUri/Get-DBPoolBaseURI/</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1226,8 +1226,8 @@ Get-DBPoolContainer -ParentContainer -DefaultDatabase 'Database*' -NotLike</dev:
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>N/A</maml:linkText>
-        <maml:uri></maml:uri>
+        <maml:linkText>https://datto-dbpool-api.kentsapp.com/Internal/apiCalls/Get-DBPoolMetaData/</maml:linkText>
+        <maml:uri>https://datto-dbpool-api.kentsapp.com/Internal/apiCalls/Get-DBPoolMetaData/</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1374,8 +1374,8 @@ Get-DBPoolContainer -ParentContainer -DefaultDatabase 'Database*' -NotLike</dev:
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>N/A</maml:linkText>
-        <maml:uri></maml:uri>
+        <maml:linkText>https://datto-dbpool-api.kentsapp.com/Internal/moduleSettings/Get-DBPoolModuleSetting/</maml:linkText>
+        <maml:uri>https://datto-dbpool-api.kentsapp.com/Internal/moduleSettings/Get-DBPoolModuleSetting/</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -1701,8 +1701,8 @@ Get-DBPoolContainer -ParentContainer -DefaultDatabase 'Database*' -NotLike</dev:
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>N/A</maml:linkText>
-        <maml:uri></maml:uri>
+        <maml:linkText>https://datto-dbpool-api.kentsapp.com/Internal/moduleSettings/Import-DBPoolModuleSetting/</maml:linkText>
+        <maml:uri>https://datto-dbpool-api.kentsapp.com/Internal/moduleSettings/Import-DBPoolModuleSetting/</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -2622,8 +2622,8 @@ Body</dev:code>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>N/A</maml:linkText>
-        <maml:uri></maml:uri>
+        <maml:linkText>https://datto-dbpool-api.kentsapp.com/Internal/apiCalls/Invoke-DBPoolRequest/</maml:linkText>
+        <maml:uri>https://datto-dbpool-api.kentsapp.com/Internal/apiCalls/Invoke-DBPoolRequest/</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -3039,8 +3039,8 @@ Body</dev:code>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>N/A</maml:linkText>
-        <maml:uri></maml:uri>
+        <maml:linkText>https://datto-dbpool-api.kentsapp.com/Internal/apiKeys/Remove-DBPoolApiKey/</maml:linkText>
+        <maml:uri>https://datto-dbpool-api.kentsapp.com/Internal/apiKeys/Remove-DBPoolApiKey/</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -3145,8 +3145,8 @@ Body</dev:code>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>N/A</maml:linkText>
-        <maml:uri></maml:uri>
+        <maml:linkText>https://datto-dbpool-api.kentsapp.com/Internal/baseUri/Remove-DBPoolBaseURI/</maml:linkText>
+        <maml:uri>https://datto-dbpool-api.kentsapp.com/Internal/baseUri/Remove-DBPoolBaseURI/</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -3473,8 +3473,8 @@ Body</dev:code>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>N/A</maml:linkText>
-        <maml:uri></maml:uri>
+        <maml:linkText>https://datto-dbpool-api.kentsapp.com/Internal/moduleSettings/Remove-DBPoolModuleSetting/</maml:linkText>
+        <maml:uri>https://datto-dbpool-api.kentsapp.com/Internal/moduleSettings/Remove-DBPoolModuleSetting/</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -3788,8 +3788,8 @@ Body</dev:code>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>N/A</maml:linkText>
-        <maml:uri></maml:uri>
+        <maml:linkText>https://datto-dbpool-api.kentsapp.com/Internal/Set-DBPoolApiParameter/</maml:linkText>
+        <maml:uri>https://datto-dbpool-api.kentsapp.com/Internal/Set-DBPoolApiParameter/</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>
@@ -3916,7 +3916,7 @@ Body</dev:code>
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para></maml:para>
+        <maml:para>N/A</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -3927,8 +3927,20 @@ Body</dev:code>
           <maml:para>Checks the availability of the API at https://api.example.com</maml:para>
         </dev:remarks>
       </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Test-DBPoolApi -base_uri "https://api.example.com" -resource_Uri "/api/docs"</dev:code>
+        <dev:remarks>
+          <maml:para>Checks the availability of the API at https://api.example.com/api/docs</maml:para>
+        </dev:remarks>
+      </command:example>
     </command:examples>
-    <command:relatedLinks />
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>https://datto-dbpool-api.kentsapp.com/Internal/Test-DBPoolApi/</maml:linkText>
+        <maml:uri>https://datto-dbpool-api.kentsapp.com/Internal/Test-DBPoolApi/</maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
@@ -4020,8 +4032,8 @@ Body</dev:code>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>N/A</maml:linkText>
-        <maml:uri></maml:uri>
+        <maml:linkText>https://datto-dbpool-api.kentsapp.com/Internal/apiKeys/Test-DBPoolApiKey/</maml:linkText>
+        <maml:uri>https://datto-dbpool-api.kentsapp.com/Internal/apiKeys/Test-DBPoolApiKey/</maml:uri>
       </maml:navigationLink>
     </command:relatedLinks>
   </command:command>

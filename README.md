@@ -23,11 +23,11 @@ First get your personal API key from the DBPool web Url
 
 - [https://dbpool.datto.net/web/self](https://dbpool.datto.net/web/self)
 
-![profile_Settings](./docs/assets/APIKey/profile_Settings.png)
+![profile_Settings](./docs/site/assets/APIKey/profile_Settings.png)
 
 You will want to store this in a secure location, such as a password manager or other secret store.
 
-![personal_ApiKey](./docs/assets/APIKey/personal_ApiKey.png)
+![personal_ApiKey](./docs/site/assets/APIKey/personal_ApiKey.png)
 
 ## Installation
 

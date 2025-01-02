@@ -23,13 +23,13 @@ First get your personal API key from the DBPool web Url
 
 [![profile_Settings]][profile_Settings]
 
-[profile_Settings]: ../assets/APIKey/profile_Settings.png
+[profile_Settings]: ./assets/APIKey/profile_Settings.png
 
 You may want to store this in a secure location, such as a password manager or other secret store.
 
 [![personal_ApiKey]][personal_ApiKey]
 
-[personal_ApiKey]: ../assets/APIKey/personal_ApiKey.png
+[personal_ApiKey]: ./assets/APIKey/personal_ApiKey.png
 
 ## Installation
 
