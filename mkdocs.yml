@@ -3,7 +3,7 @@ site_url: https://datto-dbpool-api.kentsapp.com/
 site_description: PowerShell module for internal Datto DBPool API
 site_dir: site
 exclude_docs: |
-  /en-US/
+  /generated/
 repo_url: https://github.com/cksapp/Datto-DBPool_PSWrapper
 theme:
   name: material
