@@ -36,6 +36,9 @@ jobs:
         with:
           FixedVersion: '7.3.12'
 
+      - name: Set permissions for /docs directory
+        run: sudo chmod -R 777 ./docs
+
       - name: MkDocs GH-Deploy
         if: github.ref == 'refs/heads/main'
         shell: pwsh
