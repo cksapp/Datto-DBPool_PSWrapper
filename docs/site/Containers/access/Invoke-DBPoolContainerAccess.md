@@ -202,9 +202,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 Equivalent API endpoint:
 
-- GET /api/v2/containers/{id}/access/{username}
-- PUT /api/v2/containers/{id}/access/{username}
-- DELETE /api/v2/containers/{id}/access/{username}
+- GET `/api/v2/containers/{id}/access/{username}`
+- PUT `/api/v2/containers/{id}/access/{username}`
+- DELETE `/api/v2/containers/{id}/access/{username}`
 
 ## RELATED LINKS
 

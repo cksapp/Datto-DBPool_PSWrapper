@@ -67,11 +67,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 Equivalent API endpoint:
 
-- GET /api/docs/error
-- PATCH /api/docs/error
-- POST /api/docs/error
-- PUT /api/docs/error
-- DELETE /api/docs/error
+- GET `/api/docs/error`
+- PATCH `/api/docs/error`
+- POST `/api/docs/error`
+- PUT `/api/docs/error`
+- DELETE `/api/docs/error`
 
 ## RELATED LINKS
 

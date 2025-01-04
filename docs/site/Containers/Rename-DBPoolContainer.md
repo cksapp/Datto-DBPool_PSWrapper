@@ -92,7 +92,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 Equivalent API endpoint:
 
-- PATCH /api/v2/containers/{id}
+- PATCH `/api/v2/containers/{id}`
 
 ## RELATED LINKS
 

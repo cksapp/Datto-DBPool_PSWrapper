@@ -114,8 +114,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 Equivalent API endpoint:
 
-- GET /api/v2/self
-- GET /api/v2/users/{username}
+- GET `/api/v2/self`
+- GET `/api/v2/users/{username}`
 
 ## RELATED LINKS
 

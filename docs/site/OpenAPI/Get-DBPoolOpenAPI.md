@@ -66,7 +66,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 Equivalent API endpoint:
 
-- GET /api/docs/openapi.json
+- GET `/api/docs/openapi.json`
 
 ## RELATED LINKS
 

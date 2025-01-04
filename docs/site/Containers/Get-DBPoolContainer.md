@@ -312,11 +312,11 @@ If no match is found an error is output, and the original response is returned.
 
 Equivalent API endpoint:
 
-- GET /api/v2/containers
-- GET /api/v2/parents
-- GET /api/v2/children
-- GET /api/v2/containers/{id}
-- GET /api/v2/containers/{id}/status
+- GET `/api/v2/containers`
+- GET `/api/v2/parents`
+- GET `/api/v2/children`
+- GET `/api/v2/containers/{id}`
+- GET `/api/v2/containers/{id}/status`
 
 ## RELATED LINKS
 

@@ -186,7 +186,7 @@ The default database of the parent container to clone.
 
 Equivalent API endpoint:
 
-- POST /api/v2/containers
+- POST `/api/v2/containers`
 
 ## RELATED LINKS
 

@@ -125,7 +125,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 Equivalent API endpoint:
 
-- DELETE /api/v2/containers/{id}
+- DELETE `/api/v2/containers/{id}`
 
 ## RELATED LINKS
 
