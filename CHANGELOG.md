@@ -13,6 +13,8 @@ Minor documentation updates, adds online help link for functions.
 
 - Minor **BREAKING CHANGE** `Get-DBPoolUser` function now returns `apiKey` property as `[SecureString]`, with optional `-PlainTextAPIKey` switch
 
+Default jsonDepth change to value '100' when `$DBPool_JSON_Conversion_Depth` not set and `-jsonDepth` parameter not passed
+
 ## [0.1.6] Unreleased
 
 Majority small changes to docs. Minor bug fixes and additions to root module for development

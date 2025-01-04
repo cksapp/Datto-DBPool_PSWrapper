@@ -45,7 +45,7 @@ function Get-DBPoolOpenAPI {
     process {
 
         try {
-            $response = Invoke-DBPoolRequest -method Get -resource_Uri $requestPath -ErrorAction Stop -WarningAction SilentlyContinue
+            $response = Invoke-DBPoolRequest -method Get -resource_Uri $requestPath -WarningAction SilentlyContinue -ErrorAction Stop
             if ($null -ne $response) {
                 $response | ConvertFrom-Json -ErrorAction Stop
             }

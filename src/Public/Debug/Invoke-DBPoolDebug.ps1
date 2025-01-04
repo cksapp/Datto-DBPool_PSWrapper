@@ -25,6 +25,10 @@ function Invoke-DBPoolDebug {
     .NOTES
         Equivalent API endpoint:
             - GET /api/docs/error
+            - PATCH /api/docs/error
+            - POST /api/docs/error
+            - PUT /api/docs/error
+            - DELETE /api/docs/error
 
     .LINK
         https://datto-dbpool-api.kentsapp.com/Debug/Invoke-DBPoolDebug/
@@ -35,7 +39,7 @@ function Invoke-DBPoolDebug {
     [OutputType([System.Management.Automation.ErrorRecord])]
     param (
         [Parameter(Mandatory = $false)]
-        [ValidateSet('DELETE', 'GET', 'PATCH', 'POST')]
+        [ValidateSet('DELETE', 'GET', 'PATCH', 'POST' , 'PUT')]
         [string]$method = 'GET'
     )
 
