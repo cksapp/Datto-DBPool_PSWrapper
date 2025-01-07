@@ -14,7 +14,7 @@ Internal function to make an API request to the DBPool API
 
 ```
 Invoke-DBPoolRequest [[-method] <String>] [-resource_Uri] <String> [[-uri_Filter] <Hashtable>]
- [[-data] <Hashtable>] [[-DBPool_JSON_Conversion_Depth] <Int32>] [-allPages] [<CommonParameters>]
+ [[-data] <Hashtable>] [[-jsonDepth] <Int32>] [-allPages] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -125,7 +125,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DBPool_JSON_Conversion_Depth
+### -jsonDepth
 Defines the depth of the JSON conversion for the 'data' parameter request body
 
 ```yaml
@@ -135,7 +135,7 @@ Aliases:
 
 Required: False
 Position: 5
-Default value: 5
+Default value: $DBPool_JSON_Conversion_Depth
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -176,4 +176,3 @@ N/A
 ## RELATED LINKS
 
 [https://datto-dbpool-api.kentsapp.com/Internal/apiCalls/Invoke-DBPoolRequest/](https://datto-dbpool-api.kentsapp.com/Internal/apiCalls/Invoke-DBPoolRequest/)
-

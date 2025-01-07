@@ -447,7 +447,7 @@ function Invoke-DBPoolRequest {
     .PARAMETER data
         Defines the data to be sent with the API request body when using POST or PATCH
 
-    .PARAMETER DBPool_JSON_Conversion_Depth
+    .PARAMETER jsonDepth
         Defines the depth of the JSON conversion for the 'data' parameter request body
 
     .PARAMETER allPages
@@ -514,14 +514,21 @@ function Invoke-DBPoolRequest {
 
         [Parameter(Mandatory = $false)]
         #[ValidateRange(0, [int]::MaxValue)]
-        [int]$DBPool_JSON_Conversion_Depth = 5,
+        [int]$jsonDepth = $DBPool_JSON_Conversion_Depth,
 
         [Parameter(DontShow = $true, Mandatory = $false)]
         [Switch]$allPages
 
     )
 
-    begin {}
+    begin {
+
+        if (-not $PSBoundParameters['jsonDepth'] -and $null -eq $DBPool_JSON_Conversion_Depth) {
+            $jsonDepth = 100
+            Write-Debug "The 'jsonDepth' parameter was not set. Using the default value of [ $jsonDepth ]"
+        }
+
+    }
 
     process {
 
@@ -541,7 +548,7 @@ function Invoke-DBPoolRequest {
         if ($null -eq $data) {
             $request_Body = $null
         } else {
-            $request_Body = $data | ConvertTo-Json -Depth $DBPool_JSON_Conversion_Depth
+            $request_Body = $data | ConvertTo-Json -Depth $jsonDepth
         }
 
         try {
@@ -2007,6 +2014,7 @@ function New-DBPoolContainer {
 #>
 
     [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Low')]
+    [Alias('Add-DBPoolContainer', 'Clone-DBPoolContainer', 'Copy-DBPoolContainer', 'Create-DBPoolContainer')]
     [OutputType([PSCustomObject])]
     param (
         [Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
@@ -2814,6 +2822,10 @@ function Invoke-DBPoolDebug {
     .NOTES
         Equivalent API endpoint:
             - GET /api/docs/error
+            - PATCH /api/docs/error
+            - POST /api/docs/error
+            - PUT /api/docs/error
+            - DELETE /api/docs/error
 
     .LINK
         https://datto-dbpool-api.kentsapp.com/Debug/Invoke-DBPoolDebug/
@@ -2824,7 +2836,7 @@ function Invoke-DBPoolDebug {
     [OutputType([System.Management.Automation.ErrorRecord])]
     param (
         [Parameter(Mandatory = $false)]
-        [ValidateSet('DELETE', 'GET', 'PATCH', 'POST')]
+        [ValidateSet('DELETE', 'GET', 'PATCH', 'POST' , 'PUT')]
         [string]$method = 'GET'
     )
 
@@ -2899,7 +2911,7 @@ function Get-DBPoolOpenAPI {
     process {
 
         try {
-            $response = Invoke-DBPoolRequest -method Get -resource_Uri $requestPath -ErrorAction Stop -WarningAction SilentlyContinue
+            $response = Invoke-DBPoolRequest -method Get -resource_Uri $requestPath -WarningAction SilentlyContinue -ErrorAction Stop
             if ($null -ne $response) {
                 $response | ConvertFrom-Json -ErrorAction Stop
             }
@@ -2971,8 +2983,8 @@ function Get-DBPoolUser {
 
 #>
 
-
     [CmdletBinding(DefaultParameterSetName = 'Self')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '')] # PSScriptAnalyzer - ignore creation of a SecureString using plain text for the contents of this script file
     [OutputType([PSCustomObject])]
     param (
         [Parameter(ParameterSetName = 'Self', Position = 0)]

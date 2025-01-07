@@ -62,8 +62,7 @@ Invoke an API request against the defined resource using any of the provided par
 
 Defines the type of API method to use
 
-Allowed values:
-'DEFAULT', 'DELETE', 'GET', 'HEAD', 'PATCH', 'POST', 'PUT'
+Allowed values: 'DEFAULT', 'DELETE', 'GET', 'HEAD', 'PATCH', 'POST', 'PUT'
 
 ```yaml
 Type: String

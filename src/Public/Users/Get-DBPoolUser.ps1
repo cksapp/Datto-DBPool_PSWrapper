@@ -55,8 +55,8 @@ function Get-DBPoolUser {
 
 #>
 
-
     [CmdletBinding(DefaultParameterSetName = 'Self')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '')] # PSScriptAnalyzer - ignore creation of a SecureString using plain text rule for function
     [OutputType([PSCustomObject])]
     param (
         [Parameter(ParameterSetName = 'Self', Position = 0)]

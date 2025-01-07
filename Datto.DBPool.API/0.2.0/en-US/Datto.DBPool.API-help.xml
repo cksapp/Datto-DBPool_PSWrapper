@@ -2466,7 +2466,7 @@ Invoke-DBPoolContainerAccess -Id '12345' -Username 'John.Doe' -GetAccess</dev:co
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="none">
-          <maml:name>DBPool_JSON_Conversion_Depth</maml:name>
+          <maml:name>jsonDepth</maml:name>
           <maml:description>
             <maml:para>Defines the depth of the JSON conversion for the 'data' parameter request body</maml:para>
           </maml:description>
@@ -2475,7 +2475,7 @@ Invoke-DBPoolContainerAccess -Id '12345' -Username 'John.Doe' -GetAccess</dev:co
             <maml:name>Int32</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>5</dev:defaultValue>
+          <dev:defaultValue>$DBPool_JSON_Conversion_Depth</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>allPages</maml:name>
@@ -2546,7 +2546,7 @@ Invoke-DBPoolContainerAccess -Id '12345' -Username 'John.Doe' -GetAccess</dev:co
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="none">
-        <maml:name>DBPool_JSON_Conversion_Depth</maml:name>
+        <maml:name>jsonDepth</maml:name>
         <maml:description>
           <maml:para>Defines the depth of the JSON conversion for the 'data' parameter request body</maml:para>
         </maml:description>
@@ -2555,7 +2555,7 @@ Invoke-DBPoolContainerAccess -Id '12345' -Username 'John.Doe' -GetAccess</dev:co
           <maml:name>Int32</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>5</dev:defaultValue>
+        <dev:defaultValue>$DBPool_JSON_Conversion_Depth</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>allPages</maml:name>
