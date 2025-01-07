@@ -15,6 +15,8 @@ Minor documentation updates, adds online help link for functions.
 
 Default jsonDepth change to value '100' when `$DBPool_JSON_Conversion_Depth` not set and `-jsonDepth` parameter not passed
 
+Adds function aliases to `New-DBPoolContainer`, now includes; 'Add-DBPoolContainer', 'Clone-DBPoolContainer', 'Copy-DBPoolContainer', 'Create-DBPoolContainer'
+
 ## [0.1.6] Unreleased
 
 Majority small changes to docs. Minor bug fixes and additions to root module for development

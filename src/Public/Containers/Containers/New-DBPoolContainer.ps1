@@ -57,6 +57,7 @@ function New-DBPoolContainer {
 #>
 
     [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Low')]
+    [Alias('Add-DBPoolContainer', 'Clone-DBPoolContainer', 'Copy-DBPoolContainer', 'Create-DBPoolContainer')]
     [OutputType([PSCustomObject])]
     param (
         [Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
