@@ -1084,9 +1084,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#-dbpool_json_conversion_depth" class="md-nav__link">
+  <a href="#-jsondepth" class="md-nav__link">
     <span class="md-ellipsis">
-      -DBPool_JSON_Conversion_Depth
+      -jsonDepth
     </span>
   </a>
   
@@ -1839,9 +1839,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#-dbpool_json_conversion_depth" class="md-nav__link">
+  <a href="#-jsondepth" class="md-nav__link">
     <span class="md-ellipsis">
-      -DBPool_JSON_Conversion_Depth
+      -jsonDepth
     </span>
   </a>
   
@@ -1959,7 +1959,7 @@
 <p>Internal function to make an API request to the DBPool API</p>
 <h2 id="syntax">SYNTAX</h2>
 <div class="highlight"><pre><span></span><code><span class="nb">Invoke-DBPoolRequest</span> <span class="p">[[</span><span class="n">-method</span><span class="p">]</span> <span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;]</span> <span class="p">[</span><span class="n">-resource_Uri</span><span class="p">]</span> <span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;</span> <span class="p">[[</span><span class="n">-uri_Filter</span><span class="p">]</span> <span class="p">&lt;</span><span class="n">Hashtable</span><span class="p">&gt;]</span>
- <span class="p">[[</span><span class="n">-data</span><span class="p">]</span> <span class="p">&lt;</span><span class="n">Hashtable</span><span class="p">&gt;]</span> <span class="p">[[</span><span class="n">-DBPool_JSON_Conversion_Depth</span><span class="p">]</span> <span class="p">&lt;</span><span class="n">Int32</span><span class="p">&gt;]</span> <span class="p">[</span><span class="n">-allPages</span><span class="p">]</span> <span class="p">[&lt;</span><span class="n">CommonParameters</span><span class="p">&gt;]</span>
+ <span class="p">[[</span><span class="n">-data</span><span class="p">]</span> <span class="p">&lt;</span><span class="n">Hashtable</span><span class="p">&gt;]</span> <span class="p">[[</span><span class="n">-jsonDepth</span><span class="p">]</span> <span class="p">&lt;</span><span class="n">Int32</span><span class="p">&gt;]</span> <span class="p">[</span><span class="n">-allPages</span><span class="p">]</span> <span class="p">[&lt;</span><span class="n">CommonParameters</span><span class="p">&gt;]</span>
 </code></pre></div>
 <h2 id="description">DESCRIPTION</h2>
 <p>The Invoke-DBPoolRequest cmdlet invokes an API request to DBPool API</p>
@@ -1990,8 +1990,7 @@
 <h2 id="parameters">PARAMETERS</h2>
 <h3 id="-method">-method</h3>
 <p>Defines the type of API method to use</p>
-<p>Allowed values:
-'DEFAULT', 'DELETE', 'GET', 'HEAD', 'PATCH', 'POST', 'PUT'</p>
+<p>Allowed values: 'DEFAULT', 'DELETE', 'GET', 'HEAD', 'PATCH', 'POST', 'PUT'</p>
 <div class="highlight"><pre><span></span><code><span class="nt">Type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">String</span>
 <span class="nt">Parameter Sets</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(All)</span>
 <span class="nt">Aliases</span><span class="p">:</span>
@@ -2044,7 +2043,7 @@ This is only provided to allow forward compatibility</p>
 <span class="nt">Accept pipeline input</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
 <span class="nt">Accept wildcard characters</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
 </code></pre></div>
-<h3 id="-dbpool_json_conversion_depth">-DBPool_JSON_Conversion_Depth</h3>
+<h3 id="-jsondepth">-jsonDepth</h3>
 <p>Defines the depth of the JSON conversion for the 'data' parameter request body</p>
 <div class="highlight"><pre><span></span><code><span class="nt">Type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Int32</span>
 <span class="nt">Parameter Sets</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(All)</span>
@@ -2052,7 +2051,7 @@ This is only provided to allow forward compatibility</p>
 
 <span class="nt">Required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
 <span class="nt">Position</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
-<span class="nt">Default value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+<span class="nt">Default value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$DBPool_JSON_Conversion_Depth</span>
 <span class="nt">Accept pipeline input</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
 <span class="nt">Accept wildcard characters</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
 </code></pre></div>
