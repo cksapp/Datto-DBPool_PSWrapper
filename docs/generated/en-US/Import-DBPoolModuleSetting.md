@@ -93,7 +93,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### N/A
 ## OUTPUTS
 
-### N/A
+### [void] - No output is returned.
 ## NOTES
 N/A
 

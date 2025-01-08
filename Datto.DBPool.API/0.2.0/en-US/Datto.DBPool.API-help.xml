@@ -1220,7 +1220,7 @@ Get-DBPoolContainer -ParentContainer -DefaultDatabase 'Database*' -NotLike</dev:
         <dev:code>Get-DBPoolMetaData -base_uri http://dbpool.example.com</dev:code>
         <dev:remarks>
           <maml:para>Gets various API metadata values from an Invoke-WebRequest to assist in various troubleshooting scenarios such as rate-limiting.</maml:para>
-          <maml:para>The full base uri test path in this example is:     http://dbpool.example.com/device</maml:para>
+          <maml:para>The full base uri test path in this example is:     http://dbpool.example.com/api/v2/self</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -1669,7 +1669,7 @@ Get-DBPoolContainer -ParentContainer -DefaultDatabase 'Database*' -NotLike</dev:
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>N/A</maml:name>
+          <maml:name>[void] - No output is returned.</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -2378,7 +2378,7 @@ Invoke-DBPoolContainerAccess -Id '12345' -Username 'John.Doe' -GetAccess</dev:co
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>Equivalent API endpoint:     - GET /api/docs/error</maml:para>
+        <maml:para>Equivalent API endpoint:     - GET /api/docs/error     - PATCH /api/docs/error     - POST /api/docs/error     - PUT /api/docs/error     - DELETE /api/docs/error</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -2441,7 +2441,7 @@ Invoke-DBPoolContainerAccess -Id '12345' -Username 'John.Doe' -GetAccess</dev:co
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
           <maml:name>uri_Filter</maml:name>
           <maml:description>
-            <maml:para>Used with the internal function [ ConvertTo-DBPoolQueryString ] to combine a functions parameters with the resource_Uri parameter.</maml:para>
+            <maml:para>Used with the internal function 'ConvertTo-DBPoolQueryString' to combine a functions parameters with the resource_Uri parameter.</maml:para>
             <maml:para>This allows for the full uri query to occur</maml:para>
             <maml:para>The full resource path is made with the following data $DBPool_Base_URI + $resource_Uri + ConvertTo-DBPoolQueryString</maml:para>
             <maml:para>As of June 2024, DBPool does not support any query parameters. This is only provided to allow forward compatibility</maml:para>
@@ -2521,7 +2521,7 @@ Invoke-DBPoolContainerAccess -Id '12345' -Username 'John.Doe' -GetAccess</dev:co
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
         <maml:name>uri_Filter</maml:name>
         <maml:description>
-          <maml:para>Used with the internal function [ ConvertTo-DBPoolQueryString ] to combine a functions parameters with the resource_Uri parameter.</maml:para>
+          <maml:para>Used with the internal function 'ConvertTo-DBPoolQueryString' to combine a functions parameters with the resource_Uri parameter.</maml:para>
           <maml:para>This allows for the full uri query to occur</maml:para>
           <maml:para>The full resource path is made with the following data $DBPool_Base_URI + $resource_Uri + ConvertTo-DBPoolQueryString</maml:para>
           <maml:para>As of June 2024, DBPool does not support any query parameters. This is only provided to allow forward compatibility</maml:para>

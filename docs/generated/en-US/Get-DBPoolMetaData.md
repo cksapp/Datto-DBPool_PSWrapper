@@ -43,7 +43,7 @@ Gets various API metadata values from an Invoke-WebRequest to assist
 in various troubleshooting scenarios such as rate-limiting.
 
 The full base uri test path in this example is:
-    http://dbpool.example.com/device
+    http://dbpool.example.com/api/v2/self
 
 ## PARAMETERS
 

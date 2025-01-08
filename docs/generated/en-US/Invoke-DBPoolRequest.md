@@ -87,7 +87,7 @@ Accept wildcard characters: False
 ```
 
 ### -uri_Filter
-Used with the internal function \[ ConvertTo-DBPoolQueryString \] to combine
+Used with the internal function 'ConvertTo-DBPoolQueryString' to combine
 a functions parameters with the resource_Uri parameter.
 
 This allows for the full uri query to occur
@@ -176,3 +176,4 @@ N/A
 ## RELATED LINKS
 
 [https://datto-dbpool-api.kentsapp.com/Internal/apiCalls/Invoke-DBPoolRequest/](https://datto-dbpool-api.kentsapp.com/Internal/apiCalls/Invoke-DBPoolRequest/)
+
