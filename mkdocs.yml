@@ -42,6 +42,7 @@ theme:
     - header.autohide
     - navigation.instant
     - navigation.instant.progress
+    - navigation.tracking
     - navigation.tabs
     - navigation.top
     #- navigation.tabs.sticky # Keep the tabs visible when scrolling
