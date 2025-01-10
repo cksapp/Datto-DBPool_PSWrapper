@@ -2549,7 +2549,7 @@ function Invoke-DBPoolContainerAction {
         [string]$Action,
 
         [Parameter(Mandatory = $true, Position = 1, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-        [ValidateRange(1, [int]::MaxValue)]
+        #[ValidateRange(1, [int]::MaxValue)]
         [Alias('ContainerId')]
         [int[]]$Id,
 
@@ -2569,11 +2569,7 @@ function Invoke-DBPoolContainerAction {
         $method = 'POST'
 
         # Pass the InformationAction parameter if bound, default to 'Continue'
-        if ($PSBoundParameters.ContainsKey('InformationAction')) {
-            $InformationPreference = $PSBoundParameters['InformationAction']
-        } else {
-            $InformationPreference = 'Continue'
-        }
+        if ($PSBoundParameters.ContainsKey('InformationAction')) { $InformationPreference = $PSBoundParameters['InformationAction'] } else { $InformationPreference = 'Continue' }
 
         # Write warning when using deprecated 'schema-merge' action, otherwise set confirmation prompt for 'major' actions
         if ($Action -eq 'schema-merge') {
