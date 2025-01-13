@@ -42,10 +42,12 @@ theme:
     - header.autohide
     - navigation.instant
     - navigation.instant.progress
-    - navigation.tracking
+    #- navigation.tracking # Anchor tracking links in the URL bar
     - navigation.tabs
-    - navigation.top
     #- navigation.tabs.sticky # Keep the tabs visible when scrolling
+    - toc.follow # Highlight the current section in the table of contents
+    - toc.integrate # Integrate the table of contents into the left page navigation
+    - navigation.top
     #- navigation.footer # Add page navigation to the footer
     - search.suggest
     - search.highlight
