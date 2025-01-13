@@ -19,7 +19,7 @@
     # -- PATCH version when you make backwards-compatible bug fixes.
 
     # Version number of this module.
-    ModuleVersion = '0.2.0'
+    ModuleVersion = '0.1.6'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -115,7 +115,7 @@
     )#>
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    FunctionsToExport = '*'
+    FunctionsToExport = @('Invoke-DBPoolContainerAccess','Invoke-DBPoolContainerAction','Get-DBPoolContainer','New-DBPoolContainer','Remove-DBPoolContainer','Rename-DBPoolContainer','Invoke-DBPoolContainer','Invoke-DBPoolDebug','Get-DBPoolOpenAPI','Get-DBPoolUser','ConvertTo-DBPoolQueryString','Get-DBPoolMetaData','Invoke-DBPoolRequest','Add-DBPoolApiKey','Get-DBPoolApiKey','Remove-DBPoolApiKey','Test-DBPoolApiKey','Add-DBPoolBaseURI','Get-DBPoolBaseURI','Remove-DBPoolBaseURI','Export-DBPoolModuleSetting','Get-DBPoolModuleSetting','Import-DBPoolModuleSetting','Initialize-DBPoolModuleSetting','Remove-DBPoolModuleSetting','Set-DBPoolApiParameter','Test-DBPoolApi')
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
     CmdletsToExport = '*'
@@ -156,7 +156,7 @@
             # ReleaseNotes = ''
 
             # Prerelease string of this module
-            #Prerelease = 'BETA'
+            Prerelease = 'BETA'
 
         } # End of PSData hashtable
 
