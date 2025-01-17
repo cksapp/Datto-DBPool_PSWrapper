@@ -46,7 +46,7 @@ theme:
     - navigation.tabs
     #- navigation.tabs.sticky # Keep the tabs visible when scrolling
     - toc.follow # Highlight the current section in the table of contents
-    - toc.integrate # Integrate the table of contents into the left page navigation
+    #- toc.integrate # Integrate the table of contents into the left page navigation
     - navigation.top
     #- navigation.footer # Add page navigation to the footer
     - search.suggest
