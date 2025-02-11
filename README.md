@@ -159,3 +159,7 @@ Success: Invoking Action [ restart ] on Container [ ID: 987654 ].
 Success: Invoking Action [ restart ] on Container [ ID: 135790 ].
 Success: Invoking Action [ restart ] on Container [ ID: 102030 ].
 ```
+
+---
+
+Looking for a way to automate DBPool container Refresh? Check out the [Datto.DBPool.Refresh](https://github.com/cksapp/Datto-DBPool_Refresh) module!
