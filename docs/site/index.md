@@ -41,7 +41,7 @@ You may want to store this in a secure location, such as a password manager or o
 Install using PowerShellGet
 
 ```PowerShell
-Install-Module -Name 'Datto.DBPool.API' -Scope CurrentUser -AllowPrerelease
+Install-Module -Name 'Datto.DBPool.API' -Scope CurrentUser
 ```
 
 ---
@@ -53,7 +53,7 @@ Install using [PowerShellGet v3.0](https://learn.microsoft.com/en-us/powershell/
 
 
 ```Powershell
-Install-PSResource -Name Datto.DBPool.API -Scope CurrentUser -Prerelease
+Install-PSResource -Name Datto.DBPool.API -Scope CurrentUser
 ```
 
 ### Manual Install

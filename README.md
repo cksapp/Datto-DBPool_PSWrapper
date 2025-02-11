@@ -41,7 +41,7 @@ Default
 Install using PowerShellGet
 
 ```PowerShell
-Install-Module -Name 'Datto.DBPool.API' -Scope CurrentUser -AllowPrerelease
+Install-Module -Name 'Datto.DBPool.API' -Scope CurrentUser
 ```
 
 ---
@@ -53,7 +53,7 @@ Newer
 
 
 ```Powershell
-Install-PSResource -Name Datto.DBPool.API -Scope CurrentUser -Prerelease
+Install-PSResource -Name Datto.DBPool.API -Scope CurrentUser
 ```
 
 ## Examples
