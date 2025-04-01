@@ -49,7 +49,7 @@ function Add-DBPoolBaseURI {
 
     [cmdletbinding()]
     [OutputType([void])]
-    [Alias("Set-DBPoolBaseURI")]
+    [Alias('Set-DBPoolBaseURI')]
     Param (
         [Parameter(Mandatory = $false , ValueFromPipeline = $true)]
         [ValidateNotNullOrEmpty()]

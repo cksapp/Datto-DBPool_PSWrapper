@@ -65,15 +65,15 @@ function New-DBPoolContainer {
 
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateRange(1, [int]::MaxValue)]
-        [Alias("Id")]
+        [Alias('Id')]
         [int]$ParentId,
 
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
-        [Alias("Name")]
+        [Alias('Name')]
         [string]$ParentName,
 
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
-        [Alias("DefaultDatabase")]
+        [Alias('DefaultDatabase')]
         [string]$ParentDefaultDatabase,
 
         [Parameter(Mandatory = $false, DontShow = $true)]

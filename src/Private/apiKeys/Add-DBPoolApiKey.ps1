@@ -41,7 +41,7 @@ function Add-DBPoolApiKey {
 #>
 
     [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Low')]
-    [Alias("Set-DBPoolApiKey")]
+    [Alias('Set-DBPoolApiKey')]
     [OutputType([void])]
     param (
         [Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true, HelpMessage = "API Key for authorization to DBPool.")]

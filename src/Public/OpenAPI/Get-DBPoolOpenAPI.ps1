@@ -31,7 +31,7 @@ function Get-DBPoolOpenAPI {
 
 
     [CmdletBinding()]
-    [Alias("Get-DBPoolApiSpec", "Get-DBPoolSwagger")]
+    [Alias('Get-DBPoolApiSpec', 'Get-DBPoolSwagger')]
     [OutputType([PSCustomObject])]
     param (
         [Parameter(Mandatory = $false)]
