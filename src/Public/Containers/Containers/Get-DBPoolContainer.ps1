@@ -133,6 +133,7 @@ function Get-DBPoolContainer {
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'ListContainer')]
+    [Alias('Get-DBPool')]
     [OutputType([PSCustomObject])]
     param (
         [Parameter(ParameterSetName = 'ListContainer')]
