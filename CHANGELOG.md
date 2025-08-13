@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 Add 'Get-DBPool' alias to `Get-DBPoolContainer` function
 
+Adjusted minor formatting in module and build
+
 ## [0.2.0] Release
 
 Minor documentation updates, adds online help link for functions.

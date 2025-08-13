@@ -166,6 +166,5 @@
     HelpInfoURI = 'https://github.com/cksapp/Datto-DBPool_PSWrapper/blob/main/README.md'
 
     # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
-    # DefaultCommandPrefix = 'Datto' # As of 2024-08 the 'Import-Module' cmdlet does not support $null -Prefix parameter
-
+    #DefaultCommandPrefix = 'Datto' ## As of 2024-08 the 'Import-Module' cmdlet does not support $null -Prefix parameter (https://github.com/PowerShell/PowerShell/issues/16936)
 }

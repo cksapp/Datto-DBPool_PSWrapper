@@ -1,11 +1,12 @@
 properties {
     $PSBPreference.General.SrcRootDir = 'src'
     $PSBPreference.General.ModuleName = 'Datto.DBPool.API'
-    $PSBPreference.Build.OutDir = $projectRoot
+    $PSBPreference.Build.OutDir = "$projectRoot"
     # Set this to $true to create a module with a monolithic PSM1
     $PSBPreference.Build.CompileModule = $true
-    $PSBPreference.Build.CompileScriptHeader = [System.Environment]::NewLine + '#Region'
-    $PSBPreference.Build.CompileScriptFooter = "#EndRegion"
+    $PSBPreference.Build.CompileScriptHeader = "#Region" + [System.Environment]::NewLine
+    $PSBPreference.Build.CompileScriptFooter = [System.Environment]::NewLine + "#EndRegion"
+
     # May need to exclude some files from the build and then concatenate them at end of build for MacOS
 #    $PSBPreference.Build.Exclude = @('Initialize-DBPoolModuleSettings.ps1')
     $PSBPreference.Help.DefaultLocale = 'en-US'
