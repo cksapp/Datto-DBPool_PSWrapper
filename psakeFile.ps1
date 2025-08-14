@@ -17,6 +17,7 @@ properties {
 
 task Default -depends Test
 
+# Custom task to update functions export
 Task UpdateFunctionsToExport -depends StageFiles {
     Write-Host 'Updating module manifest to update FunctionsToExport section'
 
@@ -32,33 +33,31 @@ Task UpdateFunctionsToExport -depends StageFiles {
 
     if ($allFunctions) {
         $modulePath_Built = Join-Path -Path $env:BHBuildOutput -ChildPath $( $env:BHProjectName + '.psd1' )
-
         # Update FunctionsToExport with all functions in the module
         Update-Metadata -Path $modulePath_Built -PropertyName FunctionsToExport -Value $allFunctions.BaseName
-
         Write-Host 'Module manifest updated successfully'
     }
 }
 
-# Task AddModuleData {}
-
-Task Build -FromModule PowerShellBuild -depends @('StageFiles', 'UpdateFunctionsToExport', 'BuildHelp')
-
-task Test -FromModule PowerShellBuild -minimumVersion '0.6.1'
-
-<#
-task RemoveNestedModules -depends StageFiles {
+# Custom task to remove nested modules - run after StageFiles but before GenerateMarkdown
+task RemoveNestedModules -depends UpdateFunctionsToExport {
     $modulePath_Built = Join-Path -Path $env:BHBuildOutput -ChildPath $( $env:BHProjectName + '.psd1' )
 
     Write-Host 'Updating module manifest to remove NestedModules section'
-
-    # Replace & comment out NestedModules from nonBuilt module
-    Update-Metadata -Path $modulePath_Built -PropertyName NestedModules -Value  @()
+    # Replace & comment out NestedModules from built module
+    Update-Metadata -Path $modulePath_Built -PropertyName NestedModules -Value @()
     (Get-Content -Path $modulePath_Built -Raw) -replace 'NestedModules = @\(\)', '# NestedModules = @()' | Set-Content -Path $modulePath_Built
-
     Write-Host "Module manifest updated successfully"
 }
-#>
+
+# Override GenerateMarkdown to depend on RemoveNestedModules
+Task GenerateMarkdown -FromModule PowerShellBuild -depends RemoveNestedModules
+
+# Override Build to include your custom dependencies
+Task Build -FromModule PowerShellBuild -depends @('GenerateMarkdown', 'BuildHelp')
+
+# Test task inherits from PowerShellBuild and will depend on Build
+task Test -FromModule PowerShellBuild -minimumVersion '0.6.1' -depends Build
 
 task PublishDocs -depends Build {
     exec {
