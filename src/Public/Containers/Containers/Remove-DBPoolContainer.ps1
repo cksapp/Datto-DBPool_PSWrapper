@@ -40,6 +40,7 @@ function Remove-DBPoolContainer {
 #>
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
+    [Alias('Delete-DBPoolContainer', 'Destroy-DBPoolContainer')]
     [OutputType([void])]
     param (
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]

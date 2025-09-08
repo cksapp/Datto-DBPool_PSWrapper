@@ -39,6 +39,7 @@ function Rename-DBPoolContainer {
 #>
 
     [CmdletBinding()]
+    [Alias('Edit-DBPoolContainer', 'Set-DBPoolContainer')]
     [OutputType([PSCustomObject])]
     param (
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
