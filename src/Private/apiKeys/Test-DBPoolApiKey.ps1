@@ -59,7 +59,7 @@ function Test-DBPoolApiKey {
             $DBPool_Headers.Add("Content-Type", 'application/json')
             $DBPool_Headers.Add('X-App-Apikey', $api_key)
 
-            $rest_output = Invoke-WebRequest -method Get -uri ($base_uri + $resource_uri) -headers $DBPool_Headers -ErrorAction Stop
+            $rest_output = Invoke-WebRequest -Method Get -Uri ($base_uri + $resource_uri) -Headers $DBPool_Headers -UseBasicParsing -ErrorAction Stop
         }
         catch {
 

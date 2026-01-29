@@ -74,7 +74,7 @@ function Get-DBPoolMetaData {
             $DBPool_Headers.Add("Content-Type", 'application/json')
             $DBPool_Headers.Add('X-App-APIkey', $api_Key)
 
-            $response = Invoke-WebRequest -method $method -uri ($base_uri + $resource_uri) -headers $DBPool_Headers -ErrorAction Stop
+            $response = Invoke-WebRequest -method $method -uri ($base_uri + $resource_uri) -headers $DBPool_Headers -UseBasicParsing -ErrorAction Stop
         }
         catch {
 

@@ -5,11 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [0.2.2] Unreleased
+## [0.2.2] Release
 
 Add 'Edit-DBPoolContainer', 'Set-DBPoolContainer' alias to `Rename-DBPoolContainer` function
 
 Add 'Delete-DBPoolContainer', 'Destroy-DBPoolContainer' alias to `Remove-DBPoolContainer` function
+
+Added `-UseBasicParsing` to IWR cmdlet to resolve Microsoft **KB5074596**
 
 ## [0.2.1]
 

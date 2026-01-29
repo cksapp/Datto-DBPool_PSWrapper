@@ -101,7 +101,7 @@ function Invoke-DBPoolRequest {
         #[ValidateRange(0, [int]::MaxValue)]
         [int]$jsonDepth = $DBPool_JSON_Conversion_Depth,
 
-        [Parameter(DontShow = $true, Mandatory = $false)]
+        [Parameter(DontShow = $true, Mandatory = $false)] ## Pagination not currently supported by DBPool API
         [Switch]$allPages
 
     )
@@ -152,9 +152,10 @@ function Invoke-DBPoolRequest {
 
             Set-Variable -Name 'DBPool_invokeParameters' -Value $parameters -Scope Global -Force -Confirm:$false
 
+            ## Appears to cause endless loop due to no pagination support in DBPool API as of February 2026
             if ($allPages) {
 
-                Write-Verbose "Gathering all items from [  $( $DBPool_Base_URI + $resource_Uri ) ] "
+                Write-Verbose "Gathering all items from [ $( $DBPool_Base_URI + $resource_Uri ) ] "
 
                 $page_Number = 1
                 $all_responseData = [System.Collections.Generic.List[object]]::new()
@@ -164,7 +165,7 @@ function Invoke-DBPoolRequest {
                     $parameters['Uri'] = $query_String.Uri -replace '_page=\d+', "_page=$page_Number"
 
                     Write-Verbose "Making API request to Uri: [ $($parameters['Uri']) ]"
-                    $current_Page = Invoke-WebRequest @parameters -ErrorAction Stop
+                    $current_Page = Invoke-WebRequest @parameters -UseBasicParsing -ErrorAction Stop
 
                     Write-Verbose "[ $page_Number ] of [ $($current_Page.pagination.totalPages) ] pages"
 
@@ -178,7 +179,7 @@ function Invoke-DBPoolRequest {
 
             } else {
                 Write-Verbose "Making API request to Uri: [ $($parameters['Uri']) ]"
-                $api_Response = Invoke-WebRequest @parameters -ErrorAction Stop
+                $api_Response = Invoke-WebRequest @parameters -UseBasicParsing -ErrorAction Stop
                 $appRequestId = $api_Response.Headers['X-App-Request-Id']
                 Write-Debug "If you need to report an error to the DBE team, include this request ID which can be used to search through the application logs for messages that were logged while processing your request [ X-App-Request-Id: $appRequestId ]"
                 Set-Variable -Name 'DBPool_appRequestId' -Value $appRequestId -Scope Global -Force -Confirm:$false
