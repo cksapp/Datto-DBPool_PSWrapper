@@ -8,3 +8,6 @@ testResults.xml
 venv/
 
 /site/
+
+# Build output folders (local builds only, not source)
+Datto.DBPool.API/*/

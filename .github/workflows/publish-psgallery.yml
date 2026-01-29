@@ -1,0 +1,103 @@
+name: Publish to PowerShell Gallery
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Extract version from release tag
+        id: version
+        shell: pwsh
+        run: |
+          $tagName = "${{ github.event.release.tag_name }}"
+          $version = $tagName -replace '^v', ''
+          Write-Output "version=$version" >> $env:GITHUB_OUTPUT
+          Write-Host "Release version: $version"
+      
+      - name: Download release artifact
+        shell: pwsh
+        run: |
+          $version = "${{ steps.version.outputs.version }}"
+          $assetName = "Datto.DBPool.API-$version.zip"
+          
+          # Get the asset download URL from the release
+          $assets = '${{ toJson(github.event.release.assets) }}' | ConvertFrom-Json
+          $zipAsset = $assets | Where-Object { $_.name -eq $assetName }
+          
+          if ($zipAsset) {
+              $downloadUrl = $zipAsset.browser_download_url
+              Write-Host "Downloading: $assetName"
+              Write-Host "URL: $downloadUrl"
+              
+              Invoke-WebRequest -Uri $downloadUrl -OutFile "module.zip" -Headers @{
+                  Authorization = "Bearer ${{ secrets.GITHUB_TOKEN }}"
+              }
+              
+              Write-Host "✅ Downloaded successfully"
+          } else {
+              Write-Error "❌ Module artifact not found in release: $assetName"
+              Write-Host "Available assets:"
+              $assets | ForEach-Object { Write-Host "  - $($_.name)" }
+              exit 1
+          }
+      
+      - name: Extract module archive
+        shell: pwsh
+        run: |
+          Write-Host "Extracting module.zip..."
+          Expand-Archive -Path "module.zip" -DestinationPath "." -Force
+          
+          Write-Host "Extracted contents:"
+          Get-ChildItem -Recurse | Select-Object FullName
+      
+      - name: Validate module structure
+        id: validate
+        shell: pwsh
+        run: |
+          $version = "${{ steps.version.outputs.version }}"
+          $modulePath = "Datto.DBPool.API/$version"
+          
+          if (-not (Test-Path $modulePath)) {
+              Write-Error "❌ Module directory not found: $modulePath"
+              exit 1
+          }
+          
+          $manifestPath = Join-Path $modulePath "Datto.DBPool.API.psd1"
+          if (-not (Test-Path $manifestPath)) {
+              Write-Error "❌ Module manifest not found: $manifestPath"
+              exit 1
+          }
+          
+          Write-Output "module_path=$modulePath" >> $env:GITHUB_OUTPUT
+          Write-Host "✅ Module structure validated"
+          Write-Host "Module path: $modulePath"
+      
+      - name: Publish to PowerShell Gallery
+        shell: pwsh
+        env:
+          PS_GALLERY_API_KEY: ${{ secrets.PS_GALLERY_API_KEY }}
+        run: |
+          $modulePath = "${{ steps.validate.outputs.module_path }}"
+          
+          if (-not $env:PS_GALLERY_API_KEY) {
+              Write-Error "❌ PS_GALLERY_API_KEY secret is not set"
+              Write-Host "Please add the secret in repository Settings > Secrets and variables > Actions"
+              exit 1
+          }
+          
+          Write-Host "Publishing module from: $modulePath"
+          
+          try {
+              Publish-Module -Path $modulePath -NuGetApiKey $env:PS_GALLERY_API_KEY -Verbose -Force
+              Write-Host "✅ Module published successfully to PowerShell Gallery"
+          } catch {
+              Write-Error "❌ Failed to publish module: $_"
+              exit 1
+          }
