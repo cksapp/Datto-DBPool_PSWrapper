@@ -7,8 +7,9 @@ properties {
     $PSBPreference.Build.CompileScriptHeader = "#Region" + [System.Environment]::NewLine
     $PSBPreference.Build.CompileScriptFooter = [System.Environment]::NewLine + "#EndRegion"
 
-    # May need to exclude some files from the build and then concatenate them at end of build for MacOS
-#    $PSBPreference.Build.Exclude = @('Initialize-DBPoolModuleSettings.ps1')
+    # Exclude Initialize file from normal compilation to prevent dependency ordering issues
+    # This file will be appended at the end by the AppendInitialization task
+    $PSBPreference.Build.Exclude = @('Initialize-DBPoolModuleSetting.ps1')
     $PSBPreference.Help.DefaultLocale = 'en-US'
     $PSBPreference.Test.OutputFile = 'out/testResults.xml'
     $PSBPreference.Test.ImportModule = $true
@@ -50,8 +51,35 @@ task RemoveNestedModules -depends UpdateFunctionsToExport {
     Write-Host "Module manifest updated successfully"
 }
 
-# Override GenerateMarkdown to depend on RemoveNestedModules
-Task GenerateMarkdown -FromModule PowerShellBuild -depends RemoveNestedModules
+# Custom task to append the Initialize script at the end of the compiled module
+# This ensures all function dependencies are defined before the script runs
+task AppendInitialization -depends RemoveNestedModules {
+    $compiledModulePath = Join-Path -Path $env:BHBuildOutput -ChildPath $( $env:BHProjectName + '.psm1' )
+    $initializeScriptPath = Join-Path -Path $env:BHPSModulePath -ChildPath 'Private\moduleSettings\Initialize-DBPoolModuleSetting.ps1'
+
+    if (Test-Path $initializeScriptPath) {
+        Write-Host "Appending Initialize script to compiled module for proper dependency order"
+
+        # Read the initialize script content
+        $initializeContent = Get-Content -Path $initializeScriptPath -Raw
+
+        # Append to the compiled module with proper region markers
+        # Use simple comment format to avoid path interpretation issues
+        $appendContent = @"
+
+# Region: Initialize-DBPoolModuleSetting.ps1
+$initializeContent
+# EndRegion: Initialize-DBPoolModuleSetting.ps1
+"@
+        Add-Content -Path $compiledModulePath -Value $appendContent
+        Write-Host "Initialize script appended successfully"
+    } else {
+        Write-Warning "Initialize script not found at: $initializeScriptPath"
+    }
+}
+
+# Override GenerateMarkdown to depend on AppendInitialization
+Task GenerateMarkdown -FromModule PowerShellBuild -depends AppendInitialization
 
 # Override Build to include your custom dependencies
 Task Build -FromModule PowerShellBuild -depends @('GenerateMarkdown', 'BuildHelp')
