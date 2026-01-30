@@ -61,6 +61,9 @@ task AppendInitialization -depends RemoveNestedModules {
         Add-Content -Path $modulePath_Built_PSM1 -Value "`n# Module Initialization`n$initContent"
         Write-Host "Initialization script appended successfully"
     }
+    else {
+        Write-Warning "Initialization script not found at: $initScriptPath"
+    }
 }
 
 # Override GenerateMarkdown to depend on AppendInitialization
