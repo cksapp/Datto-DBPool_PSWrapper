@@ -149,17 +149,17 @@ jobs:
           $existingRelease = gh release view $tagName 2>&1
           if ($LASTEXITCODE -eq 0) {
               Write-Error @"
-      ❌ Release already exists!
-         Version: $currentVersion
-         Tag: $tagName
+              ❌ Release already exists!
+                Version: $currentVersion
+                Tag: $tagName
 
-         A GitHub release for this version already exists.
-         You cannot publish the same version twice.
+                A GitHub release for this version already exists.
+                You cannot publish the same version twice.
 
-         Please:
-         1. Increment the version in CHANGELOG.md and src/Datto.DBPool.API.psd1
-         2. Create a new release with the incremented version
-      "@
+                Please:
+                1. Increment the version in CHANGELOG.md and src/Datto.DBPool.API.psd1
+                2. Create a new release with the incremented version
+              "@
               exit 1
           } else {
               # gh returns non-zero when release is not found; clear to avoid failing the step
@@ -173,16 +173,16 @@ jobs:
               $psGalleryModule = Find-Module -Name 'Datto.DBPool.API' -RequiredVersion $currentVersion -ErrorAction SilentlyContinue
               if ($psGalleryModule) {
                   Write-Error @"
-      ❌ Version already published to PSGallery!
-         Version: $currentVersion
+                ❌ Version already published to PSGallery!
+                  Version: $currentVersion
 
-         This version already exists in PowerShell Gallery.
-         You cannot publish the same version twice.
+                  This version already exists in PowerShell Gallery.
+                  You cannot publish the same version twice.
 
-         Please increment the version in:
-         - CHANGELOG.md
-         - src/Datto.DBPool.API.psd1
-      "@
+                  Please increment the version in:
+                  - CHANGELOG.md
+                  - src/Datto.DBPool.API.psd1
+                "@
                   exit 1
               }
               Write-Host "✅ Version $currentVersion not found in PSGallery (safe to publish)"
