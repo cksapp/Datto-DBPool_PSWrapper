@@ -3,16 +3,11 @@ name: Publish to PowerShell Gallery
 on:
   release:
     types: [published]
-  workflow_run:
-    workflows:
-      - Build and Release
-    types: [completed]
   workflow_dispatch:
 
 jobs:
   publish:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: Checkout code
@@ -20,27 +15,44 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Resolve release tag
+      - name: Resolve and validate version
         id: version
         shell: pwsh
         run: |
+          $ErrorActionPreference = 'Stop'
+
+          # Resolve tag name from release event or git
           $tagName = "${{ github.event.release.tag_name }}"
-
           if (-not $tagName) {
-              $sha = "${{ github.event.workflow_run.head_sha }}"
-              if (-not $sha) {
-                  $sha = (git rev-parse HEAD)
-              }
-
-              $tagName = git tag --points-at $sha | Where-Object { $_ -match '^v\d+\.\d+\.\d+$' } | Select-Object -First 1
+              $tagName = git describe --tags --abbrev=0 --match 'v*.*.*' 2>$null
           }
 
           if (-not $tagName) {
-              Write-Error "[ERROR] Could not resolve a release tag for this run"
-              exit 1
+              throw "[ERROR] Could not resolve a release tag for this run"
           }
 
           $version = $tagName -replace '^v', ''
+
+          # Validate version format
+          if ($version -notmatch '^\d+\.\d+\.\d+$') {
+              throw "[ERROR] Invalid version format: $version (expected X.Y.Z)"
+          }
+
+          # Check if version already exists in PSGallery
+          Write-Host "Checking PSGallery for version $version..."
+          try {
+              $existingModule = Find-Module -Name 'Datto.DBPool.API' -RequiredVersion $version -ErrorAction SilentlyContinue
+              if ($existingModule) {
+                  Write-Host "[INFO] Version $version already published to PSGallery"
+                  Write-Output "skip_publish=true" >> $env:GITHUB_OUTPUT
+              } else {
+                  Write-Output "skip_publish=false" >> $env:GITHUB_OUTPUT
+              }
+          } catch {
+              Write-Host "[INFO] Could not check PSGallery: $_"
+              Write-Output "skip_publish=false" >> $env:GITHUB_OUTPUT
+          }
+
           Write-Output "version=$version" >> $env:GITHUB_OUTPUT
           Write-Output "tag_name=$tagName" >> $env:GITHUB_OUTPUT
           Write-Host "Release version: $version"
@@ -96,26 +108,45 @@ jobs:
           Write-Host "Module path: $modulePath"
 
       - name: Publish to PowerShell Gallery
+        if: ${{ steps.version.outputs.skip_publish != 'true' }}
         shell: pwsh
         env:
           PS_GALLERY_API_KEY: ${{ secrets.PS_GALLERY_API_KEY }}
         run: |
+          $ErrorActionPreference = 'Stop'
           $modulePath = "${{ steps.validate.outputs.module_path }}"
+          $version = "${{ steps.version.outputs.version }}"
 
           if (-not $env:PS_GALLERY_API_KEY) {
-              Write-Error "[ERROR] PS_GALLERY_API_KEY secret is not set"
-              Write-Host "Please add the secret in repository Settings > Secrets and variables > Actions"
-              exit 1
+              throw "[ERROR] PS_GALLERY_API_KEY secret is not set. Please add it in repository Settings > Secrets and variables > Actions"
           }
 
-          Write-Host "Publishing module from: $modulePath"
+          Write-Host "Publishing module version $version from: $modulePath"
 
           try {
               Publish-Module -Path $modulePath -NuGetApiKey $env:PS_GALLERY_API_KEY -Verbose -Force
-              Write-Host "[SUCCESS] Module published successfully to PowerShell Gallery"
+              Write-Host "[SUCCESS] Module version $version published successfully to PowerShell Gallery"
           } catch {
-              Write-Error "[ERROR] Failed to publish module: $_"
-              exit 1
+              $errorMessage = $_.Exception.Message
+              if ($errorMessage -like "*already available in the repository*") {
+                  Write-Host "[WARNING] Module version already published to PSGallery"
+                  exit 1
+              } else {
+                  Write-Error "[ERROR] Failed to publish module: $_"
+                  exit 1
+              }
+          }
+
+      - name: Confirm publish completion
+        shell: pwsh
+        run: |
+          $skipPublish = "${{ steps.version.outputs.skip_publish }}"
+          $version = "${{ steps.version.outputs.version }}"
+
+          if ($skipPublish -eq 'true') {
+              Write-Host "[INFO] Version $version already exists in PSGallery (publish skipped)"
+          } else {
+              Write-Host "[SUCCESS] Version $version publish completed"
           }
 
       - name: Trigger documentation update
