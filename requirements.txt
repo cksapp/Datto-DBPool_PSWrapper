@@ -1,8 +1,8 @@
 # This file defines python requirements to be installed with pip.
 
 mkdocs~=1.6
-mkdocs-material~=9.5
-mkdocs-awesome-pages-plugin~=2.9
+mkdocs-material~=9.7
+mkdocs-awesome-pages-plugin~=2.10
 mkdocs-open-in-new-tab~=1.0
-mkdocs-material[imaging]~=9.5
-mkdocs-glightbox~=0.4.0
+mkdocs-material[imaging]~=9.7
+mkdocs-glightbox~=0.5.2
