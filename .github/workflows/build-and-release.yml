@@ -92,20 +92,21 @@ jobs:
         id: previous-tag
         shell: pwsh
         run: |
-          # Get the current tag if this is a tag-triggered build
-          $currentTag = "${{ github.ref }}" -replace 'refs/tags/', ''
-          
-          # Find the previous tag (excluding the current one if it exists)
-          $allTags = & git tag --sort=-version:refname | Where-Object { $_ -ne $currentTag }
-          
-          if ($allTags -and $allTags.Count -gt 0) {
-              $tag = $allTags[0]
-              Write-Output "tag=$tag" >> $env:GITHUB_OUTPUT
-              Write-Host "Previous release tag: $tag"
-          } else {
-              Write-Output "tag=" >> $env:GITHUB_OUTPUT
-              Write-Host "No previous release found (first release)"
+          try {
+            $latestReleaseTag = gh release list --limit 1 --json tagName --jq '.[0].tagName' 2>$null
+          } catch {
+            $latestReleaseTag = $null
           }
+
+          if ($LASTEXITCODE -eq 0 -and $latestReleaseTag) {
+            Write-Output "tag=$latestReleaseTag" >> $env:GITHUB_OUTPUT
+            Write-Host "Previous release tag: $latestReleaseTag"
+          } else {
+            Write-Output "tag=" >> $env:GITHUB_OUTPUT
+            Write-Host "No previous release found (first automated release)"
+          }
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Validate version and check for duplicates
         shell: pwsh
