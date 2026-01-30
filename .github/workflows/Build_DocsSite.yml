@@ -41,7 +41,7 @@ jobs:
           path: .cache
 
       - name: Setup PowerShell
-        uses: bjompen/UpdatePWSHAction@v1.0.1
+        uses: bjompen/UpdatePWSHAction@v1.0.3
 
       - name: Build and deploy documentation
         if: github.ref == 'refs/heads/main'
