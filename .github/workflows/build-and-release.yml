@@ -6,19 +6,23 @@ on:
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Full history for git log and tags
-      
-      - name: Build in dev container
-        uses: devcontainers/ci@v0.3
-        with:
-          runCmd: |
-            pwsh -c './build.ps1 -Bootstrap'
-      
+
+      - name: Setup PowerShell
+        shell: pwsh
+        run: |
+          pwsh -v
+
+      - name: Bootstrap and build module
+        shell: pwsh
+        run: |
+          ./build.ps1 -Bootstrap
+
       - name: Extract version from CHANGELOG
         id: version
         shell: pwsh
@@ -30,15 +34,15 @@ jobs:
                   return $matches.Version
               }
           } | Select-Object -First 1
-          
+
           if (-not $version) {
               Write-Error "Could not extract version from CHANGELOG.md"
               exit 1
           }
-          
+
           Write-Output "version=$version" >> $env:GITHUB_OUTPUT
           Write-Host "✅ Extracted version: $version"
-      
+
       - name: Get previous release tag
         id: previous-tag
         shell: pwsh
@@ -51,43 +55,43 @@ jobs:
               Write-Output "tag=" >> $env:GITHUB_OUTPUT
               Write-Host "No previous release found (first release)"
           }
-      
+
       - name: Validate version has changed
         shell: pwsh
         run: |
           $currentVersion = "${{ steps.version.outputs.version }}"
           $previousTag = "${{ steps.previous-tag.outputs.tag }}"
-          
+
           if ($previousTag) {
               # Remove 'v' prefix if present for comparison
               $previousVersion = $previousTag -replace '^v', ''
-              
+
               if ($previousVersion -eq $currentVersion) {
                   Write-Error @"
           ❌ Version has not changed since last release!
              Current version: $currentVersion
              Last released:   $previousVersion
-             
+
              Please update the version in:
              - CHANGELOG.md (add new section with format: ## [X.Y.Z] Release)
              - src/Datto.DBPool.API.psd1 (update ModuleVersion)
-             
+
              The Pester tests validate these match before publishing.
           "@
                   exit 1
               }
-              
+
               Write-Host "✅ Version updated: $previousVersion → $currentVersion"
           } else {
               Write-Host "✅ First release with version: $currentVersion"
           }
-      
+
       - name: Generate release notes
         id: release-notes
         shell: pwsh
         run: |
           $previousTag = "${{ steps.previous-tag.outputs.tag }}"
-          
+
           if ($previousTag) {
               $notes = & git log "${previousTag}..HEAD" --pretty=format:"- %s (%h)" --no-merges
               if ($notes) {
@@ -99,22 +103,22 @@ jobs:
           } else {
               $fullNotes = "First release"
           }
-          
+
           $fullNotes | Out-File -FilePath release-notes.txt -Encoding utf8
           Write-Host "Release notes:"
           Get-Content release-notes.txt
-      
+
       - name: Create archive of module version
         shell: pwsh
         run: |
           $version = "${{ steps.version.outputs.version }}"
           $sourceDir = "Datto.DBPool.API/$version"
           $zipName = "Datto.DBPool.API-$version.zip"
-          
+
           if (Test-Path $sourceDir) {
               Compress-Archive -Path $sourceDir -DestinationPath $zipName -Force
               Write-Host "✅ Created: $zipName"
-              
+
               # Verify archive contents
               $archiveContents = Get-ChildItem $sourceDir -Recurse | Measure-Object
               Write-Host "Archive contains $($archiveContents.Count) files"
@@ -124,7 +128,7 @@ jobs:
               Get-ChildItem -Directory | Select-Object Name
               exit 1
           }
-      
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -136,7 +140,7 @@ jobs:
           body_path: release-notes.txt
           draft: false
           prerelease: false
-      
+
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
         env:
