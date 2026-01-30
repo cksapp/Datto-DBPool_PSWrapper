@@ -19,7 +19,7 @@
     # -- PATCH version when you make backwards-compatible bug fixes.
 
     # Version number of this module.
-    ModuleVersion = '0.2.2'
+    ModuleVersion = '0.2.3'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
