@@ -115,6 +115,11 @@ jobs:
           $previousTag = "${{ steps.previous-tag.outputs.tag }}"
           $tagName = "v$currentVersion"
 
+            if ($previousTag -and $previousTag -eq $tagName) {
+              Write-Host "[INFO] Previous release tag equals current tag; treating as first release"
+              $previousTag = ""
+            }
+
           # Check if version has changed from previous release
           if ($previousTag) {
               # Remove 'v' prefix if present for comparison
