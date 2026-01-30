@@ -31,3 +31,7 @@ jobs:
     - name: Test
       shell: pwsh
       run: ./build.ps1 -Task Test -Bootstrap
+      # This runs full test suite including:
+      # - Manifest.tests.ps1: Validates CHANGELOG and manifest versions match
+      # - Help.tests.ps1: Validates documentation
+      # - Meta.tests.ps1: Code quality checks

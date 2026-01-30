@@ -2,6 +2,9 @@ name: Build and Release
 
 on:
   workflow_dispatch:
+  push:
+    tags:
+      - 'v*.*.*'  # Trigger on version tags like v0.2.3, v1.0.0
 
 jobs:
   build-and-release:
@@ -12,6 +15,53 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Full history for git log and tags
+
+      - name: Determine version source
+        id: version-source
+        shell: pwsh
+        run: |
+          if ("${{ github.ref }}" -like "refs/tags/v*") {
+              $tagVersion = "${{ github.ref }}" -replace 'refs/tags/v', ''
+              Write-Output "source=tag" >> $env:GITHUB_OUTPUT
+              Write-Output "tag_version=$tagVersion" >> $env:GITHUB_OUTPUT
+              Write-Host "✅ Triggered by tag: v$tagVersion"
+          } else {
+              Write-Output "source=manual" >> $env:GITHUB_OUTPUT
+              Write-Host "✅ Triggered manually"
+          }
+
+      - name: Check CI status
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const workflows = ['Build_Tests', 'PSScriptAnalyzer'];
+            const branch = context.ref.replace('refs/heads/', '');
+
+            for (const workflowName of workflows) {
+              const runs = await github.rest.actions.listWorkflowRunsForRepo({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                workflow_id: workflowName === 'Build_Tests' ? 'Build_Tests.yaml' : 'PSScriptAnalyzer.yml',
+                branch: branch,
+                status: 'completed',
+                per_page: 1
+              });
+
+              if (runs.data.workflow_runs.length === 0) {
+                core.warning(`No ${workflowName} runs found for ${branch}`);
+                continue;
+              }
+
+              const latestRun = runs.data.workflow_runs[0];
+              if (latestRun.conclusion !== 'success') {
+                core.setFailed(`❌ ${workflowName} has not passed. Status: ${latestRun.conclusion}. Please ensure all CI checks pass before creating a release.`);
+                return;
+              }
+
+              core.info(`✅ ${workflowName} passed`);
+            }
+
+            core.info('✅ All CI checks passed');
 
       - name: Setup PowerShell
         shell: pwsh
@@ -41,7 +91,24 @@ jobs:
           }
 
           Write-Output "version=$version" >> $env:GITHUB_OUTPUT
-          Write-Host "✅ Extracted version: $version"
+          Write-Host "✅ Extracted CHANGELOG version: $version"
+
+          # If triggered by tag, validate tag matches CHANGELOG
+          $tagVersion = "${{ steps.version-source.outputs.tag_version }}"
+          if ("${{ steps.version-source.outputs.source }}" -eq "tag" -and $tagVersion) {
+              if ($tagVersion -ne $version) {
+                  Write-Error @"
+          ❌ Git tag version mismatch!
+             Git tag version:      $tagVersion
+             CHANGELOG version:    $version
+
+             The git tag must match the version in CHANGELOG.md
+             Please ensure versions are synchronized before tagging.
+          "@
+                  exit 1
+              }
+              Write-Host "✅ Git tag matches CHANGELOG version"
+          }
 
       - name: Get previous release tag
         id: previous-tag
@@ -90,23 +157,62 @@ jobs:
         id: release-notes
         shell: pwsh
         run: |
-          $previousTag = "${{ steps.previous-tag.outputs.tag }}"
+          $version = "${{ steps.version.outputs.version }}"
+          $changelogPath = './CHANGELOG.md'
 
-          if ($previousTag) {
-              $notes = & git log "${previousTag}..HEAD" --pretty=format:"- %s (%h)" --no-merges
-              if ($notes) {
-                  $header = "## Changes since $previousTag`n`n"
-                  $fullNotes = $header + ($notes -join "`n")
-              } else {
-                  $fullNotes = "No changes recorded"
+          # Extract release notes from CHANGELOG for this version
+          $inVersionSection = $false
+          $releaseNotes = @()
+          $versionPattern = "^##\s\[$version\]"
+          $nextVersionPattern = "^##\s\["
+
+          Get-Content $changelogPath | ForEach-Object {
+              if ($_ -match $versionPattern) {
+                  $inVersionSection = $true
+                  return  # Skip the version header line
               }
-          } else {
-              $fullNotes = "First release"
+
+              if ($inVersionSection) {
+                  # Stop when we hit the next version section
+                  if ($_ -match $nextVersionPattern) {
+                      $inVersionSection = $false
+                      return
+                  }
+
+                  # Skip empty lines at the start
+                  if (-not $releaseNotes -and [string]::IsNullOrWhiteSpace($_)) {
+                      return
+                  }
+
+                  $releaseNotes += $_
+              }
           }
 
+          # If no CHANGELOG notes found, fall back to git log
+          if (-not $releaseNotes) {
+              Write-Host "⚠️ No release notes found in CHANGELOG for version $version, using git log"
+              $previousTag = "${{ steps.previous-tag.outputs.tag }}"
+
+              if ($previousTag) {
+                  $gitNotes = & git log "${previousTag}..HEAD" --pretty=format:"- %s (%h)" --no-merges
+                  if ($gitNotes) {
+                      $releaseNotes = @("## Changes since $previousTag", "") + $gitNotes
+                  } else {
+                      $releaseNotes = @("No changes recorded")
+                  }
+              } else {
+                  $releaseNotes = @("First release")
+              }
+          }
+
+          $fullNotes = $releaseNotes -join "`n"
+          $fullNotes = $fullNotes.TrimEnd()
+
           $fullNotes | Out-File -FilePath release-notes.txt -Encoding utf8
-          Write-Host "Release notes:"
+          Write-Host "📝 Release notes:"
+          Write-Host "─────────────────────"
           Get-Content release-notes.txt
+          Write-Host "─────────────────────"
 
       - name: Create archive of module version
         shell: pwsh
@@ -150,3 +256,15 @@ jobs:
           asset_path: ./Datto.DBPool.API-${{ steps.version.outputs.version }}.zip
           asset_name: Datto.DBPool.API-${{ steps.version.outputs.version }}.zip
           asset_content_type: application/zip
+
+      - name: Trigger documentation build
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'Build_DocsSite.yml',
+              ref: 'main'
+            });
+            core.info('✅ Triggered documentation build');
