@@ -312,3 +312,15 @@ jobs:
               ref: 'main'
             });
             core.info('[SUCCESS] Triggered documentation build');
+
+      - name: Trigger PowerShell Gallery publish
+        uses: actions/github-script@v8
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'publish-psgallery.yml',
+              ref: 'main'
+            });
+            core.info('[SUCCESS] Triggered PowerShell Gallery publish');
