@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write  # For creating releases and tags
-      actions: read
+      actions: write
 
     steps:
       - name: Checkout code
