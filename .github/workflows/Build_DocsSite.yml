@@ -42,8 +42,6 @@ jobs:
 
       - name: Setup PowerShell
         uses: bjompen/UpdatePWSHAction@v1.0.1
-        with:
-          FixedVersion: '7.3.12'
 
       - name: Build and deploy documentation
         if: github.ref == 'refs/heads/main'

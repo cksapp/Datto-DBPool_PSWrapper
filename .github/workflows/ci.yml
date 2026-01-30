@@ -36,8 +36,6 @@ jobs:
 
       - name: Setup PowerShell
         uses: bjompen/UpdatePWSHAction@v1.0.1
-        with:
-          FixedVersion: '7.3.12'
 
       - name: Run Pester Tests
         shell: pwsh
