@@ -259,21 +259,33 @@ jobs:
         shell: pwsh
         run: |
           $version = "${{ steps.version.outputs.version }}"
-          $sourceDir = "Datto.DBPool.API/$version"
-          $zipName = "Datto.DBPool.API-$version.zip"
+          $moduleName = "Datto.DBPool.API"
+          $sourceDir = Join-Path $moduleName $version
+          $zipName = "$moduleName-$version.zip"
 
           if (Test-Path $sourceDir) {
-              Compress-Archive -Path $sourceDir -DestinationPath $zipName -Force
-              Write-Host "[SUCCESS] Created: $zipName"
+            $stagingRoot = "release-staging"
+            $stagingModuleDir = Join-Path $stagingRoot $moduleName
+            $stagingVersionDir = Join-Path $stagingModuleDir $version
 
-              # Verify archive contents
-              $archiveContents = Get-ChildItem $sourceDir -Recurse | Measure-Object
-              Write-Host "Archive contains $($archiveContents.Count) files"
+            Remove-Item $stagingRoot -Recurse -Force -ErrorAction SilentlyContinue
+            New-Item -ItemType Directory -Path $stagingVersionDir -Force | Out-Null
+
+            Copy-Item -Path $sourceDir -Destination $stagingModuleDir -Recurse -Force
+
+            Compress-Archive -Path $stagingModuleDir -DestinationPath $zipName -Force
+            Write-Host "[SUCCESS] Created: $zipName"
+
+            # Verify archive contents
+            $archiveContents = Get-ChildItem $sourceDir -Recurse | Measure-Object
+            Write-Host "Archive contains $($archiveContents.Count) files"
+
+            Remove-Item $stagingRoot -Recurse -Force
           } else {
-              Write-Error "[ERROR] Build output directory not found: $sourceDir"
-              Write-Host "Available directories:"
-              Get-ChildItem -Directory | Select-Object Name
-              exit 1
+            Write-Error "[ERROR] Build output directory not found: $sourceDir"
+            Write-Host "Available directories:"
+            Get-ChildItem -Directory | Select-Object Name
+            exit 1
           }
 
       - name: Upload Release Asset
