@@ -8,7 +8,7 @@ properties {
     $PSBPreference.Build.CompileScriptFooter = [System.Environment]::NewLine + "#EndRegion"
 
     # May need to exclude some files from the build and then concatenate them at end of build for MacOS
-#    $PSBPreference.Build.Exclude = @('Initialize-DBPoolModuleSettings.ps1')
+    $PSBPreference.Build.Exclude = @('Initialize-DBPoolModuleSetting.ps1')
     $PSBPreference.Help.DefaultLocale = 'en-US'
     $PSBPreference.Test.OutputFile = 'out/testResults.xml'
     $PSBPreference.Test.ImportModule = $true
@@ -50,8 +50,21 @@ task RemoveNestedModules -depends UpdateFunctionsToExport {
     Write-Host "Module manifest updated successfully"
 }
 
-# Override GenerateMarkdown to depend on RemoveNestedModules
-Task GenerateMarkdown -FromModule PowerShellBuild -depends RemoveNestedModules
+# Custom task to append initialization script to the end of compiled module
+task AppendInitialization -depends RemoveNestedModules {
+    $modulePath_Built_PSM1 = Join-Path -Path $env:BHBuildOutput -ChildPath $env:BHProjectName -AdditionalChildPath "$($env:BHProjectName).psm1"
+    $initScriptPath = Join-Path -Path $env:BHPSModulePath -ChildPath 'Private/moduleSettings/Initialize-DBPoolModuleSetting.ps1'
+    
+    if (Test-Path $initScriptPath) {
+        Write-Host "Appending initialization script to compiled module"
+        $initContent = Get-Content -Path $initScriptPath -Raw
+        Add-Content -Path $modulePath_Built_PSM1 -Value "`n# Module Initialization`n$initContent"
+        Write-Host "Initialization script appended successfully"
+    }
+}
+
+# Override GenerateMarkdown to depend on AppendInitialization
+Task GenerateMarkdown -FromModule PowerShellBuild -depends AppendInitialization
 
 # Override Build to include your custom dependencies
 Task Build -FromModule PowerShellBuild -depends @('GenerateMarkdown', 'BuildHelp')
