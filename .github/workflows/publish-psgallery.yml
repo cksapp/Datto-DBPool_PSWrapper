@@ -40,9 +40,9 @@ jobs:
                   Authorization = "Bearer ${{ secrets.GITHUB_TOKEN }}"
               }
 
-              Write-Host "✅ Downloaded successfully"
+              Write-Host "[SUCCESS] Downloaded successfully"
           } else {
-              Write-Error "❌ Module artifact not found in release: $assetName"
+              Write-Error "[ERROR] Module artifact not found in release: $assetName"
               Write-Host "Available assets:"
               $assets | ForEach-Object { Write-Host "  - $($_.name)" }
               exit 1
@@ -65,18 +65,18 @@ jobs:
           $modulePath = "Datto.DBPool.API/$version"
 
           if (-not (Test-Path $modulePath)) {
-              Write-Error "❌ Module directory not found: $modulePath"
+              Write-Error "[ERROR] Module directory not found: $modulePath"
               exit 1
           }
 
           $manifestPath = Join-Path $modulePath "Datto.DBPool.API.psd1"
           if (-not (Test-Path $manifestPath)) {
-              Write-Error "❌ Module manifest not found: $manifestPath"
+              Write-Error "[ERROR] Module manifest not found: $manifestPath"
               exit 1
           }
 
           Write-Output "module_path=$modulePath" >> $env:GITHUB_OUTPUT
-          Write-Host "✅ Module structure validated"
+          Write-Host "[SUCCESS] Module structure validated"
           Write-Host "Module path: $modulePath"
 
       - name: Publish to PowerShell Gallery
@@ -87,7 +87,7 @@ jobs:
           $modulePath = "${{ steps.validate.outputs.module_path }}"
 
           if (-not $env:PS_GALLERY_API_KEY) {
-              Write-Error "❌ PS_GALLERY_API_KEY secret is not set"
+              Write-Error "[ERROR] PS_GALLERY_API_KEY secret is not set"
               Write-Host "Please add the secret in repository Settings > Secrets and variables > Actions"
               exit 1
           }
@@ -96,9 +96,9 @@ jobs:
 
           try {
               Publish-Module -Path $modulePath -NuGetApiKey $env:PS_GALLERY_API_KEY -Verbose -Force
-              Write-Host "✅ Module published successfully to PowerShell Gallery"
+              Write-Host "[SUCCESS] Module published successfully to PowerShell Gallery"
           } catch {
-              Write-Error "❌ Failed to publish module: $_"
+              Write-Error "[ERROR] Failed to publish module: $_"
               exit 1
           }
 
@@ -112,4 +112,4 @@ jobs:
               workflow_id: 'Build_DocsSite.yml',
               ref: 'main'
             });
-            core.info('✅ Triggered documentation update after PSGallery publish');
+            core.info('[SUCCESS] Triggered documentation update after PSGallery publish');

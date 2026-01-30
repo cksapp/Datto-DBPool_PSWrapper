@@ -7,8 +7,19 @@ on:
       - 'v*.*.*'  # Trigger on version tags like v0.2.3, v1.0.0
 
 jobs:
+  # Step 1: Run CI to ensure all checks pass before release
+  ci:
+    name: CI - Verify Code Quality
+    uses: ./.github/workflows/ci.yml
+
+  # Step 2: Only proceed with release if CI passes
   build-and-release:
+    name: Create Release
+    needs: ci
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # For creating releases and tags
+      actions: read
 
     steps:
       - name: Checkout code
@@ -29,39 +40,6 @@ jobs:
               Write-Output "source=manual" >> $env:GITHUB_OUTPUT
               Write-Host "✅ Triggered manually"
           }
-
-      - name: Check CI status
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const workflows = ['Build_Tests', 'PSScriptAnalyzer'];
-            const branch = context.ref.replace('refs/heads/', '');
-
-            for (const workflowName of workflows) {
-              const runs = await github.rest.actions.listWorkflowRunsForRepo({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                workflow_id: workflowName === 'Build_Tests' ? 'Build_Tests.yaml' : 'PSScriptAnalyzer.yml',
-                branch: branch,
-                status: 'completed',
-                per_page: 1
-              });
-
-              if (runs.data.workflow_runs.length === 0) {
-                core.warning(`No ${workflowName} runs found for ${branch}`);
-                continue;
-              }
-
-              const latestRun = runs.data.workflow_runs[0];
-              if (latestRun.conclusion !== 'success') {
-                core.setFailed(`❌ ${workflowName} has not passed. Status: ${latestRun.conclusion}. Please ensure all CI checks pass before creating a release.`);
-                return;
-              }
-
-              core.info(`✅ ${workflowName} passed`);
-            }
-
-            core.info('✅ All CI checks passed');
 
       - name: Setup PowerShell
         shell: pwsh
@@ -190,7 +168,7 @@ jobs:
 
           # If no CHANGELOG notes found, fall back to git log
           if (-not $releaseNotes) {
-              Write-Host "⚠️ No release notes found in CHANGELOG for version $version, using git log"
+              Write-Host "[WARN] No release notes found in CHANGELOG for version $version, using git log"
               $previousTag = "${{ steps.previous-tag.outputs.tag }}"
 
               if ($previousTag) {
@@ -209,10 +187,10 @@ jobs:
           $fullNotes = $fullNotes.TrimEnd()
 
           $fullNotes | Out-File -FilePath release-notes.txt -Encoding utf8
-          Write-Host "📝 Release notes:"
-          Write-Host "─────────────────────"
+          Write-Host "[INFO] Release notes:"
+          Write-Host "---------------------"
           Get-Content release-notes.txt
-          Write-Host "─────────────────────"
+          Write-Host "---------------------"
 
       - name: Create archive of module version
         shell: pwsh
@@ -223,13 +201,13 @@ jobs:
 
           if (Test-Path $sourceDir) {
               Compress-Archive -Path $sourceDir -DestinationPath $zipName -Force
-              Write-Host "✅ Created: $zipName"
+              Write-Host "[SUCCESS] Created: $zipName"
 
               # Verify archive contents
               $archiveContents = Get-ChildItem $sourceDir -Recurse | Measure-Object
               Write-Host "Archive contains $($archiveContents.Count) files"
           } else {
-              Write-Error "❌ Build output directory not found: $sourceDir"
+              Write-Error "[ERROR] Build output directory not found: $sourceDir"
               Write-Host "Available directories:"
               Get-ChildItem -Directory | Select-Object Name
               exit 1
@@ -248,14 +226,12 @@ jobs:
           prerelease: false
 
       - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ./Datto.DBPool.API-${{ steps.version.outputs.version }}.zip
+          tag_name: v${{ steps.version.outputs.version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Datto.DBPool.API-${{ steps.version.outputs.version }}.zip
-          asset_name: Datto.DBPool.API-${{ steps.version.outputs.version }}.zip
-          asset_content_type: application/zip
 
       - name: Trigger documentation build
         uses: actions/github-script@v7
@@ -267,4 +243,4 @@ jobs:
               workflow_id: 'Build_DocsSite.yml',
               ref: 'main'
             });
-            core.info('✅ Triggered documentation build');
+            core.info('[SUCCESS] Triggered documentation build');

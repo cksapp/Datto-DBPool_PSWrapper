@@ -2,415 +2,527 @@
 
 This document describes the integrated CI/CD pipeline for the Datto.DBPool.API PowerShell module.
 
+## Workflow Architecture
+
+The pipeline follows GitHub Actions best practices using **reusable workflows** for the CI layer:
+
+- **CI (Continuous Integration):** Runs on every code change (push/PR) with fresh tests
+- **CD (Continuous Deployment):** Runs only on manual dispatch or version tags, depends on CI passing
+
 ## Workflow Overview
 
 ```text
-                    ┌──────────────────────────────────────────────────────────┐
-                    │         CONTINUOUS INTEGRATION (Every Push/PR)           │
-                    ├──────────────────────────────────────────────────────────┤
-                    │                                                          │
-    Developer   →   │  • Build_Tests.yaml                                      │
-    Code Push       │    - Linux & Windows Matrix                              │
-                    │    - Version Match: CHANGELOG ↔ Manifest                 │
-                    │    - Pester Tests                                        │
-                    │    - Module Build                                        │
-                    │                                                          │
-                    │  • PSScriptAnalyzer.yml                                  │
-                    │    - Code Quality Checks                                 │
-                    │    - Security Rules                                      │
-                    │    - SARIF Upload                                        │
-                    │                                                          │
-                    └──────────────────┬───────────────────────────────────────┘
-                                       │ All CI Checks Pass
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                 CONTINUOUS INTEGRATION (Every Code Change)                   │
+│                              [ci.yml]                                        │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  Triggers:                                                                   │
+│  • Push to /src or /Datto.DBPool.API                                        │
+│  • Pull requests to main                                                    │
+│  • Called by build-and-release.yml (reusable workflow)                      │
+│                                                                              │
+│  Jobs (Runs in Parallel):                                                   │
+│  ┌────────────────────────────────────────────────────────────────────────┐ │
+│  │  [test]         ──→  Pester Tests (Linux + Windows Matrix)             │ │
+│  │                      • CHANGELOG ↔ Manifest version match              │ │
+│  │                      • Unit tests                                      │ │
+│  │                      • Module build verification                       │ │
+│  │                      • Runs: ./build.ps1 -Task Test -Bootstrap         │ │
+│  ├────────────────────────────────────────────────────────────────────────┤ │
+│  │  [analyze]      ──→  PSScriptAnalyzer Code Quality                     │ │
+│  │                      • Static code analysis                            │ │
+│  │                      • Security rules                                  │ │
+│  │                      • SARIF results → GitHub Security tab             │ │
+  │                      • Runs: microsoft/psscriptanalyzer-action         │ │
+│  ├────────────────────────────────────────────────────────────────────────┤ │
+│  │  [quality-gate] ──→  Pass/Fail Gate                                    │ │
+│  │                      • Depends on: test + analyze                      │ │
+│  │                      • Blocks deployment if either fails               │ │
+│  └────────────────────────────────────────────────────────────────────────┘ │
+│                                                                              │
+│  All jobs must pass for code to be merge-able and release-able             │
+└──────────────────────────────────────┬───────────────────────────────────────┘
+                                       │ CI Passes
                                        ▼
-    ┌───────────────────────────────────────────────────────────────────────────┐
-    │                     VERSION VALIDATION CHAIN                              │
-    │                        (Git Tag Workflow)                                 │
-    ├───────────────────────────────────────────────────────────────────────────┤
-    │                                                                           │
-    │  Git Tag Push   →   Validate Tag Format   →   Extract Version   →         │
-    │  (v*.*.*)           (v*.*.* pattern)           from Tag                   │
-    │                                                                           │
-    │                                     ↓                                     │
-    │                                                                           │
-    │              Verify in CHANGELOG.md   →   Verify in Manifest.psd1         │
-    │                                                                           │
-    └───────────────────────────────┬───────────────────────────────────────────┘
-                                    │ Tag Validation Complete
-                                    ▼
-    ┌───────────────────────────────────────────────────────────────────────────┐
-    │                    CONTINUOUS DEPLOYMENT                                  │
-    ├───────────────────────────────────────────────────────────────────────────┤
-    │                                                                           │
-    │  Manual Trigger  ─┐                                                       │
-    │  (workflow_dispatch) ─→  [ build-and-release.yml ]                        │
-    │                                                                           │
-    │  Git Tag Trigger ─┘      1. Verify CI Status (Must Pass)                  │
-    │                          2. Bootstrap & Build (PowerShellBuild)           │
-    │                          3. Extract Version (from CHANGELOG)              │
-    │                          4. Validate Version (vs Last Release)            │
-    │                          5. Generate Release Notes (CHANGELOG Section)    │
-    │                          6. Create Archive (.zip Artifact)                │
-    │                          7. Create GitHub Release (Tag v{version})        │
-    │                          8. Upload Artifact (Module.zip)                  │
-    │                                                                           │
-    │                                    │                                      │
-    │                                    │ Release Published Event              │
-    │                                    ▼                                      │
-    │                                                                           │
-    │                         [ publish-psgallery.yml ]                         │
-    │                                                                           │
-    │                          1. Download Artifact (Auto-triggered)            │
-    │                          2. Extract Module (from Archive)                 │
-    │                          3. Validate Structure (Manifest Check)           │
-    │                          4. Publish to PSGallery (Publish-Module)         │
-    │                                                                           │
-    └────────────────────────────────┬──────────────────────────────────────────┘
-                                     │ Trigger Documentation Build
-                                     ▼
-    ┌───────────────────────────────────────────────────────────────────────────┐
-    │                          DOCUMENTATION                                    │
-    ├───────────────────────────────────────────────────────────────────────────┤
-    │                                                                           │
-    │                      [ Build_DocsSite.yml ]                               │
-    │                                                                           │
-    │                      • Build MkDocs                                       │
-    │                      • Deploy to GitHub Pages                             │
-    │                      • Update with New Version                            │
-    │                                                                           │
-    └───────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                  CONTINUOUS DEPLOYMENT (Controlled Release)                  │
+│                        [build-and-release.yml]                              │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  Triggers:                                                                   │
+│  • Manual: workflow_dispatch button                                         │
+│  • Git Tag: Push tags matching v*.*.* pattern                              │
+│                                                                              │
+│  Jobs:                                                                       │
+│  ┌────────────────────────────────────────────────────────────────────────┐ │
+│  │  [ci] (Reusable)                                                       │ │
+│  │  • Calls: ./.github/workflows/ci.yml                                   │ │
+│  │  • Ensures fresh CI passes before proceeding to release                │ │
+│  ├────────────────────────────────────────────────────────────────────────┤ │
+│  │  [build-and-release] (Depends on: ci)                                 │ │
+│  │                                                                         │ │
+│  │  1. Determine Source (Git tag vs manual trigger)                       │ │
+│  │  2. Build Module (PowerShellBuild, psake)                              │ │
+│  │  3. Extract Version (CHANGELOG.md regex parse)                         │ │
+│  │  4. Validate Version (Tag ↔ CHANGELOG ↔ Manifest)                      │ │
+│  │  5. Check Version Changed (vs last GitHub release)                     │ │
+│  │  6. Generate Release Notes (from CHANGELOG section)                    │ │
+│  │  7. Create Archive (Datto.DBPool.API-{version}.zip)                    │ │
+│  │  8. Create GitHub Release (with tag v{version})                        │ │
+│  │  9. Upload Artifact (module zip to release)                            │ │
+│  │  10. Trigger Docs Build (Build_DocsSite.yml)                           │ │
+│  └────────────────────────────────────────────────────────────────────────┘ │
+│                                                                              │
+│  All validations must pass; release is created only if all checks succeed   │
+└──────────────────────────────────────┬───────────────────────────────────────┘
+                                       │ Release Published
+                                       ▼
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                     POWERSHELL GALLERY PUBLICATION                          │
+│                        [publish-psgallery.yml]                              │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  Triggered: Automatically when GitHub release is published                  │
+│                                                                              │
+│  Steps:                                                                      │
+│  1. Download Release Artifact                                               │
+│  2. Extract Module from Archive                                             │
+│  3. Validate Module Structure                                               │
+│  4. Publish to PowerShell Gallery (Publish-Module cmdlet)                   │
+│  5. Trigger Docs Update                                                     │
+│                                                                              │
+└──────────────────────────────────────┬───────────────────────────────────────┘
+                                       │
+                                       ▼
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                        DOCUMENTATION BUILD                                   │
+│                        [Build_DocsSite.yml]                                  │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  Triggered:                                                                  │
+│  • Manual: workflow_dispatch                                                │
+│  • Changes: docs/** or mkdocs.yml                                           │
+│  • Auto: After build-and-release.yml or publish-psgallery.yml              │
+│                                                                              │
+│  Steps:                                                                      │
+│  1. Build MkDocs                                                             │
+│  2. Deploy to GitHub Pages                                                  │
+│  3. Update with Latest Version Info                                         │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
 ```
 
-## Workflow Details
+## Architecture Rationale
 
-### 1. Build_Tests.yaml - Continuous Integration
+### Why Reusable Workflows (ci.yml)?
+
+1. **Single Source of Truth:** CI logic defined once, used everywhere
+2. **Guaranteed Fresh Tests:** Every release runs CI fresh, not relying on past results
+3. **Maintainability:** Changes to CI automatically apply to all trigger points
+4. **GitHub Best Practice:** Follows official GitHub Actions recommendations
+5. **Explicit Dependencies:** Clear job dependencies prevent concurrent issues
+
+### Why Separate CI from CD?
+
+- **CI (Continuous Integration):** Runs automatically on every code change
+  - Validates code quality before merge
+  - Developers get immediate feedback
+  - Pull requests require CI to pass
+
+- **CD (Continuous Deployment):** Controlled release process
+  - Only runs on manual approval or version tags
+  - Prevents accidental releases
+  - Clearly separates development from production
+
+## Detailed Workflow Documentation
+
+### 1. ci.yml - Continuous Integration (Reusable Workflow)
+
+**File:** `.github/workflows/ci.yml`
 
 **Triggers:**
 
-- Push to `/src` or `/Datto.DBPool.API`
-- Pull requests to `main`
+- Direct: Push to `/src` or `/Datto.DBPool.API` directories
+- Direct: Pull requests to `main` branch
+- Called: By `build-and-release.yml` using `uses: ./.github/workflows/ci.yml`
 
-**Purpose:** Validate code quality and functionality on every commit
+**Purpose:** Comprehensive code quality and functionality validation
+
+**Jobs (Run in Parallel):**
+
+#### [test] - Pester Testing & Module Build
+
+**Strategy:** Matrix on `os: [ubuntu-latest, windows-latest]`
 
 **Steps:**
 
-1. Run on Linux and Windows (matrix strategy)
+1. Checkout code (full history)
 2. Setup PowerShell 7.3.12
 3. Execute `./build.ps1 -Task Test -Bootstrap`
-   - Validates CHANGELOG and manifest versions match (Manifest.tests.ps1)
-   - Runs all Pester tests
-   - Builds module to verify compilation
+   - Manifest.tests.ps1: Validates CHANGELOG ↔ manifest version match
+   - Help.tests.ps1: Validates all functions have documentation
+   - Meta.tests.ps1: Validates module structure and metadata
+   - Pester: Runs unit tests for all functions
+   - Build: Compiles module to verify no syntax errors
 
-**Blocking:** Yes - Required for merge and release
+**Fails If:**
 
----
+- CHANGELOG version differs from manifest
+- Help documentation missing or incomplete
+- Pester tests fail
+- Module compilation fails
 
-### 2. PSScriptAnalyzer.yml - Code Quality
-
-**Triggers:**
-
-- Push to `/src` or `/Datto.DBPool.API`
-- Pull requests to `main`
-- Monthly schedule (17th day, 21:26 UTC)
-
-**Purpose:** Static code analysis and security scanning
+#### [analyze] - PSScriptAnalyzer Code Quality
 
 **Steps:**
 
-1. Run PSScriptAnalyzer with security rules
-2. Upload SARIF results to GitHub Security tab
+1. Checkout code
+2. Run PSScriptAnalyzer using `microsoft/psscriptanalyzer-action`
+   - Analyzes all PowerShell files recursively
+   - Applies security rules: PSAvoidGlobalAliases, PSAvoidUsingConvertToSecureStringWithPlainText
+   - Generates SARIF (Static Analysis Results Format) output
+3. Upload SARIF to GitHub Security tab (`github/codeql-action/upload-sarif`)
 
-**Blocking:** Advisory - Results visible in Security tab
+**Detects:**
+
+- Security vulnerabilities
+- Code style violations
+- Incorrect cmdlet usage
+- Parameter validation issues
+
+#### [quality-gate] - Pass/Fail Guard
+
+**Depends On:** `[test, analyze]`
+
+**Purpose:** Ensures all CI jobs passed before release can proceed
+
+**Implementation:** Simple pass job that fails if dependencies fail
 
 ---
+
+### 2. build-and-release.yml - Release Creation (CD Pipeline)
+
+**File:** `.github/workflows/build-and-release.yml`
+
+**Triggers:**
+
+- Manual: `workflow_dispatch` (button in Actions tab)
+- Git Tags: Push of tags matching `v*.*.*` pattern (e.g., `v0.2.3`, `v1.0.0`)
+
+**Purpose:** Create official GitHub release with version-controlled artifacts
+
+**Requires CI to Pass:**
+
+The workflow explicitly calls the reusable CI workflow at the start:
+
+```yaml
+jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+
+  build-and-release:
+    needs: ci  # Cannot proceed until CI passes
+```
+
+This ensures fresh CI results before any release steps execute.
+
+**Release Job Steps:**
+
+1. **Determine Source**
+   - Detects if triggered by git tag or manual dispatch
+   - Extracts tag version if present
+
+2. **Setup & Build**
+   - Checkout code with full history
+   - Setup PowerShell
+   - Run `./build.ps1 -Bootstrap` to compile module
+
+3. **Extract Version**
+   - Parses `CHANGELOG.md` with regex: `^##\s\[(?<Version>(\d+\.){1,3}\d+)\]`
+   - Extracts version from first matching section header
+
+4. **Validate Version Matches**
+   - If triggered by tag: ensures `git-tag-version == CHANGELOG-version`
+   - Error if mismatch detected
+
+5. **Get Previous Release**
+   - Uses `git describe --tags --abbrev=0` to find last release tag
+
+6. **Validate Version Changed**
+   - Compares current version with previous release
+   - Fails if versions are identical
+   - Ensures every release has version bump
+
+7. **Generate Release Notes**
+   - Extracts section from `CHANGELOG.md` for current version
+   - Format: Content between `## [X.Y.Z]` headers
+   - Fallback: Uses git log `--pretty=format` if no CHANGELOG section
+
+8. **Create Archive**
+   - Zips module directory: `Datto.DBPool.API/{version}/`
+   - Output: `Datto.DBPool.API-{version}.zip`
+   - Includes PSM1, PSD1, help XML, all subdirectories
+
+9. **Create GitHub Release**
+   - Uses `actions/create-release@v1`
+   - Tag: `v{version}`
+   - Release name: `Release {version}`
+   - Body: Generated release notes
+   - Not a draft, not a prerelease
+
+10. **Upload Artifact**
+    - Uses `actions/upload-release-asset@v1`
+    - Attaches `.zip` file to release
+    - Content-Type: `application/zip`
+
+11. **Trigger Documentation Build**
+    - Uses `github/actions/github-script@v7`
+    - Dispatches: `Build_DocsSite.yml` workflow
+    - Branch: `main`
+
+**Artifacts Created:**
+
+- GitHub release with tag (e.g., `v0.2.2`)
+- ZIP archive: `Datto.DBPool.API-0.2.2.zip`
+- Release notes from CHANGELOG
+
+**Next Automatic Step:**
+
+- Publishing to PowerShell Gallery
 
 ### 3. build-and-release.yml - Release Creation
 
 **Triggers:**
 
-- Manual (`workflow_dispatch`)
-- **Git version tags** (e.g., `v0.2.3`, `v1.0.0`)
-
-**Purpose:** Create official GitHub release with versioned artifact
-
-**Prerequisites:**
-
-- Build_Tests must pass
-- PSScriptAnalyzer must pass
-- Version in CHANGELOG.md must be updated
-- Version in src/Datto.DBPool.API.psd1 must match CHANGELOG
-- Git tag version (if used) must match CHANGELOG version
-
-**Steps:**
-
-1. **Determine Source:** Detects if triggered by git tag or manually
-2. **CI Status Check:** Verifies latest Build_Tests and PSScriptAnalyzer runs passed
-3. **Build:** Runs `./build.ps1 -Bootstrap` to compile module
-4. **Version Extraction:** Parses CHANGELOG.md for version (regex: `^##\s\[(?<Version>(\d+\.){1,3}\d+)\]`)
-5. **Tag Validation:** If triggered by tag, validates tag version matches CHANGELOG
-6. **Version Validation:** Ensures version changed since last release
-7. **Release Notes:** Extracts from CHANGELOG.md section for that version (falls back to git commits)
-8. **Archive Creation:** Creates `Datto.DBPool.API-{version}.zip` from build output
-9. **GitHub Release:** Creates release with tag `v{version}`
-10. **Asset Upload:** Attaches module zip to release
-11. **Docs Trigger:** Automatically triggers Build_DocsSite.yml
-
-**Outputs:**
-
-- GitHub release with tag (e.g., `v0.2.2`)
-- Release artifact: `Datto.DBPool.API-0.2.2.zip`
-- Triggers: publish-psgallery.yml
+(Publishing to PowerShell Gallery)
 
 ---
 
-### 4. publish-psgallery.yml - PowerShell Gallery Publishing
+### 3. publish-psgallery.yml - PowerShell Gallery Publishing
+
+**File:** `.github/workflows/publish-psgallery.yml`
 
 **Triggers:**
 
-- Automatically on release publication (from build-and-release.yml)
+- Automatically on GitHub release publication (triggered by `build-and-release.yml`)
 
-**Purpose:** Publish module to PowerShell Gallery
+**Purpose:** Publish compiled module to PowerShell Gallery
 
 **Prerequisites:**
 
 - GitHub secret `PS_GALLERY_API_KEY` must be configured
+- Release must be created by `build-and-release.yml`
 
 **Steps:**
 
-1. **Download:** Retrieves release artifact from GitHub
-2. **Extract:** Unpacks module archive
-3. **Validate:** Verifies module manifest and structure
-4. **Publish:** Uploads to PowerShell Gallery using `Publish-Module`
-5. **Docs Trigger:** Triggers Build_DocsSite.yml to update docs with published version
+1. **Download Release:** Retrieves artifact from GitHub release
+2. **Extract Module:** Unpacks `.zip` file
+3. **Validate Structure:** Verifies PSM1, PSD1 present and valid
+4. **Publish:** Uses `Publish-Module` with API key to push to PowerShell Gallery
+5. **Trigger Docs:** Dispatches `Build_DocsSite.yml` to update documentation
 
 **Outputs:**
 
-- Module published to PowerShell Gallery
-- Documentation updated
+- Module version published to PowerShell Gallery
+- Users can install with: `Install-Module Datto.DBPool.API -Repository PSGallery`
 
 ---
 
-### 5. Build_DocsSite.yml - Documentation
+### 4. Build_DocsSite.yml - Documentation Build and Deployment
+
+**File:** `.github/workflows/Build_DocsSite.yml`
 
 **Triggers:**
 
-- Manual (`workflow_dispatch`)
-- Push to `docs/**` or `mkdocs.yml`
-- Automatically triggered by build-and-release.yml
-- Automatically triggered by publish-psgallery.yml
+- Manual: `workflow_dispatch` (Actions tab button)
+- File changes: Push to `docs/**` or `mkdocs.yml`
+- Auto: After `build-and-release.yml` completes
+- Auto: After `publish-psgallery.yml` completes
 
-**Purpose:** Build and deploy MkDocs documentation to GitHub Pages
+**Purpose:** Build MkDocs documentation and deploy to GitHub Pages
 
 **Steps:**
 
-1. Setup PowerShell and dependencies
-2. Execute `./build.ps1 -Task PublishDocs`
-3. Deploy to GitHub Pages
+1. Checkout repository
+2. Setup Python and MkDocs
+3. Execute `./build.ps1 -Task PublishDocs`
+4. Deploy to GitHub Pages (gh-pages branch)
+
+**Output:**
+
+- Documentation website updated at `https://{org}.github.io/{repo}/`
+- Latest module version documented
 
 ---
 
-## Release Process Flow
+## Release Process Workflow
 
-### Developer Workflow
+### Option A: Release via Git Tag (Recommended)
 
-**Option A: Automatic Release via Git Tag (Recommended)** ⭐
+**Why use tags?** Industry standard, immutable, explicit intent
 
-1. **Make changes** to code in `src/`
-2. **Update version** in:
-   - `CHANGELOG.md` - Add `## [X.Y.Z] Release` section with release notes
-   - `src/Datto.DBPool.API.psd1` - Update `ModuleVersion`
-3. **Commit and push** to `main`
-4. **Wait for CI** (Build_Tests + PSScriptAnalyzer must pass)
-5. **Create and push git tag:**
+1. **Make code changes** and commit to `main`
+2. **Update version files:**
+   - `CHANGELOG.md` - Add new section: `## [X.Y.Z] Release`
+   - `src/Datto.DBPool.API.psd1` - Update `ModuleVersion = 'X.Y.Z'`
+3. **Commit and push:** `git add CHANGELOG.md src/Datto.DBPool.API.psd1 && git commit -m "Bump version to 0.2.3" && git push origin main`
+4. **Wait for CI to pass** (check Actions tab - ci.yml workflow must pass)
+5. **Create and push annotated git tag:** `git tag -a v0.2.3 -m "Release version 0.2.3" && git push origin v0.2.3`
+6. **Automation takes over:**
+   - `build-and-release.yml` triggered by tag push
+   - Calls `ci.yml` to run fresh CI
+   - Validates tag version matches CHANGELOG
+   - Creates GitHub release with artifacts
+   - `publish-psgallery.yml` auto-triggered on release
+   - Module published to PowerShell Gallery
+   - Documentation auto-updated
 
-   ```powershell
-   git tag -a v0.2.3 -m "Release version 0.2.3"
-   git push origin v0.2.3
-   ```
+**Tag Format:** `v*.*.*` (e.g., `v0.2.3`, `v1.0.0`)
 
-6. **Automation handles:**
-   - Tag validation (must match CHANGELOG)
-   - Verification of CI status
-   - Build and test
-   - Release creation
-   - PSGallery publishing
-   - Documentation updates
+### Option B: Manual Release Dispatch
 
-#### Option B: Manual Release
+**When to use:** One-off releases, hotfixes, testing release process
 
-1. **Make changes** to code in `src/`
-2. **Update version** in:
-   - `CHANGELOG.md` - Add `## [X.Y.Z] Release` section with release notes
-   - `src/Datto.DBPool.API.psd1` - Update `ModuleVersion`
-3. **Commit and push** to `main`
-4. **Wait for CI** (Build_Tests + PSScriptAnalyzer must pass)
-5. **Trigger release:**
-   - Go to Actions → "Build and Release"
+1. **Update and commit versions** (same as above)
+2. **Push to main** and wait for CI
+3. **Trigger manually:**
+   - Go to GitHub > Actions
+   - Find "Build and Release" workflow
    - Click "Run workflow"
    - Select branch: `main`
-6. **Automation handles:**
-   - Verification of CI status
-   - Version validation
-   - Release creation
-   - PSGallery publishing
-   - Documentation updates
-
-### What Gets Validated
-
-| Check                              | Where             | Enforced               |
-|------------------------------------|-------------------|------------------------|
-| CHANGELOG ↔ Manifest version match | Build_Tests       | Blocking               |
-| Git tag ↔ CHANGELOG version match  | build-and-release | Blocking (if tag used) |
-| Code quality                       | PSScriptAnalyzer  | Advisory               |
-| Pester tests pass                  | Build_Tests       | Blocking               |
-| Version changed since last release | build-and-release | Blocking               |
-| CI status passed                   | build-and-release | Blocking               |
+   - Click green "Run workflow" button
+4. **Automation proceeds** (same as above)
 
 ---
 
-## Git Tag Release Workflow
+## Validation Checklist
 
-### Creating a Release with Git Tags
+Before any release is created, these validations are enforced:
 
-Git tags provide a clean, industry-standard way to trigger releases:
-
-```powershell
-# 1. Update versions in CHANGELOG.md and manifest
-# 2. Commit and push changes
-git add CHANGELOG.md src/Datto.DBPool.API.psd1
-git commit -m "Bump version to 0.2.3"
-git push
-
-# 3. Wait for CI to pass (check Actions tab)
-
-# 4. Create annotated tag
-git tag -a v0.2.3 -m "Release version 0.2.3"
-
-# 5. Push tag to trigger release
-git push origin v0.2.3
-```
-
-### Tag Format
-
-- **Required format:** `v*.*.*` (e.g., `v0.2.3`, `v1.0.0`, `v2.1.4`)
-- **Must be annotated:** Use `-a` flag with message
-- **Must match CHANGELOG:** Tag version must equal CHANGELOG version
-
-### Benefits of Git Tags
-
-- **Industry standard** - Used by most open source projects
-- **Permanent markers** - Tags are immutable references in git history
-- **Clear intent** - Only triggers when you explicitly tag
-- **Integration friendly** - Works with other tools (GitHub Releases, changelogs)
-- **Audit trail** - Easy to see what was released and when
-- **Rollback support** - Can checkout any tagged version
-
-### CHANGELOG as Release Notes
-
-The workflow extracts release notes from CHANGELOG.md:
-
-```markdown
-## [0.2.3] Release
-
-Add new feature for container management
-
-Fix bug in API authentication
-
-Update documentation for new endpoints
-```
-
-These notes appear in the GitHub Release automatically!
-
-**Fallback:** If no CHANGELOG section found, uses git commit messages.
+| Validation | Stage | Blocks Release |
+| --- | --- | --- |
+| Tests pass (Pester) | `ci.yml` test job | Yes |
+| Code analysis passes | `ci.yml` analyze job | Yes |
+| Version in CHANGELOG matches tag | build-and-release | Yes (if tag used) |
+| Version differs from last release | build-and-release | Yes |
+| Module builds without errors | build-and-release | Yes |
+| Help documentation complete | `ci.yml` test job | Yes |
+| Manifest version matches CHANGELOG | `ci.yml` test job | Yes |
 
 ---
 
-## Secrets Configuration
+## Configuration
 
-### Required Secrets
+### Required GitHub Secrets
 
-Navigate to: `Settings` → `Secrets and variables` → `Actions`
+Navigate to: Repository > Settings > Secrets and variables > Actions
 
-| Secret Name          | Purpose                    | Used By               |
-|----------------------|----------------------------|-----------------------|
-| `PS_GALLERY_API_KEY` | PowerShell Gallery API key | publish-psgallery.yml |
-| `GITHUB_TOKEN`       | Auto-provided by GitHub    | All workflows         |
+| Secret | Purpose | Required |
+| --- | --- | --- |
+| `PS_GALLERY_API_KEY` | PowerShell Gallery API key | Yes |
+| `GITHUB_TOKEN` | GitHub API (auto-provided) | Yes |
 
-### Setting up PS_GALLERY_API_KEY
+### Setting PS_GALLERY_API_KEY
 
-1. Go to [PowerShell Gallery](https://www.powershellgallery.com/)
-2. Sign in and navigate to API Keys
-3. Create new API key with `Push` permission
-4. Copy the key
-5. In GitHub: Settings → Secrets → New repository secret
-6. Name: `PS_GALLERY_API_KEY`
-7. Paste key and save
+1. Create account at [PowerShell Gallery](https://www.powershellgallery.com/)
+2. Navigate to "API Keys"
+3. Create new key with "Push new packages" permission
+4. Copy the key to clipboard
+5. In GitHub: Settings > Secrets and variables > Actions
+6. Click "New repository secret"
+7. Name: `PS_GALLERY_API_KEY`
+8. Value: Paste your API key
+9. Save
 
 ---
 
-## Monitoring and Troubleshooting
+## Workflow Status & Troubleshooting
 
 ### Viewing Workflow Runs
 
-- **CI Status:** Actions tab → Filter by workflow name
-- **Release History:** Releases page
-- **Security Issues:** Security tab → Code scanning alerts
+- **All workflows:** Repository > Actions tab
+- **Specific workflow:** Click workflow name to see all runs
+- **Detailed logs:** Click run > Click job > Expand step
 
 ### Common Issues
 
-#### Release fails with "Version has not changed"
+**[ERROR] "CI checks not passed" in build-and-release**
 
-**Cause:** Version in CHANGELOG.md matches the last release
-**Fix:** Update version in both CHANGELOG.md and manifest
+- **Cause:** Tests or analysis failed on latest commit
+- **Fix:**
+  1. Check Actions tab for failing workflow
+  2. Fix code issues
+  3. Push fix and wait for CI to pass
+  4. Retry release
 
-#### Release fails with "CI checks not passed"
+**[ERROR] "Version has not changed since last release"**
 
-**Cause:** Build_Tests or PSScriptAnalyzer failed on latest commit
-**Fix:** Check Actions tab, fix failing tests, push fix
+- **Cause:** Version in files matches last published version
+- **Fix:**
+  1. Update CHANGELOG.md with new version
+  2. Update src/Datto.DBPool.API.psd1 with new ModuleVersion
+  3. Commit and retry release
 
-#### PSGallery publish fails
+**[ERROR] "Git tag version mismatch"**
 
-**Cause:** API key expired or invalid
-**Fix:** Regenerate PS_GALLERY_API_KEY secret
+- **Cause:** Git tag version doesn't match CHANGELOG version
+- **Fix:**
+  1. Ensure tag created matches CHANGELOG version exactly
+  2. Delete incorrect tag: `git tag -d v0.2.4 && git push origin :refs/tags/v0.2.4`
+  3. Create correct tag: `git tag -a v0.2.3 -m "Release 0.2.3"`
 
-#### Documentation not updating
+**[ERROR] PowerShell Gallery publish fails**
 
-**Cause:** Build_DocsSite.yml workflow disabled or failing
-**Fix:** Check workflow runs, ensure Docker is available for MkDocs build
+- **Cause:** PS_GALLERY_API_KEY invalid, expired, or insufficient permissions
+- **Fix:**
+  1. Go to PowerShell Gallery > API Keys
+  2. Create new key with "Push packages" permission
+  3. Update `PS_GALLERY_API_KEY` secret in GitHub
+  4. Manually retry publish-psgallery workflow
+
+**[ERROR] Documentation not updating**
+
+- **Cause:** Build_DocsSite workflow disabled or Docker issue
+- **Fix:**
+  1. Check Build_DocsSite.yml runs
+  2. Review MkDocs build logs
+  3. Verify `mkdocs.yml` is valid
 
 ---
 
 ## Best Practices
 
-1. **Always run tests locally** before pushing: `./build.ps1 -Bootstrap`
-2. **Update CHANGELOG.md** with every significant change
-3. **Use semantic versioning:** MAJOR.MINOR.PATCH
-4. **Wait for CI** to pass before creating releases
-5. **Review release notes** generated from commits - write descriptive commit messages
-6. **Test in dev container** to match CI environment
-7. **Monitor Security tab** for PSScriptAnalyzer findings
+- **Test locally first:** Run `./build.ps1 -Bootstrap` before pushing
+- **Meaningful CHANGELOG entries:** Users read these as release notes
+- **Semantic versioning:** MAJOR.MINOR.PATCH
+- **Annotated tags:** Use `-a` flag with descriptive message
+- **Commit messages:** Write clear, descriptive messages for git log fallback
+- **One version bump per release:** Keep versions in sync
+- **Review PSScriptAnalyzer results:** Fix findings before release
+- **Test in CI environment:** Docker dev container matches GitHub runners
 
 ---
 
-## File Locations
+## File Reference
 
-| File                                      | Purpose                  |
-|-------------------------------------------|--------------------------|
-| `.github/workflows/build-and-release.yml` | Release creation         |
-| `.github/workflows/publish-psgallery.yml` | PSGallery publishing     |
-| `.github/workflows/Build_Tests.yaml`      | CI testing               |
-| `.github/workflows/PSScriptAnalyzer.yml`  | Code quality             |
-| `.github/workflows/Build_DocsSite.yml`    | Documentation            |
-| `build.ps1`                               | Main build script        |
-| `psakeFile.ps1`                           | Build tasks definition   |
-| `requirements.psd1`                       | Build dependencies       |
-| `tests/Manifest.tests.ps1`                | Version validation tests |
+| File | Purpose | Key Variables |
+| --- | --- | --- |
+| `.github/workflows/ci.yml` | Reusable CI workflow | Runs tests & analysis |
+| `.github/workflows/build-and-release.yml` | Release creation & CD | Calls ci.yml first |
+| `.github/workflows/publish-psgallery.yml` | PSGallery publication | Uses PS_GALLERY_API_KEY |
+| `.github/workflows/Build_DocsSite.yml` | Documentation deployment | Builds MkDocs |
+| `build.ps1` | Main build orchestrator | Uses psakeFile.ps1 |
+| `psakeFile.ps1` | Build task definitions | PowerShellBuild tasks |
+| `CHANGELOG.md` | Release notes & versions | `^##\s\[X.Y.Z\]` format |
+| `src/Datto.DBPool.API.psd1` | Module manifest | ModuleVersion = 'X.Y.Z' |
+| `tests/Manifest.tests.ps1` | Version validation tests | Verifies sync |
 
 ---
 
-## Version History
+## Revision History
 
-- **2026-01-29:** Initial integrated CI/CD pipeline created
-  - Added CI status verification to release workflow
-  - Automated documentation updates on release
-  - Integrated all workflows into cohesive pipeline
+| Date | Change |
+| --- | --- |
+| 2026-01-30 | Restructured for reusable CI workflow (ci.yml) |
+| 2026-01-29 | Added CI/CD pipeline documentation |
