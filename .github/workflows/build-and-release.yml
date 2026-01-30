@@ -92,8 +92,14 @@ jobs:
         id: previous-tag
         shell: pwsh
         run: |
-          $tag = & git describe --tags --abbrev=0 2>$null
-          if ($tag) {
+          # Get the current tag if this is a tag-triggered build
+          $currentTag = "${{ github.ref }}" -replace 'refs/tags/', ''
+          
+          # Find the previous tag (excluding the current one if it exists)
+          $allTags = & git tag --sort=-version:refname | Where-Object { $_ -ne $currentTag }
+          
+          if ($allTags -and $allTags.Count -gt 0) {
+              $tag = $allTags[0]
               Write-Output "tag=$tag" >> $env:GITHUB_OUTPUT
               Write-Host "Previous release tag: $tag"
           } else {
@@ -101,12 +107,14 @@ jobs:
               Write-Host "No previous release found (first release)"
           }
 
-      - name: Validate version has changed
+      - name: Validate version and check for duplicates
         shell: pwsh
         run: |
           $currentVersion = "${{ steps.version.outputs.version }}"
           $previousTag = "${{ steps.previous-tag.outputs.tag }}"
+          $tagName = "v$currentVersion"
 
+          # Check if version has changed from previous release
           if ($previousTag) {
               # Remove 'v' prefix if present for comparison
               $previousVersion = $previousTag -replace '^v', ''
@@ -130,6 +138,50 @@ jobs:
           } else {
               Write-Host "✅ First release with version: $currentVersion"
           }
+          
+          # Check if GitHub release already exists
+          $existingRelease = gh release view $tagName 2>&1
+          if ($LASTEXITCODE -eq 0) {
+              Write-Error @"
+          ❌ Release already exists!
+             Version: $currentVersion
+             Tag: $tagName
+          
+             A GitHub release for this version already exists.
+             You cannot publish the same version twice.
+          
+             Please:
+             1. Increment the version in CHANGELOG.md and src/Datto.DBPool.API.psd1
+             2. Create a new release with the incremented version
+          "@
+              exit 1
+          }
+          
+          Write-Host "✅ No existing release found for $tagName"
+          
+          # Check if version exists in PSGallery
+          try {
+              $psGalleryModule = Find-Module -Name 'Datto.DBPool.API' -RequiredVersion $currentVersion -ErrorAction SilentlyContinue
+              if ($psGalleryModule) {
+                  Write-Error @"
+          ❌ Version already published to PSGallery!
+             Version: $currentVersion
+          
+             This version already exists in PowerShell Gallery.
+             You cannot publish the same version twice.
+          
+             Please increment the version in:
+             - CHANGELOG.md
+             - src/Datto.DBPool.API.psd1
+          "@
+                  exit 1
+              }
+              Write-Host "✅ Version $currentVersion not found in PSGallery (safe to publish)"
+          } catch {
+              Write-Host "[INFO] Could not check PSGallery (module may not be published yet): $_"
+          }
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate release notes
         id: release-notes
