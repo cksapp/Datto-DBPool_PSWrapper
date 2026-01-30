@@ -3,50 +3,66 @@ name: Publish to PowerShell Gallery
 on:
   release:
     types: [published]
+  workflow_run:
+    workflows:
+      - Build and Release
+    types: [completed]
+  workflow_dispatch:
 
 jobs:
   publish:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
-      - name: Extract version from release tag
+      - name: Resolve release tag
         id: version
         shell: pwsh
         run: |
           $tagName = "${{ github.event.release.tag_name }}"
+
+          if (-not $tagName) {
+              $sha = "${{ github.event.workflow_run.head_sha }}"
+              if (-not $sha) {
+                  $sha = (git rev-parse HEAD)
+              }
+
+              $tagName = git tag --points-at $sha | Where-Object { $_ -match '^v\d+\.\d+\.\d+$' } | Select-Object -First 1
+          }
+
+          if (-not $tagName) {
+              Write-Error "[ERROR] Could not resolve a release tag for this run"
+              exit 1
+          }
+
           $version = $tagName -replace '^v', ''
           Write-Output "version=$version" >> $env:GITHUB_OUTPUT
+          Write-Output "tag_name=$tagName" >> $env:GITHUB_OUTPUT
           Write-Host "Release version: $version"
 
       - name: Download release artifact
         shell: pwsh
         run: |
           $version = "${{ steps.version.outputs.version }}"
+          $tagName = "${{ steps.version.outputs.tag_name }}"
           $assetName = "Datto.DBPool.API-$version.zip"
 
-          # Get the asset download URL from the release
-          $assets = '${{ toJson(github.event.release.assets) }}' | ConvertFrom-Json
-          $zipAsset = $assets | Where-Object { $_.name -eq $assetName }
+          Write-Host "Downloading: $assetName from $tagName"
+          gh release download $tagName -p $assetName -O module.zip
 
-          if ($zipAsset) {
-              $downloadUrl = $zipAsset.browser_download_url
-              Write-Host "Downloading: $assetName"
-              Write-Host "URL: $downloadUrl"
-
-              Invoke-WebRequest -Uri $downloadUrl -OutFile "module.zip" -Headers @{
-                  Authorization = "Bearer ${{ secrets.GITHUB_TOKEN }}"
-              }
-
-              Write-Host "[SUCCESS] Downloaded successfully"
-          } else {
+          if (-not (Test-Path module.zip)) {
               Write-Error "[ERROR] Module artifact not found in release: $assetName"
-              Write-Host "Available assets:"
-              $assets | ForEach-Object { Write-Host "  - $($_.name)" }
               exit 1
           }
+
+          Write-Host "[SUCCESS] Downloaded successfully"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Extract module archive
         shell: pwsh
