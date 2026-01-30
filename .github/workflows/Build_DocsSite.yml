@@ -46,6 +46,10 @@ jobs:
       - name: Build and deploy documentation
         if: github.ref == 'refs/heads/main'
         shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_ACTOR: ${{ github.actor }}
         run: ./build.ps1 -Bootstrap -Task PublishDocs
 
       - name: Documentation published
